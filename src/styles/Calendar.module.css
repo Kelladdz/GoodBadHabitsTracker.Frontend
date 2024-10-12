@@ -1,0 +1,53 @@
+.calendar {
+    margin: 1rem 2rem;
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 700;
+    letter-spacing: -0.08rem;
+    padding: 0.5rem;
+}
+
+.days-of-week {
+    display: flex;
+    height: 2rem;
+    width: 100%;
+    font-size: 0.7rem;
+    color: #828282;
+}
+
+.day-of-week-box {
+    width: calc(100% / 7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.days-of-month {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(5, 3.1rem);
+}
+
+.day-of-month-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.day-of-month {
+    padding: .75rem;
+    border-radius: 50%;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.day-of-month:hover {
+    background-color: #828282;
+}

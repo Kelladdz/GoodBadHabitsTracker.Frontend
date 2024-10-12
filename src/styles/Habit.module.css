@@ -1,0 +1,26 @@
+.habit {
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 1rem;
+    height: 4rem;
+    width: 100%;
+    border-bottom: 1px solid #c2c2c2;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btns {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-label {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+}

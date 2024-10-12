@@ -1,0 +1,31 @@
+.comment-section {
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+    margin: 2rem;
+    width: calc(100% - 4rem);
+    height: calc(50% - 4rem);
+}
+
+.list {
+    height: 19rem;
+    overflow-y: scroll;
+    border-bottom: 1px solid #c2c2c2;
+}
+
+.year-box {
+    display: flex;
+	justify-content: center;
+	border-bottom: 1px solid #cccccc;
+}
+
+.year {
+    padding-top: 0.5rem;
+	text-align: center;
+	font-style: normal;
+	font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.07rem;
+    color: #1e1e1e;
+	margin-bottom: 0.5rem;
+    color: #1e1e1e;
+}

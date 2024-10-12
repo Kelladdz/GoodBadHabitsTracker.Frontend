@@ -1,0 +1,31 @@
+.filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap:0.5rem;
+    height: 3rem;
+    border-bottom: 1px solid #c2c2c2;
+}
+
+.group-name-box {
+    width: 5rem;
+    padding-left: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.group-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.05rem;
+    color: #1e1e1e;
+}
+
+.r-side {
+    display: flex;
+    gap: 0.5rem;
+    margin-right: 0.5rem;
+}
+

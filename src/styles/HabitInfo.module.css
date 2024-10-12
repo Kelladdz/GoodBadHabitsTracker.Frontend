@@ -1,0 +1,17 @@
+.habit-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.name {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.07rem;
+    color: #1e1e1e;
+}
+
+.progress {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #828282;
+}

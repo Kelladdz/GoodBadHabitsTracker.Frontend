@@ -1,7 +1,26 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import mkcert from 'vite-plugin-mkcert';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+import dns from 'dns';
+import dotenv from 'dotenv';
 
-// https://vitejs.dev/config/
+dotenv.config();
+
+dns.setDefaultResultOrder('verbatim');
+
 export default defineConfig({
-  plugins: [react()],
-})
+	server: {
+		port: 8080,
+		https: {
+			key: readFileSync(resolve(process.env.VITE_DEV_PEM_LOCATION)),
+			cert: readFileSync(resolve(process.env.VITE_CERT_PEM_LOCATION))
+		},
+		cors: {
+			origin: process.env.VITE_LOCALHOST_URL,
+			optionsSuccessStatus: 200,
+		},
+	},
+	plugins: [mkcert()],
+
+});

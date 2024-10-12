@@ -1,0 +1,46 @@
+.comment-form {
+    margin-left: 1rem;
+    margin-right: .5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 3rem;
+}
+
+.input-box {
+    width: calc(100% - 0.5rem);
+    height: 2rem;
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    padding-left: .5rem;
+    margin-right: .5rem;
+}
+
+.input {
+    outline: none;
+    border: none;
+    width: calc(100% - .5rem);
+}
+
+.input::placeholder {
+    letter-spacing: -0.05rem;
+    color: #c2c2c2;
+}
+
+.btn {
+    height: 2rem;
+    width: 2rem;
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+}
+
+.btn:hover {
+    background-color: #e2e2e2;
+}
+
+.icon {
+    transform: scale(.7);
+}

@@ -1,0 +1,18 @@
+.filter-bar-dropdown {
+    display: flex;
+    align-items: center;
+    gap:0.5rem;
+    height: 2rem;
+    background-color: transparent;
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+    padding-inline:0.5rem;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.label {
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    color: #1e1e1e;
+}

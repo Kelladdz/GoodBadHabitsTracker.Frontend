@@ -1,0 +1,37 @@
+.statistic-cell {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 0.5rem;
+}
+
+.streak-icon {
+    position: absolute;
+    left: 1rem;
+    transform: scale(1.25);
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.label {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.07rem;
+    color: #1e1e1e;
+}
+
+.value {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.05rem;
+    color: #828282;
+    line-height: 1.3;
+}

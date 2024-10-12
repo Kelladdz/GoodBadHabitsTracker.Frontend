@@ -1,0 +1,19 @@
+.header {
+    background-color: #1e1e1e;
+    height: 5rem;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-inline: 1.75rem;
+    height: 100%;
+}
+
+.r-side {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}

@@ -1,0 +1,13 @@
+.left-bar {
+    padding-top: .5rem;
+    width: 10%;
+    background-color: #ececec;
+    border-right: 1px solid #c2c2c2;
+}
+
+.habit-types-btns {
+    display: flex;
+    flex-direction: column;
+    gap:0.5rem;
+    padding-bottom: 2rem;
+}

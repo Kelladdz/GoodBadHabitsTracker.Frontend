@@ -1,0 +1,13 @@
+.habit-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    height: 2rem;
+    background-color: transparent;
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+    padding-inline: .75rem;
+    min-width: 2.25rem;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
