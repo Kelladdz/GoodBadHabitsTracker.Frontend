@@ -1,0 +1,38 @@
+.creator-form-section {
+    width: calc(100% - 2px);
+}
+
+.disabled .label{
+    display: none;
+}
+
+
+
+.label {
+    display: inline-block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #828282;
+}
+
+.select-inputs-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.select-inputs-box > * {
+
+    height: 2rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: -0.03rem;
+    border-radius: 7px;
+    color: #1e1e1e;
+}
+
+.select-inputs-box > input {
+    width: 5rem;
+}

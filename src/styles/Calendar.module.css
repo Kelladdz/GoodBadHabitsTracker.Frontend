@@ -1,7 +1,8 @@
 .calendar {
-    margin: 1rem 2rem;
     border: 1px solid #c2c2c2;
     border-radius: 7px;
+    background-color: white;
+    overflow-x: hidden;
 }
 
 .header {
@@ -13,12 +14,29 @@
     padding: 0.5rem;
 }
 
+.arrow-btn {
+    height: 2rem;
+    width: 2rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrow-btn:hover {
+    background-color: #f2f2f2;
+}
+
 .days-of-week {
     display: flex;
     height: 2rem;
     width: 100%;
     font-size: 0.7rem;
     color: #828282;
+    padding-inline: 0.5rem;
 }
 
 .day-of-week-box {
@@ -31,23 +49,78 @@
 .days-of-month {
     display: grid;
     width: 100%;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(5, 3.1rem);
+    padding: 0.5rem;
+    padding-top: 0;
+    position: relative;
 }
 
-.day-of-month-box {
+.floating-circle {
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: #9088ff;
+    z-index: 1;
+}
+
+
+
+
+.day-of-month-box,
+.disabled-day-of-month-box {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 50%;
+    position: relative;
+    z-index: 2;
+    padding: 0.25rem;
 }
 
-.day-of-month {
-    padding: .75rem;
-    border-radius: 50%;
-    line-height: 1;
+.day-of-month-box {
     cursor: pointer;
 }
 
-.day-of-month:hover {
-    background-color: #828282;
+.disabled-day-of-month-box {
+    color: #c2c2c2;
+    cursor: default;
+}
+
+.day-of-month {
+    line-height: 1;
+    position: relative;
+}
+
+
+@media (max-width: 88rem) {
+    .calendar {
+        margin: 4rem 1rem;
+    }
+    
+}
+
+@media (max-width: 55rem) {
+    .calendar {
+        margin: 0;
+        width: 100vw;
+        border-radius: 0;
+        border-inline: none;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .days-of-week {
+        display: none;
+    }
+
+    .days-of-month {
+        display: flex;
+        width: 100vw;
+        overflow-x: scroll;
+    }
+    
 }

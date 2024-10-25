@@ -1,0 +1,31 @@
+.search-bar-input {
+    position: relative;
+    height: 2rem;
+    background-color: transparent;
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+}
+
+.input {
+    width: 100%;
+    border: none;
+    padding-inline: 0.5rem;
+    outline: none;
+}
+
+.btn {
+    position: absolute;
+    right: 0;
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    transform: scale(0.9);
+}

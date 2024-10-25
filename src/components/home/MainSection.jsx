@@ -1,14 +1,19 @@
-import styles from '../../styles/MainSection.module.css'
+import { LeftBarProvider } from '../../context/left-bar';
+
 import LeftBar from './left-bar/LeftBar';
 import MiddleSection from './middle-section/MiddleSection';
 import RightSection from './right-section/RightSection';
 
+import styles from '../../styles/MainSection.module.css'
+
 const MainSection = () => {
     return (
-        <div className={styles.container}>
+        <div className={styles['main-section']}>
             <LeftBar/>
-            <MiddleSection/>
-            <RightSection name='Good habit'/>
+            <div className={styles.content}>
+                <MiddleSection/>
+                <RightSection name='Good habit'/>
+            </div>
         </div>
     );
 }

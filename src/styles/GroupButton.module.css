@@ -1,9 +1,9 @@
-.group-button {
+.group-button,
+.group-button-active {
     display: flex;
     justify-content: start;
     align-items: center;
     border: none;
-    background-color: transparent;
     margin-inline: 0.5rem;
     height: 2.25rem;
     border-radius: 5px;
@@ -11,9 +11,14 @@
     gap: 0.5rem;
 }
 
-.group-button:hover {
-    background-color: #c9c9c9;
+.group-button {
+    background-color: transparent;
 }
+
+.group-button-active {
+    background-color: #d1d1d1;
+}
+
 
 .icon-box {
     width: 1rem;
@@ -28,9 +33,21 @@
     transform: translateY(-1px);
 }
 
-.label {
+.label,
+.input {
     font-size: .8rem;
     font-weight: 600;
     letter-spacing: -0.03rem;
     color: #1e1e1e;
+    text-wrap: nowrap;
+    z-index: 2;
+}
+
+.input {
+    border: 1px solid #1e1e1e;
+    border-radius: 7px;
+    margin: 0;
+    background-color: transparent;
+    border: none;
+    outline: none;
 }

@@ -1,0 +1,31 @@
+.context-menu {
+    position: absolute;
+    z-index: 1000;
+    background-color: #fff;
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+}
+
+.list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.item {
+    height: 2.25rem;
+    width: 100%;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding-inline: .5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    cursor: pointer;
+}
+
+.item:hover {
+    background-color: #c9c9c9;
+}

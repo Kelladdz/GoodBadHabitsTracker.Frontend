@@ -1,4 +1,28 @@
-.container {
+.main-section {
   display: flex;
   height: calc(100vh - 5rem);
+}
+
+.content {
+  display: flex;
+  width: 90%;
+  height: 100vh;
+}
+
+@media (max-width: 75rem) {
+  .main-section {
+    flex-direction: column;
+    height: calc(100vh - 5.25rem);
+  }
+
+  .content {
+    width: 100%;
+  }
+}
+
+@media (max-width: 55rem) {
+  .content {
+    flex-direction: column;
+    justify-content: space-between;
+  }
 }

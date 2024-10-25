@@ -1,6 +1,5 @@
 .add-group-input {
     display: flex;
-    justify-content: start;
     align-items: center;
     border: none;
     background-color: transparent;
@@ -29,9 +28,37 @@
     transform: translateY(-1px);
 }
 
-.label {
+.form {
+    display: flex;
+    align-items: center;
+}
+
+.label,
+.input {
     font-size: .8rem;
     font-weight: 600;
     letter-spacing: -0.03rem;
     color: #1e1e1e;
+    text-wrap: nowrap;
+}
+
+.input {
+    border: 1px solid #1e1e1e;
+    border-radius: 7px;
+    margin: 0;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.btn {
+    width: 0;
+    height: 0;
+}
+
+@media (max-width: 75rem) {
+    .add-group-input {
+        transform: translateY(1px);
+    }
+    
 }

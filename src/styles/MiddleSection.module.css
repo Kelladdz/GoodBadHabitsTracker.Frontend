@@ -1,4 +1,18 @@
 .middle-section {
-    width: 35%;
+    width: 50%;
     border-right: 1px solid #c2c2c2;
+}
+
+@media (max-width: 75rem) {
+    .middle-section {
+        width: 50%;
+    }
+    
+}
+
+@media (max-width: 55rem) {
+    .middle-section {
+        width: 100%;
+        border-right: none;
+    }
 }

@@ -12,6 +12,7 @@
     letter-spacing: 0.05rem;
     color: #1e1e1e;
     text-transform: uppercase;
+    transform: translateY(-1px);
 }
 
 .btns {
@@ -19,4 +20,21 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+}
+
+@media (max-width: 75rem) {
+    .group-list {
+        padding-bottom: 0;
+    }
+    .btns {
+        margin-top: 0;
+    }
+    .label {
+        margin-left: 3rem;
+    }
+    .group-list,
+    .btns {
+        flex-direction: row;
+        align-items: center;
+    }
 }

@@ -3,6 +3,19 @@
     width: 10%;
     background-color: #ececec;
     border-right: 1px solid #c2c2c2;
+    position: relative;
+
+}
+
+.active-rectangle {
+    position: absolute;
+    margin-inline: 0.5rem;
+    height: 2.25rem;
+    border-radius: 5px;
+    padding-inline: 0.5rem;
+    gap: 0.5rem; 
+    background-color: #d1d1d1;
+    width: calc(100% - 1rem);
 }
 
 .habit-types-btns {
@@ -10,4 +23,30 @@
     flex-direction: column;
     gap:0.5rem;
     padding-bottom: 2rem;
+    position: relative;
+
+}
+
+@media (max-width: 88rem) {
+    .left-bar {
+        width: 20%;
+    }
+}
+
+@media (max-width: 75rem) {
+    .left-bar {
+        min-height: 2.5rem;
+        padding-top: 0;
+        display: flex;
+        width: 100%;
+        overflow-y: scroll;
+        padding-inline: 1rem;
+    }
+
+    .habit-types-btns {
+        flex-direction: row;
+        align-items: center;
+        padding-bottom: 0;
+    }
+
 }

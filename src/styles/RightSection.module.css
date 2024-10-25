@@ -1,5 +1,5 @@
 .right-section {
-    width: 55%;
+    width: 65%;
 }
 
 .label-box {
@@ -24,12 +24,13 @@
 }
 
 .l-side{
-    width: 40%;
+    width: 45%;
     border-right: 1px solid #c2c2c2;
+    padding-inline: 2rem;
 }
 
 .r-side{
-    width: 60%;
+    width: 55%;;
 }
 
 .cell:first-child {
@@ -51,8 +52,82 @@
     grid-template-rows: repeat(3, auto);
     grid-template-areas: 
         "streak streak";
-    gap: 2rem;
-    column-gap: 4rem;
-    padding: 2rem 2rem 1rem 2rem;
+    gap: 1rem;
+    column-gap: 2rem;
+    padding: 1rem 0
 }
 
+@media (max-width: 88rem) {
+    .right-section {
+        width: 40%;
+        height: calc(100% - 7rem);
+        overflow-y: scroll;
+    }
+
+    .habit-data {
+        flex-direction: column;
+    }
+
+    .l-side {
+        width: 100%;
+        border-right: none;
+        
+    }
+
+    .r-side {
+        width: 100%;
+    }
+
+    .statistics-grid {
+        padding: 1rem 1rem .5rem 1rem;
+    }
+}
+
+@media (max-width: 75rem) {
+    .right-section {
+        width: 50%;
+    }
+}
+
+@media (max-width: 55rem) {
+    .right-section {
+        width: 100%;
+        height: 35.5rem;
+    }
+
+    .label-box {
+        display: none;
+    }
+
+    .habit-data {
+        flex-direction: column-reverse;
+    }
+
+    .l-side {
+        width: 20rem;
+    }
+
+    .statistics-grid {
+        display: flex;
+        width:100vw;
+        gap: 3rem;
+        height: 6.4rem;
+    }
+
+    .cell {
+        width: 8rem;
+        height: 5rem;
+        border-right: 1px solid #c2c2c2;
+    }
+
+    .cell:first-child {
+        padding-right: 1rem;
+    }
+
+    .r-side {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        width: 100vw;
+    }
+}

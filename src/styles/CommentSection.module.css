@@ -29,3 +29,25 @@
 	margin-bottom: 0.5rem;
     color: #1e1e1e;
 }
+
+@media (max-width: 88rem) {
+    .comment-section {
+        width: calc(100% - 2.5rem);
+        height: 18rem;
+        margin: 1rem;
+    }
+    .list {
+        height: 15rem;
+    }
+}
+
+@media (max-width: 55rem) {
+    .comment-section {
+        width: calc(100% - 2rem);
+        height: 13.5rem;
+    }
+
+    .list {
+        height: 10.5rem;
+    }
+}

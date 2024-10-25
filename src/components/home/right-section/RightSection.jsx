@@ -1,11 +1,12 @@
 import StatisticCell from './StatisticCell';
-import Calendar from './Calendar';
+import Calendar from '../shared/Calendar';
 import CommentSection from './CommentSection';
 import Chart from './Chart';
 
 import { HABIT_STATISTICS_PROPERTIES } from '../../../constants/habit-statistics-properties';
 
 import styles from '../../../styles/RightSection.module.css';
+import { CALENDAR_TYPES } from '../../../constants/calendar-types';
 
 const RightSection = ({name}) => {
     return (
@@ -38,11 +39,11 @@ const RightSection = ({name}) => {
                         </div>
 
                     </div>
-                    <Calendar />
+                    <Calendar withoutArrows cellSize='2.75rem' headerPadding='0.5rem' type={CALENDAR_TYPES.main}/>
                 </div>
                 <div className={styles['r-side']}>
-                    <CommentSection />
                     <Chart />
+                    <CommentSection />
                 </div>
             </div>
         </div>

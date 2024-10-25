@@ -1,0 +1,16 @@
+{
+    "groups": [
+        {
+            "id": 1,
+            "name": "Languages"
+        },
+        {
+            "id": 2,
+            "name": "ASAP"
+        },
+        {
+            "id": 3,
+            "name": "Group 3"
+        }
+    ]
+}

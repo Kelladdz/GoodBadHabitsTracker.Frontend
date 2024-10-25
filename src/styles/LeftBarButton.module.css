@@ -1,19 +1,26 @@
-.left-bar-button {
+.left-bar-button,
+.left-bar-button-active {
     display: flex;
     justify-content: start;
     align-items: center;
     border: none;
-    background-color: transparent;
+    
     margin-inline: 0.5rem;
     height: 2.25rem;
     border-radius: 5px;
     padding-left: 0.5rem;
-    gap: 0.5rem;
+    gap: 0.5rem; 
 }
 
-.left-bar-button:hover {
-    background-color: #c9c9c9;
+.left-bar-button {
+    background-color: transparent;
 }
+
+.left-bar-button-active {
+    background-color: #dadada;
+}
+
+
 
 .icon-box {
     width: 1.5rem;
@@ -28,4 +35,5 @@
     font-weight: 600;
     letter-spacing: -0.03rem;
     color: #1e1e1e;
+    text-wrap:  nowrap;
 }

@@ -1,0 +1,81 @@
+.creator-calendar-dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap:0.5rem;
+    height: 2rem;
+    background-color: transparent;
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+    padding-inline:0.5rem;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+.label {
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    color: #1e1e1e;
+    text-wrap: nowrap;
+    overflow-x: hidden;
+}
+
+.calendar-box {
+    position: absolute;
+    top: 2.25rem;
+    left: 0em;
+    border-radius: 7px;
+    background-color: transparent;
+    overflow-y: hidden;
+    
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 700;
+    letter-spacing: -0.08rem;
+    padding: 0.5rem;
+}
+
+.days-of-week {
+    display: flex;
+    height: 2rem;
+    width: 100%;
+    font-size: 0.7rem;
+    color: #828282;
+}
+
+.day-of-week-box {
+    width: calc(100% / 7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.days-of-month {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+}
+
+.day-of-month-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.day-of-month {
+    padding: .75rem;
+    border-radius: 7px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.day-of-month:hover {
+    background-color: #f2f2f2;
+}
+

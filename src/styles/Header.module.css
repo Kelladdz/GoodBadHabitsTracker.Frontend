@@ -17,3 +17,20 @@
     align-items: center;
     gap: 1rem;
 }
+
+@media (max-width: 67rem) {
+    .header {
+        position: absolute;
+        bottom: 0rem;
+        width: 100%;
+    }
+
+    .logo {
+        position: absolute;
+        left: calc(50% - 5rem);
+    }
+
+    .r-side {
+        width: 100%;
+    }
+}

@@ -1,0 +1,167 @@
+.creator-repeat-dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap:0.5rem;
+    height: 2rem;
+    background-color: transparent;
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+    padding-inline:0.5rem;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    z-index: 3;
+}
+
+.list-box {
+    width: 100%
+}
+
+.creator-dropdown:active {
+    box-shadow: none;
+    transform: translate(1px, 1px);
+}
+
+.label {
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    color: #1e1e1e;
+    text-wrap: nowrap;
+    overflow-x: hidden;
+}
+
+.list,
+.nested-list,
+.nested-grid,
+.nested-intervals {
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    border-radius: 7px;
+    border: 1px solid #c2c2c2;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    overflow-x: hidden;
+    overflow-y: hidden;
+    text-wrap: nowrap;
+    
+}
+
+.list,
+.nested-list {
+    list-style: none;
+    
+}
+
+.nested-list,
+.nested-grid,
+.nested-intervals {
+    left: 10rem;
+    top: 0rem;
+}
+
+.list {
+    width: 100%;
+    top: 2.25rem;
+}
+
+.nested-list {
+    height: 14rem;
+}
+
+.nested-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 2rem);
+    grid-template-rows: repeat(5, 2rem);
+    height: 10rem;
+}
+
+.nested-intervals {
+    height: 12rem;
+}
+
+.option {
+    padding-inline: 0.5rem;
+    border-radius: 7px;
+    cursor: pointer;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.option:hover {
+    background-color: #f2f2f2;
+}
+
+.option-label {
+    position: relative;
+}
+
+.nested-list-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-radius: 7px;
+    cursor: pointer;
+    height: 2rem;
+}
+
+.nested-list-option:hover,
+.day:hover {
+    background-color: #f2f2f2;
+}
+
+.day {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 7px;
+    cursor: pointer;
+    padding: .25rem;
+}
+
+.day:hover {
+    margin: 0.25rem;
+    border-radius: 7px;
+}
+
+.included-day {
+    background-color: #3662CC;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.25rem;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.included-check-icon {
+    transform: scale(1);
+    animation: show-icon .2s cubic-bezier(.39,.65,0,.99);
+}
+
+.check-icon {
+    transform: scale(0);
+    animation: hide-icon .2s cubic-bezier(.39,.65,0,.99);
+}
+
+@keyframes show-icon {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes hide-icon {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(0);
+    }
+}

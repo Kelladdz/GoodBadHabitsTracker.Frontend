@@ -1,0 +1,124 @@
+.creator-dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap:0.5rem;
+    height: 2rem;
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+    padding-inline:0.5rem;
+    height: 2rem;
+    animation: show .2s cubic-bezier(.39,.65,0,.99);
+    
+}
+
+.container {
+    width: 6rem;
+    position: relative;
+    opacity: 1;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    animation: show .2s cubic-bezier(.39,.65,0,.99);
+    height: 2rem;
+}
+
+.disabled,
+.disabled .creator-dropdown {
+    border: 0;
+    width: 0rem;
+    padding-inline: 0;
+    box-shadow: none;
+    animation: hide .2s cubic-bezier(.39,.65,0,.99);
+    height: 0;
+} 
+
+.disabled .creator-dropdown .icon {
+    opacity: 0;
+    animation: hide-btn .2s cubic-bezier(.39,.65,0,.99);
+}
+
+.disabled > .creator-dropdown > .label {
+    width: 0;
+    animation: hide .2s cubic-bezier(.39,.65,0,.99);
+}
+
+@keyframes hide {
+    0% {
+        height: 2rem;
+        width: 6rem;
+    }
+    50% {
+        height: 2rem;
+        width: 0rem;
+    }
+    100% {
+        height: 0rem;
+        width: 0rem;
+    }
+}
+
+@keyframes hide-btn {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes show {
+    0% {
+        height: 0rem;
+        width: 0rem;
+        
+    }
+    50% {
+        height: 2rem;
+        width: 0rem;
+    }
+    100% {
+        height: 2rem;
+        width: 6rem;
+    }
+}
+
+
+
+.creator-dropdown:active {
+    box-shadow: none;
+    transform: translate(1px, 1px);
+}
+
+.label {
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    color: #1e1e1e;
+    text-wrap: nowrap;
+    overflow-x: hidden;
+}
+
+.list {
+    position: absolute;
+    top: 2.25rem;
+    padding: 0;
+    margin: 0;
+    z-index: 1000;
+    background-color: #fff;
+    border-radius: 7px;
+    list-style: none;
+    width: 100%;
+    border: 1px solid #c2c2c2;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    overflow-y: hidden;
+}
+
+.option {
+    padding-inline: 0.5rem;
+    border-radius: 7px;
+    cursor: pointer;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+}

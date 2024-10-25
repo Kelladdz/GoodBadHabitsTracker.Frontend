@@ -1,4 +1,12 @@
 .chart {
-	margin-inline: 0.75rem;
-	height: 50%;
+	margin-inline: 2rem;
+}
+
+@media (max-width: 88rem) {
+	.chart {
+		height: auto;
+		margin-inline: 1rem;
+		width: calc(100% - 2.5rem);
+	}
+	
 }
