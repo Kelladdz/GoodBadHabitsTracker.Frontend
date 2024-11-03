@@ -11,12 +11,17 @@ import { set } from 'react-hook-form';
 import { useTransition, animated } from 'react-spring';
 import { easeExpIn } from "d3-ease";
 import HabitCreatorContext from '../../../context/habit-creator';
+import { useSelector } from 'react-redux';
+import LeftBarContext from '../../../context/left-bar';
 
 const CreatorDropdown = ({style, options, property, handleOptionChange}) => {
-    
+    const groupId = useSelector(state => state.goodHabitCreator.groupId);
+
+    const {activeGroup} = useContext(LeftBarContext);
     const {activeCreator} = useContext(HabitCreatorContext);
+
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(options[0]);
+    const [selectedOption, setSelectedOption] = useState(groupId && property === HABIT_PROPERTIES.group ? activeGroup.name : options[0]);
 
     const dropdownRef = useRef();
     const listRef = useRef();

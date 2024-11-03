@@ -14,6 +14,11 @@
     border: none;
     padding-inline: 0.5rem;
     outline: none;
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    color: #1e1e1e;
+    text-wrap: nowrap;
 }
 
 .btn {
@@ -24,6 +29,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
 .icon {

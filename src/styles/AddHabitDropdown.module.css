@@ -1,6 +1,7 @@
-.add-habit-dropdown {
+.add-habit-dropdown,
+.wrapped-add-habit-dropdown {
     height: 2rem;
-    width: 8rem;
+    
     background-color: #3662CC;
     border: 1px solid #2a4fa5;
     border-radius: 7px;
@@ -11,11 +12,112 @@
     gap: 0.5rem;
     box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
     outline: none;
+    cursor: pointer;
+}
+
+.add-habit-dropdown:active,
+.wrapped-add-habit-dropdown:active {
+    box-shadow: none;
+    transform: translate(1px, 1px);
+}
+
+.add-habit-dropdown {
+    width: 8rem;
+    animation: expand .4s cubic-bezier(.39,.65,0,.99);
+}
+
+.wrapped-add-habit-dropdown {
+    width: 2rem;
+    justify-content: center;
+    animation: wrap .2s cubic-bezier(.39,.65,0,.99);
+}
+
+@keyframes wrap {
+    0% {
+        width: 8rem;
+    }
+    100% {
+        width: 2rem;
+    }
+}
+
+@keyframes expand {
+    0% {
+        width: 2rem;
+    }
+    50% {
+        width: 2rem;
+    }
+    100% {
+        width: 8rem;
+    }
 }
 
 .label {
+    opacity: 1;
     font-size: .8rem;
     font-weight: 600;
     letter-spacing: -0.03rem;
     color: white;
+    text-wrap: nowrap;
+    animation: fade-in .4s cubic-bezier(.39,.65,0,.99);
+}
+
+.wrapped-label {
+    opacity: 0;
+    animation: fade-out .2s cubic-bezier(.39,.65,0,.99);
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.list {
+    list-style-type: none;
+    background-color: #fff;
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 2.25rem;
+    left: 0;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.item {
+    height: 2rem;
+    width: 100%;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding-inline: .5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    text-wrap: nowrap;
+    cursor: pointer;
+}
+
+.item:hover {
+    background-color: #c9c9c9;
 }

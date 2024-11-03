@@ -36,7 +36,6 @@
     justify-content: space-between;
     width: 100%;
     height: 4rem;
-    overflow: hidden;
     gap: 1rem;
 }
 
@@ -44,7 +43,7 @@
 .repeat-dropdown-box,
 .calendar-dropdown-box
  {
-    width: 100%;
+    width: calc(50% - 0.5rem);
     display: flex;
     animation: show 0.2s cubic-bezier(.39,.65,0,.99);
 }

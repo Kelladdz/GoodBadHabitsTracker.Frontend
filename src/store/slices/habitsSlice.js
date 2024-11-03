@@ -11,7 +11,8 @@ const habitsSlice = createSlice({
             state.habit = action.payload;
         },
         getHabits: (state, action) => {
-            state.habits = action.payload ? action.payload.habits : [];
+            console.log('Habits:', action.payload);
+            state.habits.push(action.payload);
         }
     }
 })

@@ -11,6 +11,7 @@ import ModalsContext from "./context/modals";
 import Modal from "./components/modals/Modal";
 import HabitCreatorContext from "./context/habit-creator";
 import DebugWindow from "./DebugWindow";
+import { HabitProvider } from "./context/habit";
 
 const PrivateRoute = () => {
     const {activeMenu, hideContextMenu} = useContext(ContextMenuContext);
@@ -35,11 +36,13 @@ const PrivateRoute = () => {
     return (
         <div style={{position: 'relative', height: '100vh'}}>
             <LeftBarProvider>
-                {activeCreator && <Creator />}
-                {activeMenu && <ContextMenu ref={ref}/>}
-                {activeModal && <Modal activeModal={activeModal}/>}
-                <Header />
-                <Outlet />
+                <HabitProvider>
+                    {activeCreator && <Creator />}
+                    {activeMenu && <ContextMenu ref={ref}/>}
+                    {activeModal && <Modal activeModal={activeModal}/>}
+                    <Header />
+                    <Outlet />
+                </HabitProvider>
             </LeftBarProvider>
             {activeCreator && <DebugWindow />}
         </div>

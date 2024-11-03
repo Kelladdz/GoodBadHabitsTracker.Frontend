@@ -1,15 +1,17 @@
 import { findIndex } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { CALENDAR_TYPES } from '../constants/calendar-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeStartDate } from '../store';
 import { current } from '@reduxjs/toolkit';
+import CalendarContext from '../context/calendar';
 
 export function useCalendar(type, cellSize) {
     const dispatch = useDispatch();
     const startDate = useSelector(state => state.goodHabitCreator.startDate);
 
-    const [currentDate, setCurrentDate] = useState(new Date());
+ const {currentDate, currentDateString, changeCurrentDate} = useContext(CalendarContext);
+
     const [calendarDays, setCalendarDays] = useState();
 
     const today = new Date();
@@ -17,7 +19,6 @@ export function useCalendar(type, cellSize) {
     const numberOfLastDayOfCurrentMonth = new Date(currentDate.getFullYear(), currentMonth + 1, 0).getDate();
     const numberOfLastDayOfPreviousMonth = new Date(currentDate.getFullYear(), currentMonth, 0).getDate();
     const firstDayOfCurrentMonth = new Date(currentDate.getFullYear(), currentMonth, 1).getDay();
-    const lastDayOfCurrentMonth = new Date(currentDate.getFullYear(), currentMonth + 1, 0).getDay();
     const lastDayOfPreviousMonth = new Date(currentDate.getFullYear(), currentMonth, 0).getDay();
     const lastSundayOfPreviousMonth = numberOfLastDayOfPreviousMonth - lastDayOfPreviousMonth + 1;
     const firstDayOnCalendar = firstDayOfCurrentMonth === 0 
@@ -41,16 +42,16 @@ export function useCalendar(type, cellSize) {
         setCurrentDate(previousMonth);
     }
 
-    const handleDayClick = (day, index) => {
+    const handleDayClick = (day) => {
         console.log(day, 'day clicked');
         if (type !== CALENDAR_TYPES.main) {
             const selectedDate = new Date(day);
             console.log('Selected date', selectedDate);
-            const today = new Date();
-            const todayIndex = findIndex(calendarDays, (d) => d === today.getDate());
-            console.log('Index of today', todayIndex);
-            const selectedDayIndex = findIndex(calendarDays, (d) => d === day);
-            console.log('Index of selected day', selectedDayIndex);
+            // const today = new Date();
+            // const todayIndex = findIndex(calendarDays, (d) => d === today.getDate());
+            // console.log('Index of today', todayIndex);
+            // const selectedDayIndex = findIndex(calendarDays, (d) => d === day);
+            // console.log('Index of selected day', selectedDayIndex);
             if (selectedDate.getMonth() < currentDate.getMonth()) {
                 previousMonth();
             } else if (selectedDate.getMonth() > currentDate.getMonth()) {
@@ -60,8 +61,12 @@ export function useCalendar(type, cellSize) {
                 console.log('Want to change start date');
                 dispatch(changeStartDate(day));
             }
-            
         }
+    }
+
+    const handleCurrentDateChange = (day) => {
+        console.log('Handle current date change', day);
+        changeCurrentDate(new Date(day));
     }
     
     useEffect(() => {
@@ -77,5 +82,5 @@ export function useCalendar(type, cellSize) {
         
     }, [currentDate]);
 
-    return { currentDate, startDate, today, numberOfLastDayOfCurrentMonth, firstDayOnCalendar, calendarDays, calendarRows, previousMonth, nextMonth, handleDayClick};
+    return { currentDate, currentDateString, startDate, today, numberOfLastDayOfCurrentMonth, firstDayOnCalendar, calendarDays, calendarRows, previousMonth, nextMonth, handleDayClick, handleCurrentDateChange};
 }

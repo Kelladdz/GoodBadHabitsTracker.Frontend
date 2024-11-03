@@ -28,7 +28,7 @@
     border-radius: 7px;
     background-color: transparent;
     overflow-y: hidden;
-    
+    z-index: 1000;
 }
 
 .header {

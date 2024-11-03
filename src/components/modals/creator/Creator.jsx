@@ -29,7 +29,6 @@ const Creator = () => {
     const {data: groupsData, error: groupsError, isLoading: groupsIsLoading} = useFetchGroupsQuery();
     const [addHabit, isLoading] = useAddHabitMutation();
 
-    const [selectedCreator, setSelectedCreator] = useState(CREATOR_TYPES.goodHabit);
     const {activeCreator, toggleCreator} = useContext(HabitCreatorContext);
     
     
@@ -102,7 +101,8 @@ const Creator = () => {
             repeatDaysOfMonth: form.repeatDaysOfMonth.length > 0 && form.habitType === 0 ? form.repeatDaysOfMonth : null,
             repeatDaysOfWeek: form.repeatDaysOfWeek.length > 0 && form.habitType === 0 ? form.repeatDaysOfWeek : null,
             repeatInterval: form.habitType === 0 ? form.repeatInterval : null,
-            reminderTimes: null
+            reminderTimes: null,
+            groupId: form.groupId
         }
         try {
             addHabit(request);
@@ -149,7 +149,7 @@ const Creator = () => {
     },[activeCreator])
 
     useEffect(() => {
-        if (groupsData && !groupsIsLoading) {
+        if (groupsData && !groupsIsLoading && groupOptions.length === 0) {
             setGroupOptions(groupsData.map((group) => group.entity.name));
         }
     })

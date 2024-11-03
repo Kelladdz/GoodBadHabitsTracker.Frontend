@@ -4,10 +4,14 @@ const CalendarContext = createContext();
 
 function CalendarProvider({children}) {
     const [currentDate, setCurrentDate] = useState(new Date());
+    const currentDateString = currentDate.toISOString().substring(0, 10);
     
+    const changeCurrentDate = (date) => {
+        setCurrentDate(date);
+    }
 
     return <CalendarContext.Provider value={{
-        currentDate}}>
+        currentDate, currentDateString, changeCurrentDate}}>
             {children}
 		</CalendarContext.Provider>;
 } 

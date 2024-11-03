@@ -17,6 +17,7 @@
     background-color: white;
     border: 1px solid #D9D9D9;
     border-radius: 7px;
+    overflow-x: hidden;
 }
 
 .icon {

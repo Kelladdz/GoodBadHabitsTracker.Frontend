@@ -23,19 +23,6 @@ const LeftBar = () => {
     const handleLeftBarButtonClick = (label) => {
         toggleOrder(null);
         toggleActiveGroup(label);
-        switch (label) {
-            case LEFT_BAR_BUTTON_LABELS.allHabits:
-                activeDivApi.start({top: '0.5rem'});    
-                break;
-            case LEFT_BAR_BUTTON_LABELS.badHabits:
-                activeDivApi.start({top: '3.25rem'});
-                break;
-            case LEFT_BAR_BUTTON_LABELS.goodHabits:
-                activeDivApi.start({top: '6rem'});
-                break;
-            default:
-                break
-        }
     }
     
     useEffect(() => {
@@ -46,6 +33,24 @@ const LeftBar = () => {
             activeDivApi.start({top: `${translateDistance}rem`});    
         }
     },[order])
+
+    useEffect(() => {
+        if (activeGroup) {
+            switch (activeGroup) {
+                case LEFT_BAR_BUTTON_LABELS.allHabits:
+                    activeDivApi.start({top: '0.5rem'});    
+                    break;
+                case LEFT_BAR_BUTTON_LABELS.badHabits:
+                    activeDivApi.start({top: '3.25rem'});
+                    break;
+                case LEFT_BAR_BUTTON_LABELS.goodHabits:
+                    activeDivApi.start({top: '6rem'});
+                    break;
+                default:
+                    break
+            }
+        }
+    },[activeGroup])
     
     return (
         <div className={styles['left-bar']}>
@@ -63,16 +68,14 @@ const LeftBar = () => {
                     icon={BadHabitsIcon} 
                     alt={LEFT_BAR_ICON_ALTERNATE_LABELS.badHabits} 
                     label={LEFT_BAR_BUTTON_LABELS.badHabits} 
-                    contextMenuType={CONTEXT_MENU_TYPES.badHabits}
-                    onClick={() => console.log('Bad Habits button clicked')}/>
+                    contextMenuType={CONTEXT_MENU_TYPES.badHabits}/>
                 <LeftBarButton 
                 handleLeftBarButtonClick={() => handleLeftBarButtonClick(LEFT_BAR_BUTTON_LABELS.goodHabits)}
                     style={{transform: 'rotate(180deg) scale(1.25) translateY(3px)'}}
                     icon={BadHabitsIcon} 
                     alt={LEFT_BAR_ICON_ALTERNATE_LABELS.goodHabits} 
                     label={LEFT_BAR_BUTTON_LABELS.goodHabits} 
-                    contextMenuType={CONTEXT_MENU_TYPES.goodHabits}
-                    onClick={() => console.log('Good Habits button clicked')}/>
+                    contextMenuType={CONTEXT_MENU_TYPES.goodHabits}/>
             </nav>
             <GroupList />
             <AddGroupInput />

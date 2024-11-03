@@ -11,7 +11,7 @@ import { DAYS_OF_WEEK, DAYS_OF_WEEK_SHORT } from '../../../constants/days-of-wee
 import { ORDERED_DAYS_OF_MONTH_SHORT } from '../../../constants/days-of-month';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeRepeatMode, removeRepeatDayOfWeek, addRepeatDayOfMonth, addRepeatDayOfWeek, clearRepeatDaysOfWeek, clearRepeatDaysOfMonth, changeRepeatInterval, removeRepeatDayOfMonth } from '../../../store/slices/goodHabitCreatorSlice';
-import { debounce, set } from 'lodash';
+import { debounce } from 'lodash';
 import { useOrderedNumbersShortened } from '../../../hooks/useOrderedNumbersShortened';
 
 const CreatorRepeatDropdown = () => {
@@ -192,17 +192,18 @@ const CreatorRepeatDropdown = () => {
 
     const handleClickOutsideDropdown = (e) => {
         if (dropdownRef.current && listRef.current 
-            && !listRef.current.contains(e.target) && !dropdownRef.current.contains(e.target)) {
-            if ((nestedListRef.current || nestedGridRef.current) 
-                && (!nestedListRef.current.contains(e.target) 
-                || !nestedGridRef.current.contains(e.target))) {
-
+            && !dropdownRef.current.contains(e.target) && !listRef.current.contains(e.target) ) {
+                console.log(1)
+            if ((nestedListRef.current && !nestedListRef.current.contains(e.target))
+                 || nestedGridRef.current && !nestedGridRef.current.contains(e.target)) {
+                    console.log(2)
                 setIsNestedOpen(false);
                 setTimeout(() => {
                     setHoveredMode(null);
                     setIsOpen(false);
                 }, 250);
             } else {
+                console.log(3)
                 setIsOpen(false);
             }
         
@@ -210,21 +211,24 @@ const CreatorRepeatDropdown = () => {
     }
 
     const handleMouseEnterInToNestedDropdown = (opt) => {
-        setTimeout(() => {
-            setHoveredMode(opt);
-        }, 251);
+        if (dropdownRef.current && listRef.current) {
+            setTimeout(() => {
+                setHoveredMode(opt);
+            }, 251);
+        }
+        
     }
 
-    const handleMouseLeaveOutsideDropdown = (e) => {
-        if (dropdownRef.current && listRef.current) {
-                setIsNestedOpen(false);
-                setTimeout(() => {
-                    setHoveredMode(null);
-                }, 250);
+    // const handleMouseLeaveOutsideDropdown = (e) => {
+    //     if (dropdownRef.current && listRef.current) {
+    //             setIsNestedOpen(false);
+    //             setTimeout(() => {
+    //                 setHoveredMode(null);
+    //             }, 250);
             
-        }
-        console.log('Mouse leave outside dropdown');
-    }
+    //     }
+    //     console.log('Mouse leave outside dropdown');
+    // }
 
     const handleMouseLeaveOutsideNestedDropdown = (e) => {
         if (nestedListRef.current || nestedGridRef.current) {
@@ -273,7 +277,7 @@ const CreatorRepeatDropdown = () => {
             </div>
             {transition((style, isOpen) =>
                 isOpen ? (
-                    <div ref={listRef} onMouseLeave={handleMouseLeaveOutsideDropdown} className={styles['list-box']}>
+                    <div ref={listRef} className={styles['list-box']}>
 
                         <animated.ul style={style} className={styles.list}>
                             {HABIT_REPEAT_MODES.map((opt, index) => (

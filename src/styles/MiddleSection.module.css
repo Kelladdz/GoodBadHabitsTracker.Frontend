@@ -1,6 +1,10 @@
 .middle-section {
-    width: 50%;
+    width: 45%;
     border-right: 1px solid #c2c2c2;
+}
+
+.animated-box {
+    overflow: hidden;
 }
 
 @media (max-width: 75rem) {

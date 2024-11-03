@@ -4,4 +4,7 @@ export const CONTEXT_MENU_TYPES = {
     badHabits: 'badHabits',
     customGroup: 'customGroup',
     habit: 'habit',
+    completedHabit: 'completedHabit',
+    failedHabit: 'failedHabit',
+    skippedHabit: 'SkippedHabit',
 }

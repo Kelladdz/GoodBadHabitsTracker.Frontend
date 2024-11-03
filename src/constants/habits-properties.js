@@ -27,3 +27,7 @@ export const HABITS_FREQUENCIES = [
 export const HABIT_REPEAT_MODES = [
     "Daily", "Monthly", "Interval"
 ]
+
+export const DAY_RESULTS_STATUSES = [
+    "Completed", "Failed", "Skipped", "In Progress"
+]

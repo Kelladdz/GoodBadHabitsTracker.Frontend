@@ -4,6 +4,7 @@
     gap: 0.5rem;
     width: 21rem;
     padding: .5rem;
+    overflow-x: hidden;
 }
 
 .icon-box {

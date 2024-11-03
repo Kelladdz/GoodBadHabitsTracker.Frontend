@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSpring, animated } from 'react-spring';
 
@@ -13,7 +13,7 @@ import { CREATOR_TYPES } from '../../../constants/creator-types';
 const CreatorTypeButtons = ({onCreatorTypeSelect}) => {
     const dispatch = useDispatch()
     const habitType = useSelector(state => state.goodHabitCreator.habitType);
-    const { toggleCreator } = useContext(HabitCreatorContext);
+    const {activeCreator} = useContext(HabitCreatorContext);
 
     
     const [activeDivSprings, activeDivApi] = useSpring(() => ({ left: `${(habitType + 1) * 6}rem`, config: { duration: 100 } }));
@@ -23,15 +23,12 @@ const CreatorTypeButtons = ({onCreatorTypeSelect}) => {
         try {
             switch (habitType) {
                 case HABIT_TYPES.good:
-                    activeDivApi.start({ left: '0rem' });
                     onCreatorTypeSelect(CREATOR_TYPES.goodHabit);
                     break;
                 case HABIT_TYPES.limit:
-                    activeDivApi.start({ left: '6rem' });
                     onCreatorTypeSelect(CREATOR_TYPES.limitHabit);
                     break;
                 case HABIT_TYPES.quit:
-                    activeDivApi.start({ left: '12rem' });
                     onCreatorTypeSelect(CREATOR_TYPES.quitHabit);
                     break;
                 default:
@@ -40,8 +37,17 @@ const CreatorTypeButtons = ({onCreatorTypeSelect}) => {
         } catch (error) {
             throw new Error(error);
         }
-        
     };
+
+    useEffect(() => {
+        if (activeCreator === CREATOR_TYPES.goodHabit) {
+            activeDivApi.start({ left: '0rem' });
+        } else if (activeCreator === CREATOR_TYPES.limitHabit) {
+            activeDivApi.start({ left: '6rem' });
+        } else if (activeCreator === CREATOR_TYPES.quitHabit) {
+            activeDivApi.start({ left: '12rem' });
+        }
+     }, [activeCreator])
 
     return (
         <div className={styles["creator-type-buttons"]}>

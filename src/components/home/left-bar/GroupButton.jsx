@@ -40,15 +40,19 @@ const GroupButton = ({group, order}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (name !== '') {
+        if (name !== '' && name !== group.name) {
             try {
                 renameGroup({id: group.id, name: name}).unwrap();
-                toggleEditModeToGroup(null);
+                
                 toggleActiveGroup(name);
                 setName(name);
             } catch (error) {
                 throw new Error(error);
             }
+        } else if (name === group.name) {
+            toggleEditModeToGroup(null);
+            setName(group.name);
+            throw new Error('Group name is the same');
         }
     }
 
@@ -74,7 +78,7 @@ const GroupButton = ({group, order}) => {
 		};
 	}, []);
 
-    if (groupToEdit !== group.name) {
+    if (groupToEdit && groupToEdit.name !== group.name) {
         return (
             <button className={styles[`group-button`]} onClick={handleClick} onContextMenu={showContextMenu}>
                 <div className={styles['icon-box']}>
@@ -89,7 +93,7 @@ const GroupButton = ({group, order}) => {
                     <img className={styles.icon} src={GroupIcon} alt={GROUP_ICON_ALTERNATE_LABEL}/>
                 </div>
                 <input type='text' value={name} onChange={handleNameChange} autoFocus className={styles.input} maxLength={15} minLength={3} />
-                <button type='submit' style={{ padding: '0', marginLeft: '1rem', transform: 'translateX(.5rem)' }}></button>
+                <button type='submit' style={{ display: 'none' }}></button>
             </form>
         );
     }

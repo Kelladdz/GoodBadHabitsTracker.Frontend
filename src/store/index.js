@@ -3,10 +3,12 @@ import { setupListeners } from "@reduxjs/toolkit/query"
 import { goodHabitCreatorReducer } from "./slices/goodHabitCreatorSlice"
 import { groupsApi } from "./api/groupsApi"
 import { habitsApi } from "./api/habitsApi"
+import { habitsReducer } from "./slices/habitsSlice"
 
 export const store = configureStore({
     reducer: {
         goodHabitCreator: goodHabitCreatorReducer,
+        habits: habitsReducer,
         [groupsApi.reducerPath]: groupsApi.reducer,
         [habitsApi.reducerPath]: habitsApi.reducer,
     },
@@ -38,6 +40,7 @@ export {
     changeStartDate,
     changeGroup,
     resetForm} from "./slices/goodHabitCreatorSlice";
-export {useFetchHabitQuery, useFetchHabitsQuery, useAddHabitMutation} from "./api/habitsApi";
+export {getHabit, getHabits} from "./slices/habitsSlice";
+export {useFetchHabitQuery, useFetchHabitsQuery, useSearchHabitsQuery, useAddHabitMutation, useAddDayResultMutation, useDailyUpdateMutation} from "./api/habitsApi";
 export {useFetchGroupQuery, useFetchGroupsQuery, useAddGroupMutation, useRenameGroupMutation, useDeleteGroupMutation} from "./api/groupsApi";
 

@@ -11,3 +11,12 @@
     min-width: 2.25rem;
     box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
+
+.habit-button:not(:last-of-type) {
+    min-width: 5.625rem;
+}
+
+.habit-button:active {
+    box-shadow: none;
+    transform: translate(1px, 1px);
+}

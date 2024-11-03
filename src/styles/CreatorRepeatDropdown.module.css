@@ -45,7 +45,7 @@
     overflow-x: hidden;
     overflow-y: hidden;
     text-wrap: nowrap;
-    
+    z-index: 1000;
 }
 
 .list,
@@ -57,7 +57,7 @@
 .nested-list,
 .nested-grid,
 .nested-intervals {
-    left: 10rem;
+    left: 9.5rem;
     top: 0rem;
 }
 
