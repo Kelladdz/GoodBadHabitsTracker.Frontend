@@ -1,7 +1,4 @@
-import QuestionMark from '../../../assets/svg/question-mark.svg';
-
 import {HABIT_ICON_ALTERNATE_LABEL} from '../../../constants/alternate-labels';
-import { HABIT_ICONS_URLS } from '../../../constants/habit-icons';
 
 import styles from '../../../styles/HabitIcon.module.css';
 

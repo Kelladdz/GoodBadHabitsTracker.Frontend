@@ -1,23 +1,17 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 
-import Caret from '../../../assets/svg/caret.svg';
-
+import FilterBarContext from '../../../context/filter-bar';
 
 import { CARET_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
 
+import Caret from '../../../assets/svg/caret.svg';
+
 import styles from '../../../styles/FilterBarDropdown.module.css';
-import FilterBarContext from '../../../context/filter-bar';
 
 const FilterBarDropdown = ({icon, alt, label, content, onClick}) => {
     const {isSearchBarOpen} = useContext(FilterBarContext);
 
     const wrappedClass = isSearchBarOpen ? 'wrapped-' : '';
-
-    useEffect(() => {
-        if (!isSearchBarOpen) {
-            
-        }
-    }, [isSearchBarOpen]);
     
     return (
         <div style={{position: 'relative'}}>
@@ -34,7 +28,6 @@ const FilterBarDropdown = ({icon, alt, label, content, onClick}) => {
                 {content}
             </div>
         </div>
-        
     );
 }
 

@@ -1,5 +1,13 @@
+import { useContext, useEffect, useState } from 'react';
+import Lottie from 'lottie-react';
+
+import { useDailyUpdateMutation } from '../../../store';
+
+import LeftBarContext from '../../../context/left-bar';
+
+import useFilter from '../../../hooks/useFilter';
+
 import FilterBar from './FilterBar';
-import HabitList from './HabitList';
 import HabitsAccordion from './HabitsAccordion';
 
 import { HABIT_TYPES } from '../../../constants/habits-properties';
@@ -7,36 +15,28 @@ import { LEFT_BAR_BUTTON_LABELS } from '../../../constants/button-labels';
 import loadingAnimationData from '../../../assets/animations/loading-animation.json';
 
 import styles from '../../../styles/MiddleSection.module.css';
-import Lottie from 'lottie-react';
-import { useContext, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { easeExpIn } from 'd3-ease';
-import { useTransition, animated, to } from 'react-spring';
-import LeftBarContext from '../../../context/left-bar';
-import FilterBarContext from '../../../context/filter-bar';
-import CalendarContext from '../../../context/calendar';
-import useFilter from '../../../hooks/useFilter';
-import { useDailyUpdateMutation } from '../../../store';
 
 const MiddleSection = () => {
     const {activeGroup} = useContext(LeftBarContext);
     const {habits, filteredGoodHabits, filteredLimitHabits, filteredQuitHabits, isHabitsLoading} = useFilter();
     
     const [update, isUpdateLoading] = useDailyUpdateMutation();
-    const [timeToMidnight, setTimeToMidnight] = useState();
+
+    const today = new Date();
+    today.setHours(1,0,0,0);
+    const todayString = today.toISOString().substring(0, 10);
+
 
     const dailyUpdate = () => {
         console.log(habits)
         if (habits) {
             habits.forEach(async habit => {
                 let jsonDocs = [];
-                const today = new Date();
-                today.setHours(0,0,0,0);
-                const todayString = today.toISOString().substring(0, 10);
-                const startDate = new Date(habit.startDate);
-                startDate.setHours(0,0,0,0);
-                while (startDate <= today) {
-                    console.log(startDate, '  < ', today, ' = ', startDate < today);
+                
+                let startDate = new Date(habit.startDate);
+                startDate.setHours(1,0,0,0);
+                console.log(today);
+                while (startDate < today) {
                     if (!habit.dayResults.some(result => result.date === startDate.toISOString().substring(0, 10))) {
                         jsonDocs.push(habit.habitType !== 2 ? {
                             "op": "add",
@@ -72,9 +72,26 @@ const MiddleSection = () => {
                                     "Date": startDate.toISOString().substring(0, 10)
                                 }
                             });
-                        }
-                    
+                    } 
                     startDate.setDate(startDate.getDate() + 1);
+                }
+                if (!habit.dayResults.some(result => result.date === todayString)) {
+                    jsonDocs.push(habit.habitType !== 2 ? {
+                        "op": "add",
+                        "path": "/dayResults/-",
+                        "value": {
+                            "Progress": 0,
+                            "Status": 3,
+                            "Date": todayString
+                        }
+                    } : {
+                        "op": "add",
+                        "path": "/dayResults/-",
+                        "value": {
+                            "Status": 3,
+                            "Date": todayString
+                        }
+                    });
                 }
                 console.log(jsonDocs)
                 if (jsonDocs.length === 0) return;
@@ -87,13 +104,11 @@ const MiddleSection = () => {
             })
         }
     };
-        
-    
-
-
 
     useEffect(() => {
-        if (habits.length > 0) dailyUpdate();
+        if (habits) {
+            dailyUpdate();
+        }
     }, [habits]);
 
 

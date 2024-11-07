@@ -1,7 +1,12 @@
 import { useContext, useEffect } from 'react';
 
+import { useAddDayResultMutation } from '../../../store';
+
 import ContextMenuContext from '../../../context/context-menu';
 import CalendarContext from '../../../context/calendar';
+import HabitContext from '../../../context/habit';
+
+import { useHabit } from '../../../hooks/useHabit';
 
 import HabitIcon from './HabitIcon';
 import HabitInfo from './HabitInfo';
@@ -12,26 +17,20 @@ import ThreeDots from '../../../assets/svg/three-dots.svg';
 import CounterIcon from '../../../assets/svg/counter.svg';
 
 import { CHECK_ICON_ALTERNATE_LABEL, THREE_DOTS_ALTERNATE_LABEL, COUNTER_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
-
-import styles from '../../../styles/Habit.module.css';
 import { CONTEXT_MENU_TYPES } from '../../../constants/context-menu-types';
 import { HABIT_ICONS_URLS } from '../../../constants/habit-icons';
-import { useHabit } from '../../../hooks/useHabit';
-import { useAddDayResultMutation } from '../../../store';
-import { DAY_RESULTS_STATUSES } from '../../../constants/habits-properties';
-import HabitContext from '../../../context/habit';
+import { DAY_RESULT_STATUSES } from '../../../constants/habits-properties';
+
+import styles from '../../../styles/Habit.module.css';
 
 const Habit = ({habit}) => {
     const {toggleContextMenu} = useContext(ContextMenuContext);
     const {currentDateString} = useContext(CalendarContext)
     const {toggleHabit} = useContext(HabitContext);
-    const {backgroundColor, status} = useHabit(habit);
+
+    const {backgroundColor, status, progressToDisplay, breakDays} = useHabit(habit);
 
     const [newDayResult, {isLoading: isnewDayResultLoading}] = useAddDayResultMutation(); 
-
-    const progress = habit && habit.dayResults.some(result => result.date === currentDateString) 
-        ? habit.dayResults.find(result => result.date === currentDateString).progress
-        : 0;
 
     const handleHabitClick = () => {
         toggleHabit(habit);
@@ -59,13 +58,13 @@ const Habit = ({habit}) => {
         e.preventDefault();
         toggleHabit(habit);
         switch (status) {
-            case DAY_RESULTS_STATUSES[0]:
+            case DAY_RESULT_STATUSES[0]:
                 toggleContextMenu(CONTEXT_MENU_TYPES.completedHabit, e.clientX, e.clientY);
                 break;
-            case DAY_RESULTS_STATUSES[1]:
+            case DAY_RESULT_STATUSES[1]:
                 toggleContextMenu(CONTEXT_MENU_TYPES.failedHabit, e.clientX, e.clientY);
                 break;
-            case DAY_RESULTS_STATUSES[2]:
+            case DAY_RESULT_STATUSES[2]:
                 toggleContextMenu(CONTEXT_MENU_TYPES.skippedHabit, e.clientX, e.clientY);
                 break;
             default:
@@ -87,20 +86,14 @@ const Habit = ({habit}) => {
         }
     }
 
-    useEffect(() => {
-        if (habit) {
-            console.log('habit', habit)
-        }
-    },[habit])
-
     return (
         <div style={{backgroundColor: backgroundColor}} className={styles.habit} onClick={handleHabitClick} onContextMenu={showContextMenu}>
             <div className={styles.info}>
                 <HabitIcon icon={HABIT_ICONS_URLS[habit.iconId]}/>
-                <HabitInfo name={habit.name} progress={progress} quantity={habit.quantity} isTimeBased={habit.isTimeBased}/>
+                <HabitInfo name={habit.name} habitType={habit.habitType} progress={progressToDisplay} breakDays={breakDays} quantity={habit.quantity} isTimeBased={habit.isTimeBased}/>
             </div>
             <div className={styles.btns}>
-                {status === DAY_RESULTS_STATUSES[3] && resultButton()}
+                {status === DAY_RESULT_STATUSES[3] && resultButton()}
                 <HabitButton onClick={showContextMenu}>
                     <img className={styles.icon} src={ThreeDots} alt={THREE_DOTS_ALTERNATE_LABEL}/>
                 </HabitButton>

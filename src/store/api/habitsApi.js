@@ -41,6 +41,32 @@ const habitsApi = createApi({
                 }
             }
         }),
+        deleteHabit: builder.mutation({
+            invalidatesTags: ['Habits'],
+            query: (id) => {
+                return {
+                    url: `/api/habits/${id}`,
+                    method: 'DELETE'
+                }
+            }
+        }),
+        addToGroup: builder.mutation({
+            invalidatesTags: ['Habits'],
+            query: ({habitId, groupId}) => {
+                return {
+                    url: `/api/habits/${habitId}`,
+                    method: 'PATCH',
+                    jsonContentType: 'application/json-patch+json',
+                    body: [
+                        {
+                            "op": "replace",
+                            "path": "/groupId",
+                            "value": groupId
+                        }
+                    ]
+                }
+            }
+        }),
         addDayResult: builder.mutation({
             invalidatesTags: ['Habits'],
             query: ({id, date, status, progress}) => {
@@ -52,6 +78,27 @@ const habitsApi = createApi({
                         {
                             "op": "add",
                             "path": "/dayResults/-",
+                            "value": {
+                                "Progress": progress,
+                                "Status": status,
+                                "Date": date
+                            }
+                        }
+                    ]
+                }
+            }
+        }),
+        updateDayResult: builder.mutation({
+            invalidatesTags: ['Habits'],
+            query: ({id, index, date, status, progress}) => {
+                return {
+                    url: `/api/habits/${id}`,
+                    method: 'PATCH',
+                    jsonContentType: 'application/json-patch+json',
+                    body: [
+                        {
+                            "op": "replace",
+                            "path": `/dayResults/${index}`,
                             "value": {
                                 "Progress": progress,
                                 "Status": status,
@@ -74,9 +121,8 @@ const habitsApi = createApi({
                 }
             }
         }),
-        
     }
 }})
 
-export const {useFetchHabitQuery, useFetchHabitsQuery, useSearchHabitsQuery, useAddHabitMutation, useAddDayResultMutation, useDailyUpdateMutation} = habitsApi;
+export const {useFetchHabitQuery, useFetchHabitsQuery, useSearchHabitsQuery, useAddHabitMutation, useDeleteHabitMutation, useAddToGroupMutation, useAddDayResultMutation, useUpdateDayResultMutation, useDailyUpdateMutation} = habitsApi;
 export {habitsApi};

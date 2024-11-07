@@ -4,9 +4,9 @@ import CommentSection from './CommentSection';
 import Chart from './Chart';
 
 import { HABIT_STATISTICS_PROPERTIES } from '../../../constants/habit-statistics-properties';
+import { CALENDAR_TYPES } from '../../../constants/calendar-types';
 
 import styles from '../../../styles/RightSection.module.css';
-import { CALENDAR_TYPES } from '../../../constants/calendar-types';
 
 const RightSection = ({name}) => {
     return (

@@ -1,14 +1,16 @@
-import { useSelector } from "react-redux";
 import { useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { animated, useTransition } from "react-spring";
 import { easeExpIn } from "d3-ease";
+
+import Calendar from '../../home/shared/Calendar';
+
 import Caret from "../../../assets/svg/caret.svg";
-import { CARET_ALTERNATE_LABEL } from "../../../constants/alternate-labels";
-import styles from '../../../styles/CreatorCalendarDropdown.module.css';
-import Calendar from '../../home/shared/Calendar'
-import { LEFT_ARROW_ALTERNATE_LABEL, RIGHT_ARROW_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
+
 import { CALENDAR_TYPES } from "../../../constants/calendar-types";
-import { useCalendar } from "../../../hooks/useCalendar";
+import { CARET_ALTERNATE_LABEL } from "../../../constants/alternate-labels";
+
+import styles from '../../../styles/CreatorCalendarDropdown.module.css';
 
 const CreatorCalendarDropdown = () => {
     const startDate = useSelector(state => state.goodHabitCreator.startDate);

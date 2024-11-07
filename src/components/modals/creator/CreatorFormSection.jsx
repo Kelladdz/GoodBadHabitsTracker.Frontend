@@ -1,9 +1,11 @@
 import { useContext, useEffect, useRef } from 'react'
-import { useTransition, animated } from 'react-spring'
-import styles from '../../../styles/CreatorFormSection.module.css'
+
 import HabitCreatorContext from '../../../context/habit-creator'
+
 import { CREATOR_TYPES } from '../../../constants/creator-types'
 import { CREATOR_LABELS } from '../../../constants/creator-labels'
+
+import styles from '../../../styles/CreatorFormSection.module.css'
 
 const CreatorFormSection = ({label, children}) => {
     const {activeCreator} = useContext(HabitCreatorContext);

@@ -1,17 +1,15 @@
 import { useContext, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useSpring, animated } from 'react-spring';
 
 import HabitCreatorContext from '../../../context/habit-creator';
 
 import { HABIT_TYPES } from '../../../constants/habits-properties';
-
-import styles from '../../../styles/CreatorTypeButtons.module.css';
-import { changeHabitType } from '../../../store';
 import { CREATOR_TYPES } from '../../../constants/creator-types';
 
+import styles from '../../../styles/CreatorTypeButtons.module.css';
+
 const CreatorTypeButtons = ({onCreatorTypeSelect}) => {
-    const dispatch = useDispatch()
     const habitType = useSelector(state => state.goodHabitCreator.habitType);
     const {activeCreator} = useContext(HabitCreatorContext);
 

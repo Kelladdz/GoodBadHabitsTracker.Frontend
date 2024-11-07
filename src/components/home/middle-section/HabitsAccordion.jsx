@@ -1,17 +1,14 @@
 import { useState } from 'react';
 
-import { useFilter } from '../../../hooks/useFilter';
-
 import HabitList from './HabitList';
 
-import Caret from '../../../assets/svg/caret.svg';
-
 import { CARET_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
+
+import Caret from '../../../assets/svg/caret.svg';
 
 import styles from '../../../styles/HabitsAccordion.module.css';
 
 const HabitsAccordion = ({type, habits}) => {
-    
     const [isOpen, setIsOpen] = useState(false);
 
     const handleClick = () => {

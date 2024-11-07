@@ -1,21 +1,17 @@
-import {useSpring, animated} from '@react-spring/web';
 import {useContext, useRef, useEffect, useState} from 'react';
+import { useDispatch } from 'react-redux';
+import {useSpring, animated} from '@react-spring/web';
+
+import FilterBarContext from '../../../context/filter-bar';
+import CalendarContext from '../../../context/calendar';
 
 import SearchIcon from '../../../assets/svg/search-icon.svg';
 
 import {SEARCH_ICON_ALTERNATE_LABEL} from '../../../constants/alternate-labels';
 
 import styles from '../../../styles/SearchBarInput.module.css';
-import FilterBarContext from '../../../context/filter-bar';
-import { useSearchHabitsQuery } from '../../../store';
-import CalendarContext from '../../../context/calendar';
-import { useDispatch } from 'react-redux';
-import { getHabits } from '../../../store';
 
 const SearchBarInput = () => {
-    const dispatch = useDispatch();
-    const {currentDate} = useContext(CalendarContext);
-
     const {isSearchBarOpen, toggleSearchBar, searchString, changeSearchString} = useContext(FilterBarContext);
     
     const ref = useRef(null);
@@ -53,12 +49,6 @@ const SearchBarInput = () => {
             document.removeEventListener('mousedown', handleClickOutsideSearchInput);
         }
     },[]);
-
-    useEffect(() => {
-        changeSearchString(inputValue);
-        console.log('Input value changed:', inputValue);
-    }, [inputValue]);
-
     
     return (
         <animated.div ref={ref} style={divSprings} className={styles['search-bar-input']}>

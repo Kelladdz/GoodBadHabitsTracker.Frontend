@@ -1,12 +1,12 @@
 import { useContext, useRef, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useForm } from 'react-hook-form';
 
 import { changeQuantity } from '../../../store';
 
 import HabitCreatorContext from '../../../context/habit-creator';
 
 import IncrementButton from '../../../assets/svg/increment-button.svg';
+
 import { DECREMENT_ICON_ALTERNATE_LABEL, INCREMENT_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
 import { CREATOR_TYPES } from '../../../constants/creator-types';
 
@@ -14,7 +14,6 @@ import styles from '../../../styles/QuantityInput.module.css';
 
 const QuantityInput = () => {
     const dispatch = useDispatch();
-    const quantity = useSelector(state => state.goodHabitCreator.quantity);
     const isTimeBased = useSelector(state => state.goodHabitCreator.isTimeBased);
     
     const [quantityToDisplay, setQuanityToDisplay] = useState(1);

@@ -1,21 +1,33 @@
-import { useDeleteGroupMutation } from '../../store';
-import styles from '../../styles/Modal.module.css';
+
+import { useContext, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useSpringRef, useSpring, animated, useTransition, useChain } from 'react-spring';
+import { easeElastic, easeExpOut } from 'd3-ease';
+
+import { useDeleteGroupMutation, useDeleteHabitMutation, useUpdateDayResultMutation } from '../../store';
+
 import LeftBarContext from '../../context/left-bar'
+import ModalsContext from '../../context/modals';
+import HabitContext from '../../context/habit';
+import CalendarContext from '../../context/calendar';
+
+import ModalButton from './ModalButton';
+
 import { BUTTON_LABELS } from '../../constants/modal-labels';
 import { MODAL_TYPES } from '../../constants/modal-types';
 import { PRIMARY_MODAL_LABELS, SECONDARY_MODAL_LABEL } from '../../constants/modal-labels';
-import ModalsContext from '../../context/modals';
-import ModalButton from './ModalButton';
-import { useSpringRef, useSpring, animated, useTransition, useChain } from 'react-spring';
-import { easeElastic, easeExpOut } from 'd3-ease';
+
+import styles from '../../styles/Modal.module.css';
 
 const Modal = ({activeModal}) => {
     const {toggleModal} = useContext(ModalsContext);
     const {activeGroup} = useContext(LeftBarContext);
+    const {activeHabit} = useContext(HabitContext);
+    const {currentDateString} = useContext(CalendarContext);
 
-    const [deleteGroup, {isLoading}] = useDeleteGroupMutation();
+    const [deleteGroup, {isLoading: isGroupDeleteLoading}] = useDeleteGroupMutation();
+    const [deleteHabit, {isLoading: isHabitDeleteLoading}] = useDeleteHabitMutation();
+    const [updateDayResult, {isLoading: isUpdateDayResultLoading}] = useUpdateDayResultMutation();
 
     const [isOpen, setIsOpen] = useState(true);
 
@@ -47,17 +59,45 @@ const Modal = ({activeModal}) => {
         switch (activeModal) {
             case MODAL_TYPES.deleteGroup:
                 return PRIMARY_MODAL_LABELS.deleteGroup;
+            case MODAL_TYPES.deleteHabit:
+                return PRIMARY_MODAL_LABELS.deleteHabit;
+            case MODAL_TYPES.undo:
+                return PRIMARY_MODAL_LABELS.undo;
             default:
                 return '';
         }
     }
 
-    const handleDeleteButtonClick = async() => {
-        const id = activeGroup.id;
+    const handleDeleteButtonClick = async () => {
+        if (activeModal === MODAL_TYPES.deleteGroup) {
+            const id = activeGroup.id;
+            try {
+                await deleteGroup(id).unwrap();
+            } catch (err) {
+                console.error('Deleting group failed', err);
+            } finally {
+                toggleModal(null);
+            }
+        } else if (activeModal === MODAL_TYPES.deleteHabit) {
+            const id = activeHabit.id;
+            try {
+                await deleteHabit(id).unwrap();
+            } catch (err) {
+                console.error('Deleting habit failed', err);
+            } finally {
+                toggleModal(null);
+            }
+        }
+    }
+
+    const handleUndoButtonClick = async () => {
+        const id = activeHabit.id;
+        const date = currentDateString;
+        const resultIndex = activeHabit.dayResults.findIndex(result => result.date === currentDateString);
         try {
-            await deleteGroup(id).unwrap();
+            await updateDayResult({id: id, index: resultIndex, progress: 0, status: 3, date: date}).unwrap();
         } catch (err) {
-            console.error('Deleting group failed', err);
+            console.error('Updating day result failed', err);
         } finally {
             toggleModal(null);
         }
@@ -79,7 +119,11 @@ const Modal = ({activeModal}) => {
                         <span className={styles['primary-text']}>{primaryLabel()}</span>
                         <span className={styles['secondary-text']}>{SECONDARY_MODAL_LABEL}</span>
                         <div className={styles.btns}>
-                            <ModalButton className={styles.confirm} onClick={handleDeleteButtonClick} label={BUTTON_LABELS.delete}/>
+                            {activeModal !== MODAL_TYPES.undo ? 
+                                <ModalButton className={styles.confirm} onClick={handleDeleteButtonClick} label={BUTTON_LABELS.delete}/>
+                                :
+                                <ModalButton className={styles.confirm} onClick={handleUndoButtonClick} label={BUTTON_LABELS.confirm}/>
+                            }
                             <ModalButton className={styles.cancel} onClick={handleCancelButtonClick} label={BUTTON_LABELS.cancel} />
                         </div>
                     </animated.div>))}

@@ -1,5 +1,7 @@
 import { useContext, useState, useRef, useEffect } from 'react';
 
+import { useRenameGroupMutation } from '../../../store';
+
 import LeftBarContext from '../../../context/left-bar';
 import ContextMenuContext from '../../../context/context-menu';
 
@@ -9,7 +11,6 @@ import { GROUP_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels'
 import GroupIcon from '../../../assets/svg/group-icon.svg';
 
 import styles from '../../../styles/GroupButton.module.css';
-import { useRenameGroupMutation } from '../../../store';
 
 const GroupButton = ({group, order}) => {
     const {toggleContextMenu} = useContext(ContextMenuContext);

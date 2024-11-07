@@ -3,7 +3,6 @@ import CommentForm from './CommentForm';
 
 import styles from '../../../styles/CommentSection.module.css';
 
-
 const CommentSection = () => {
     return (
         <div className={styles['comment-section']}>

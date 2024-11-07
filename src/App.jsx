@@ -1,10 +1,13 @@
-import Lottie from 'lottie-react';
-import loadingAnimationData from './assets/animations/loading-animation.json';
-import './App.css'
 import { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import Lottie from 'lottie-react';
+
 import PrivateRoute from './PrivateRoute';
+
+import loadingAnimationData from './assets/animations/loading-animation.json';
 import { privateRoutes } from './routes';
+
+import './App.css'
 
 function App() {
   return (

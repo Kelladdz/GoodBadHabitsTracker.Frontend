@@ -1,3 +1,8 @@
+import { useContext, useEffect } from 'react';
+import { useSpring, animated } from 'react-spring';
+
+import LeftBarContext from '../../../context/left-bar';
+
 import LeftBarButton from './LeftBarButton';
 import GroupList from './GroupList';
 import AddGroupInput from './AddGroupInput';
@@ -10,10 +15,6 @@ import { LEFT_BAR_BUTTON_LABELS } from '../../../constants/button-labels';
 import { CONTEXT_MENU_TYPES } from '../../../constants/context-menu-types';
 
 import styles from '../../../styles/LeftBar.module.css';
-import { useSpring, animated } from 'react-spring';
-import { useContext, useEffect } from 'react';
-import LeftBarContext from '../../../context/left-bar';
-import { HABIT_TYPES } from '../../../constants/habits-properties';
 
 const LeftBar = () => {
     const {activeGroup, toggleActiveGroup, order, toggleOrder} = useContext(LeftBarContext)

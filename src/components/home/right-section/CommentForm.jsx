@@ -1,6 +1,6 @@
-import AddCommentIcon from '../../../assets/svg/add-comment-icon.svg';
-
 import { ADD_COMMENT_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
+
+import AddCommentIcon from '../../../assets/svg/add-comment-icon.svg';
 
 import styles from '../../../styles/CommentForm.module.css';
 

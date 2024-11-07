@@ -5,13 +5,10 @@ import ContextMenuContext from '../../../context/context-menu';
 import { CONTEXT_MENU_TYPES } from '../../../constants/context-menu-types';
 
 import styles from '../../../styles/LeftBarButton.module.css';
-import LeftBarContext from '../../../context/left-bar';
+
 
 const LeftBarButton = ({style, icon, alt, label, contextMenuType, handleLeftBarButtonClick}) => {
     const {toggleContextMenu} = useContext(ContextMenuContext);
-    const {activeGroup, toggleActiveGroup} = useContext(LeftBarContext);
-
-    const activeGroupClass = activeGroup === label ? '-active' : '';
 
     const showContextMenu = (e) => {
         e.preventDefault();

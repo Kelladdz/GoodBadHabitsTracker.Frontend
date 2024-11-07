@@ -1,18 +1,22 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTransition, animated } from 'react-spring';
+import { easeExpIn } from "d3-ease";
+import { debounce } from 'lodash';
+
+import { changeRepeatMode, removeRepeatDayOfWeek, addRepeatDayOfMonth, addRepeatDayOfWeek, clearRepeatDaysOfWeek, clearRepeatDaysOfMonth, changeRepeatInterval, removeRepeatDayOfMonth } from '../../../store/slices/goodHabitCreatorSlice';
+
+import { useOrderedNumbersShortened } from '../../../hooks/useOrderedNumbersShortened';
+
 import Caret from '../../../assets/svg/caret.svg';
 import CheckIcon from '../../../assets/svg/check-icon.svg';
 
 import { CARET_ALTERNATE_LABEL, CHECK_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
-import { useTransition, animated } from 'react-spring';
-import { easeExpIn } from "d3-ease";
-import styles from '../../../styles/CreatorRepeatDropdown.module.css';
 import { HABIT_REPEAT_MODES } from '../../../constants/habits-properties';
 import { DAYS_OF_WEEK, DAYS_OF_WEEK_SHORT } from '../../../constants/days-of-week';
 import { ORDERED_DAYS_OF_MONTH_SHORT } from '../../../constants/days-of-month';
-import { useSelector, useDispatch } from 'react-redux';
-import { changeRepeatMode, removeRepeatDayOfWeek, addRepeatDayOfMonth, addRepeatDayOfWeek, clearRepeatDaysOfWeek, clearRepeatDaysOfMonth, changeRepeatInterval, removeRepeatDayOfMonth } from '../../../store/slices/goodHabitCreatorSlice';
-import { debounce } from 'lodash';
-import { useOrderedNumbersShortened } from '../../../hooks/useOrderedNumbersShortened';
+
+import styles from '../../../styles/CreatorRepeatDropdown.module.css';
 
 const CreatorRepeatDropdown = () => {
     const dispatch = useDispatch();

@@ -1,0 +1,29 @@
+.progress-logger-dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    height: 2rem;
+    background-color: white;
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+    padding-inline: 0.5rem;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    min-width: 6.5rem;
+}
+
+.dropdown-content {
+    background-color: white;
+    position: absolute;
+    top: 2.25rem;
+    min-width: 100%;
+    border-radius: 7px;
+}
+
+.label {
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    color: #1e1e1e;
+    text-wrap: nowrap;
+}

@@ -28,6 +28,12 @@ export const HABIT_REPEAT_MODES = [
     "Daily", "Monthly", "Interval"
 ]
 
-export const DAY_RESULTS_STATUSES = [
-    "Completed", "Failed", "Skipped", "In Progress"
+export const DAY_RESULT_PROPERTIES = {
+    date: 'Date',
+    status: 'Status',
+    progress: 'Progress'
+}
+
+export const DAY_RESULT_STATUSES = [
+    "Complete", "Failed", "Skipped", "In Progress"
 ]

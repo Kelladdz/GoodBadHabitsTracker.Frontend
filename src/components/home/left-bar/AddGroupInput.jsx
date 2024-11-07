@@ -1,12 +1,14 @@
 import { useEffect, useState, useContext, useRef } from 'react';
-import PlusSign from '../../../assets/svg/black-plus-sign.svg';
+
+import { useAddGroupMutation } from '../../../store';
+
+import LeftBarContext from '../../../context/left-bar';
 
 import { PLUS_SIGN_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
 
+import PlusSign from '../../../assets/svg/black-plus-sign.svg';
+
 import styles from '../../../styles/AddGroupInput.module.css';
-import { useAddGroupMutation } from '../../../store';
-import { Button } from 'react-bootstrap';
-import LeftBarContext from '../../../context/left-bar';
 
 const AddGroupInput = () => {
     const {formMode, toggleFormMode, toggleActiveGroup} = useContext(LeftBarContext);

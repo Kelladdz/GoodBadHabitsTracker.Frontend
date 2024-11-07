@@ -1,21 +1,14 @@
-.context-menu {
-    position: absolute;
-    z-index: 1000;
+.list {
+    list-style-type: none;
     background-color: #fff;
     border: 1px solid #c2c2c2;
     border-radius: 7px;
-}
-
-.list,
-.groups {
-    list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
-.item,
-.group {
-    height: 2.25rem;
+.item {
+    height: 2rem;
     width: 100%;
     border-radius: 7px;
     display: flex;
@@ -25,13 +18,10 @@
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: -0.03rem;
+    text-wrap: nowrap;
     cursor: pointer;
 }
 
 .item:hover {
     background-color: #c9c9c9;
-}
-
-.progress-logger-box {
-    position: absolute;
 }

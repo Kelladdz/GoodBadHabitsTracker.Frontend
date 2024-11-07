@@ -1,7 +1,7 @@
+import {EDIT_COMMENT_ICON_ALTERNATE_LABEL, DELETE_COMMENT_ICON_ALTERNATE_LABEL} from '../../../constants/alternate-labels';
+
 import EditCommentIcon from '../../../assets/svg/edit-comment-icon.svg';
 import DeleteCommentIcon from '../../../assets/svg/delete-comment-icon.svg';
-
-import {EDIT_COMMENT_ICON_ALTERNATE_LABEL, DELETE_COMMENT_ICON_ALTERNATE_LABEL} from '../../../constants/alternate-labels';
 
 import styles from '../../../styles/Comment.module.css';
 

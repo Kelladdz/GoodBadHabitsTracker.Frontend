@@ -82,9 +82,23 @@ const goodHabitCreatorSlice = createSlice({
             state.repeatMode = 1;
             state.repeatDaysOfWeek = [0, 1, 2, 3, 4, 5, 6];
             state.repeatDaysOfMonth = [];
-            state.repeatInterval = [];
+            state.repeatInterval = null;
             state.startDate = new Date().toISOString().substring(0, 10);
             state.groupId = null;
+        },
+        fillForm: (state, action) => {
+            state.name = action.payload.name;
+            state.iconIndex = action.payload.iconId;
+            state.habitType = action.payload.habitType;
+            state.quantity = action.payload.quantity;
+            state.isTimeBased = action.payload.isTimeBased;
+            state.frequency = action.payload.frequency;
+            state.repeatMode = action.payload.repeatMode;
+            state.repeatDaysOfWeek = action.payload.repeatDaysOfWeek;
+            state.repeatDaysOfMonth = action.payload.repeatDaysOfMonth;
+            state.repeatInterval = action.payload.repeatInterval;
+            state.startDate = action.payload.startDate;
+            state.groupId = action.payload.groupId;
         }
 }});
 
@@ -105,5 +119,6 @@ export const {
     changeRepeatInterval,
     changeStartDate,
     changeGroup,
-    resetForm} = goodHabitCreatorSlice.actions;
+    resetForm,
+    fillForm} = goodHabitCreatorSlice.actions;
 export const goodHabitCreatorReducer = goodHabitCreatorSlice.reducer;

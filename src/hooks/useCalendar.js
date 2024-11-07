@@ -1,86 +1,88 @@
-import { findIndex } from 'lodash';
 import { useContext, useEffect, useState } from 'react';
-import { CALENDAR_TYPES } from '../constants/calendar-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeStartDate } from '../store';
-import { current } from '@reduxjs/toolkit';
+
+import { changeDate, changeStartDate } from '../store';
+
 import CalendarContext from '../context/calendar';
 
-export function useCalendar(type, cellSize) {
+import { CALENDAR_TYPES } from '../constants/calendar-types';
+
+
+
+
+export function useCalendar(type) {
     const dispatch = useDispatch();
     const startDate = useSelector(state => state.goodHabitCreator.startDate);
+    const resultDate = useSelector(state => state.progressLoggingForm.date);
 
- const {currentDate, currentDateString, changeCurrentDate} = useContext(CalendarContext);
+    const {currentDate, currentDateString, changeCurrentDate} = useContext(CalendarContext);
 
     const [calendarDays, setCalendarDays] = useState();
+    const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth());
+    const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
 
     const today = new Date();
-    const currentMonth = currentDate.getMonth();
-    const numberOfLastDayOfCurrentMonth = new Date(currentDate.getFullYear(), currentMonth + 1, 0).getDate();
-    const numberOfLastDayOfPreviousMonth = new Date(currentDate.getFullYear(), currentMonth, 0).getDate();
-    const firstDayOfCurrentMonth = new Date(currentDate.getFullYear(), currentMonth, 1).getDay();
-    const lastDayOfPreviousMonth = new Date(currentDate.getFullYear(), currentMonth, 0).getDay();
-    const lastSundayOfPreviousMonth = numberOfLastDayOfPreviousMonth - lastDayOfPreviousMonth + 1;
+    const numberOfLastDayOfCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const numberOfLastDayOfPreviousMonth = new Date(currentYear, currentMonth, 0).getDate();
+    const firstDayOfCurrentMonth = new Date(currentYear, currentMonth, 1).getDay();
+    const lastDayOfPreviousMonth = new Date(currentYear, currentMonth, 0).getDay();
+    const lastSundayOfPreviousMonth = numberOfLastDayOfPreviousMonth - (lastDayOfPreviousMonth);
     const firstDayOnCalendar = firstDayOfCurrentMonth === 0 
-        ? new Date(currentDate.getFullYear(), currentMonth, 1)
-        : new Date(currentDate.getFullYear(), currentMonth - 1, lastSundayOfPreviousMonth);
+        ? new Date(currentYear, currentMonth, 1)
+        : new Date(currentYear, currentMonth - 1, lastSundayOfPreviousMonth);
     const numberOfAllDaysInCalendar = numberOfLastDayOfCurrentMonth + firstDayOfCurrentMonth;
+    const calendarRows = numberOfAllDaysInCalendar > 35 ? 6 : 5;
 
-    const calendarRows = numberOfLastDayOfCurrentMonth + firstDayOfCurrentMonth > 35 ? 6 : 5;
-    
     const previousMonth = () => {
-        const previousMonth = new Date(currentDate);
-        previousMonth.setMonth(previousMonth.getMonth() - 1);
-        if (type === CALENDAR_TYPES.form && previousMonth.getMonth() >= today.getMonth()) {
-            setCurrentDate(previousMonth);
+        const previousMonth = currentMonth - 1
+        if (currentMonth === 0) {
+            setCurrentMonth(11);
+            setCurrentYear(currentYear - 1);
+        } else {
+            setCurrentMonth(previousMonth);
         }
     }
 
     const nextMonth = () => {
-        const previousMonth = new Date(currentDate);
-        previousMonth.setMonth(previousMonth.getMonth() + 1);
-        setCurrentDate(previousMonth);
+        const nextMonth = currentMonth + 1
+        if (currentMonth === 11) {
+            setCurrentMonth(0);
+            setCurrentYear(currentYear + 1);
+        } else {
+            setCurrentMonth(nextMonth);
+        }
     }
 
     const handleDayClick = (day) => {
-        console.log(day, 'day clicked');
         if (type !== CALENDAR_TYPES.main) {
             const selectedDate = new Date(day);
-            console.log('Selected date', selectedDate);
-            // const today = new Date();
-            // const todayIndex = findIndex(calendarDays, (d) => d === today.getDate());
-            // console.log('Index of today', todayIndex);
-            // const selectedDayIndex = findIndex(calendarDays, (d) => d === day);
-            // console.log('Index of selected day', selectedDayIndex);
             if (selectedDate.getMonth() < currentDate.getMonth()) {
                 previousMonth();
             } else if (selectedDate.getMonth() > currentDate.getMonth()) {
                 nextMonth();
             } 
-            if (type === CALENDAR_TYPES.form) {
-                console.log('Want to change start date');
-                dispatch(changeStartDate(day));
+            switch (type) {
+                case CALENDAR_TYPES.form:
+                    dispatch(changeStartDate(day));
+                    break;
+                case CALENDAR_TYPES.logger:
+                    dispatch(changeDate(day));
+                    break;
+                case CALENDAR_TYPES.filter:
+                    changeCurrentDate(day);
+                    break;
             }
         }
     }
-
-    const handleCurrentDateChange = (day) => {
-        console.log('Handle current date change', day);
-        changeCurrentDate(new Date(day));
-    }
     
     useEffect(() => {
-        console.log('Current date', currentDate);
         let newCalendarDays = [];
         for (let i = 0; i < numberOfAllDaysInCalendar; i++) {
-            const nextDay = new Date(firstDayOnCalendar.getFullYear(), firstDayOnCalendar.getMonth(), firstDayOnCalendar.getDate() + i);
+            const nextDay = new Date(firstDayOnCalendar.getFullYear(), firstDayOnCalendar.getMonth(), firstDayOnCalendar.getDate() + i + 1);
             newCalendarDays.push(nextDay.toISOString().substring(0, 10));
         }
-        setCalendarDays(newCalendarDays);
-        
-        
-        
-    }, [currentDate]);
+        setCalendarDays(newCalendarDays); 
+    }, [currentMonth]);
 
-    return { currentDate, currentDateString, startDate, today, numberOfLastDayOfCurrentMonth, firstDayOnCalendar, calendarDays, calendarRows, previousMonth, nextMonth, handleDayClick, handleCurrentDateChange};
+    return { currentDate, currentMonth, currentDateString, startDate, resultDate, today, numberOfLastDayOfCurrentMonth, firstDayOnCalendar, calendarDays, calendarRows, previousMonth, nextMonth, handleDayClick};
 }

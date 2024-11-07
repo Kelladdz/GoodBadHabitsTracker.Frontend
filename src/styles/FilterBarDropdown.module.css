@@ -9,6 +9,7 @@
     border-radius: 7px;
     padding-inline:0.5rem;
     box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+
 }
 
 .filter-bar-dropdown {
@@ -91,6 +92,7 @@
     margin: 0;
     z-index: 1000;
     border-radius: 7px;
+    right: 0rem;
 }
 
 .icon {

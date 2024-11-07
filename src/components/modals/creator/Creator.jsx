@@ -1,26 +1,27 @@
 import { useState, useRef, useContext, useEffect } from 'react';
-
-import styles from '../../../styles/Creator.module.css';
+import { useSelector, useDispatch } from 'react-redux';
 import { createPortal } from 'react-dom';
-import CreatorNameInput from './CreatorNameInput';
 import { useSpringRef, useSpring, animated, useTransition, useChain } from 'react-spring';
 import { easeElastic, easeExpOut } from 'd3-ease';
+
+import { changeIsTimeBased, changeFrequency, resetForm, useAddHabitMutation, changeHabitType, useFetchGroupsQuery, changeGroup } from '../../../store';
+
+import HabitCreatorContext from '../../../context/habit-creator';
+
+import CreatorNameInput from './CreatorNameInput';
 import CreatorIconBox from './CreatorIconBox';
 import CreatorTypeButtons from './CreatorTypeButtons';
 import CreatorFormSection from './CreatorFormSection';
-import { CREATOR_LABELS } from '../../../constants/creator-labels';
-import { HABIT_PROPERTIES, HABITS_FREQUENCIES, HABITS_QUANTITY_UNITS } from '../../../constants/habits-properties';
-import { useSelector, useDispatch } from 'react-redux';
 import QuantityInput from './QuantityInput';
-import { useForm } from 'react-hook-form';
-import Caret from '../../../assets/svg/caret.svg';
-import { CARET_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
 import CreatorDropdown from './CreatorDropdown';
-import { changeIsTimeBased, changeFrequency, resetForm, useAddHabitMutation, changeHabitType, useFetchGroupsQuery, changeGroup } from '../../../store';
 import CreatorRepeatDropdown from './CreatorRepeatDropdown';
 import CreatorCalendarDropdown from './CreatorCalendarDropdown';
-import HabitCreatorContext from '../../../context/habit-creator';
+
+import { CREATOR_LABELS } from '../../../constants/creator-labels';
+import { HABIT_PROPERTIES, HABITS_FREQUENCIES, HABITS_QUANTITY_UNITS } from '../../../constants/habits-properties';
 import { CREATOR_TYPES } from '../../../constants/creator-types';
+
+import styles from '../../../styles/Creator.module.css';
 
 const Creator = () => {
     const dispatch = useDispatch();
@@ -31,12 +32,8 @@ const Creator = () => {
 
     const {activeCreator, toggleCreator} = useContext(HabitCreatorContext);
     
-    
     const [isOpen, setIsOpen] = useState(true);
     const [groupOptions, setGroupOptions] = useState([]);
-
-    let disabledInputClass = activeCreator === CREATOR_TYPES.goodHabit ? 'disabled-' : '';
-    let expandedInputClass = activeCreator === CREATOR_TYPES.goodHabit ? 'expanded-' : '';
 
     const formRef = useRef();
     const repeatRef = useRef();

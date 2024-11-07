@@ -1,8 +1,12 @@
-import loadingAnimationData from '../../../assets/animations/loading-animation.json';
 import Lottie from 'lottie-react';
-import GroupButton from './GroupButton';
-import styles from '../../../styles/GroupList.module.css';
+
 import { useFetchGroupsQuery } from '../../../store';
+
+import GroupButton from './GroupButton';
+
+import loadingAnimationData from '../../../assets/animations/loading-animation.json';
+
+import styles from '../../../styles/GroupList.module.css';
 
 const GroupList = () => {
     const {data, error, isLoading} = useFetchGroupsQuery() || [];

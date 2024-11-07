@@ -1,18 +1,18 @@
 import { useState, useRef, useEffect, useContext} from 'react';
+import { useSelector } from 'react-redux';
+import { useTransition, animated } from 'react-spring';
+import { easeExpIn } from "d3-ease";
+
+import HabitCreatorContext from '../../../context/habit-creator';
+import LeftBarContext from '../../../context/left-bar';
 
 import Caret from '../../../assets/svg/caret.svg';
 
 import { CARET_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
-
-import styles from '../../../styles/CreatorDropdown.module.css';
 import { HABIT_PROPERTIES } from '../../../constants/habits-properties';
 import { CREATOR_TYPES } from '../../../constants/creator-types';
-import { set } from 'react-hook-form';
-import { useTransition, animated } from 'react-spring';
-import { easeExpIn } from "d3-ease";
-import HabitCreatorContext from '../../../context/habit-creator';
-import { useSelector } from 'react-redux';
-import LeftBarContext from '../../../context/left-bar';
+
+import styles from '../../../styles/CreatorDropdown.module.css';
 
 const CreatorDropdown = ({style, options, property, handleOptionChange}) => {
     const groupId = useSelector(state => state.goodHabitCreator.groupId);

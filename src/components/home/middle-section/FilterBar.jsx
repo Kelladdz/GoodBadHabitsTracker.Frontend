@@ -3,22 +3,22 @@ import { useTransition, animated } from 'react-spring';
 import { easeExpIn } from 'd3-ease';
 
 import LeftBarContext from '../../../context/left-bar';
+import CalendarContext from '../../../context/calendar';
 
 import FilterBarDropdown from './FilterBarDropdown';
 import SearchBarInput from './SearchBarInput';
 import AddHabitDropdown from './AddHabitDropdown';
 import Calendar from '../shared/Calendar';
+import SortMenu from './SortMenu';
 
 import { FILTER_BAR_BUTTON_LABELS } from '../../../constants/button-labels';
+import { CALENDAR_TYPES } from '../../../constants/calendar-types';
+import { CALENDAR_ICON_ALTERNATE_LABEL, FILTER_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
 
 import CalendarIcon from '../../../assets/svg/calendar-icon.svg';
 import FilterIcon from '../../../assets/svg/filter-icon.svg';
 
 import styles from '../../../styles/FilterBar.module.css';
-import SortMenu from './SortMenu';
-import { CALENDAR_TYPES } from '../../../constants/calendar-types';
-import { CALENDAR_ICON_ALTERNATE_LABEL, FILTER_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
-import CalendarContext from '../../../context/calendar';
 
 const FilterBar = () => {
     const {activeGroup} = useContext(LeftBarContext);
@@ -27,14 +27,12 @@ const FilterBar = () => {
 
     const calendarRef = useRef(null);
     const calendarDropdownRef = useRef(null);
-
     const sortMenuRef = useRef(null);
     const sortMenuDropdownRef = useRef(null);
 
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
     
-
     const calendarTransition = useTransition(isCalendarOpen, {
         from: { height: '0rem' },
         enter: { height: `17rem` },
@@ -110,8 +108,7 @@ const FilterBar = () => {
             <div className={styles['r-side']}>
                 <SearchBarInput/>
                 <div ref={calendarDropdownRef} className={styles['dropdown-box']}>
-                    <FilterBarDropdown icon={FilterIcon} alt={FILTER_ICON_ALTERNATE_LABEL} label={currentDateString === todayString ? 'Today' : currentDateString} onClick={showCalendar} content={calendar}/>
-                        
+                    <FilterBarDropdown icon={FilterIcon} alt={FILTER_ICON_ALTERNATE_LABEL} label={currentDateString === todayString ? 'Today' : currentDateString} onClick={showCalendar} content={calendar}/>       
                 </div>
                 <div ref={sortMenuDropdownRef} className={styles['dropdown-box']}>
                     <FilterBarDropdown icon={CalendarIcon} alt={CALENDAR_ICON_ALTERNATE_LABEL} label={FILTER_BAR_BUTTON_LABELS.sortBy} onClick={showSortMenu} content={sortMenu}/>
