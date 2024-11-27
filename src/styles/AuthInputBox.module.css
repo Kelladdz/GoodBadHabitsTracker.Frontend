@@ -1,0 +1,27 @@
+.auth-input-box {
+	background-color: transparent;
+    border: 1px solid #c2c2c2;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    outline: none;
+    border-radius: 7px;
+    height: 2.5rem;
+    width: 100%;
+	padding-left: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.input {
+	background-color: transparent; 
+    border: none;
+    outline: none;
+    margin-left: 0.5rem;
+	padding-left: 0.5rem;
+	border-radius: 7px;
+	height: 100%;
+	width: 100%;
+}
+
+.icon {
+	width: 1.5rem;
+}

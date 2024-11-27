@@ -1,0 +1,24 @@
+.btn {
+    background-color: #3662CC;
+    border: 1px solid #2a4fa5;
+    display: flex;
+    align-items: center;
+    gap:0.5rem;
+    height: 2rem;
+    border-radius: 7px;
+    padding-inline:0.5rem;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.btn:active {
+    box-shadow: none;
+    transform: translate(1px, 1px);
+}
+
+.label {
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    color: white;
+    text-wrap: nowrap;
+}

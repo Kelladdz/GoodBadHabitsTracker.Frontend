@@ -9,7 +9,8 @@ import loadingAnimationData from '../../../assets/animations/loading-animation.j
 import styles from '../../../styles/GroupList.module.css';
 
 const GroupList = () => {
-    const {data, error, isLoading} = useFetchGroupsQuery() || [];
+    const accessToken = localStorage.getItem('accessToken');
+    const {data, error, isLoading} = useFetchGroupsQuery(null, {skip: !accessToken}) || [];
 
     return (
         <div className={styles['group-list']}>

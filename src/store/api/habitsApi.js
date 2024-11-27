@@ -2,7 +2,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const habitsApi = createApi({
     reducerPath: 'habits',
-    baseQuery: fetchBaseQuery({ baseUrl: 'https://localhost:7154'}),
+    baseQuery: fetchBaseQuery({ 
+        baseUrl: 'https://localhost:7154', 
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        }}),
     endpoints: (builder) => {
         return {
         fetchHabit: builder.query({
@@ -121,8 +125,64 @@ const habitsApi = createApi({
                 }
             }
         }),
+        addComment: builder.mutation({
+            invalidatesTags: ['Habits'],
+            query: ({id, body, date}) => {
+                return {
+                    url: `/api/habits/${id}`,
+                    method: 'PATCH',
+                    jsonContentType: 'application/json-patch+json',
+                    body: [
+                        {
+                            "op": "add",
+                            "path": "/comments/-",
+                            "value": {
+                                "Body": body,
+                                "Date": date
+                            }
+                        }
+                    ]
+                }
+            }
+        }),
+        editComment: builder.mutation({
+            invalidatesTags: ['Habits'],
+            query: ({id, body, date, index}) => {
+                return {
+                    url: `/api/habits/${id}`,
+                    method: 'PATCH',
+                    jsonContentType: 'application/json-patch+json',
+                    body: [
+                        {
+                            "op": "replace",
+                            "path": `/comments/${index}`,
+                            "value": {
+                                "Body": body,
+                                "Date": date
+                            }
+                        }
+                    ]
+                }
+            }
+        }),
+        deleteComment: builder.mutation({
+            invalidatesTags: ['Habits'],
+            query: ({id, index}) => {
+                return {
+                    url: `/api/habits/${id}`,
+                    method: 'PATCH',
+                    jsonContentType: 'application/json-patch+json',
+                    body: [
+                        {
+                            "op": "remove",
+                            "path": `/comments/${index}`
+                        }
+                    ]
+                }
+            }
+        }),
     }
 }})
 
-export const {useFetchHabitQuery, useFetchHabitsQuery, useSearchHabitsQuery, useAddHabitMutation, useDeleteHabitMutation, useAddToGroupMutation, useAddDayResultMutation, useUpdateDayResultMutation, useDailyUpdateMutation} = habitsApi;
+export const {useFetchHabitQuery, useFetchHabitsQuery, useSearchHabitsQuery, useAddHabitMutation, useDeleteHabitMutation, useAddToGroupMutation, useAddDayResultMutation, useUpdateDayResultMutation, useDailyUpdateMutation, useAddCommentMutation, useEditCommentMutation, useDeleteCommentMutation} = habitsApi;
 export {habitsApi};

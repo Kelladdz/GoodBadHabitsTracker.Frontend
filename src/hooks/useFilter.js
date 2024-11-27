@@ -1,19 +1,23 @@
 import { useContext, useEffect, useState } from 'react';
+
+import { useFetchHabitsQuery } from '../store';
+
 import CalendarContext from '../context/calendar';
 import FilterBarContext from '../context/filter-bar';
-import { useFetchHabitsQuery } from '../store';
+
 import { ORDER_OPTIONS } from '../constants/order-options';
+
 export function useFilter() {
-    const {currentDate, currentDateString} = useContext(CalendarContext);
+    const {currentDate} = useContext(CalendarContext);
     const {searchString, orderOption} = useContext(FilterBarContext);
+    const accessToken = localStorage.getItem('accessToken');
 
     const [habits, setHabits] = useState([]);
-
     const [filteredGoodHabits, setFilteredGoodHabits] = useState([]);
     const [filteredLimitHabits, setFilteredLimitHabits] = useState([]);
     const [filteredQuitHabits, setFilteredQuitHabits] = useState([]);
 
-    const {data, error, isLoading} = useFetchHabitsQuery() || [];
+    const {data, error, isLoading} = useFetchHabitsQuery(null, {skip: !accessToken}) || [];
 
     const filterByDate = (habits, currentDate) => {
         let filteredHabits = [];

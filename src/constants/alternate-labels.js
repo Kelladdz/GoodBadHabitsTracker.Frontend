@@ -1,14 +1,8 @@
-export const HEADER_ICON_ALTERNATE_LABELS = {
-    settings: "Settings Icon",
-    profile: "Profile Icon"
-}
-
-export const LEFT_BAR_ICON_ALTERNATE_LABELS = {
-    allHabits: "All Habits Icon",
-    goodHabits: "Good Habits Icon",
-    badHabits: "Bad Habits Icon"
-}
-
+export const ALL_HABITS_ICON_ALTERNATE_LABEL = "All Habits Icon"
+export const GOOD_HABITS_ICON_ALTERNATE_LABEL = "Good Habits Icon"
+export const BAD_HABITS_ICON_ALTERNATE_LABEL = "Bad Habits Icon"
+export const SETTINGS_ICON_ALTERNATE_LABEL = "Settings Icon"
+export const PROFILE_ICON_ALTERNATE_LABEL = "Profile Icon"
 export const GROUP_ICON_ALTERNATE_LABEL = "Group Icon"
 export const SEARCH_ICON_ALTERNATE_LABEL = "Search Icon"
 export const CARET_ALTERNATE_LABEL = "Caret"
@@ -29,3 +23,5 @@ export const INCREMENT_ICON_ALTERNATE_LABEL = "Increment Icon"
 export const DECREMENT_ICON_ALTERNATE_LABEL = "Decrement Icon"
 export const FILTER_ICON_ALTERNATE_LABEL = "Filter Icon"
 export const CALENDAR_ICON_ALTERNATE_LABEL = "Calendar Icon"
+export const CLOSE_ICON_ALTERNATE_LABEL = "Close Icon"
+export const PROFILE_IMAGE_ALTERNATE_LABEL = "Profile Image"

@@ -1,5 +1,5 @@
 .right-section {
-    width: 65%;
+    width: 54%;
 }
 
 .label-box {
@@ -30,7 +30,7 @@
 }
 
 .r-side{
-    width: 55%;;
+    width: 55%;
 }
 
 .cell:first-child {
@@ -130,4 +130,34 @@
         justify-content: flex-end;
         width: 100vw;
     }
+}
+
+.btns {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    width: 6rem;
+    background-color: transparent;
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+    padding-inline:0.5rem;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: -0.03rem;
+    color: #1e1e1e;
+}
+
+.btn:active {
+    box-shadow: none;
+    transform: translate(1px, 1px);
 }

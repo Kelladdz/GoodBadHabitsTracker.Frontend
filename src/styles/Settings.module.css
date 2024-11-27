@@ -1,0 +1,73 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+.settings {
+	min-width: 56rem;
+	height: 38rem;
+	margin: 0;
+	position: absolute;
+    background-color: white;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	left: calc(50% - 28rem);
+    top: calc(50% - 19rem);
+    border-radius: 7px;
+}
+
+.settings-box {
+	display: flex;
+	margin-top: 2rem;
+	min-width: 55rem;
+}
+
+.caution-zone,
+.general-settings {
+	width: 50%;
+}
+
+.caution-text,
+.general-settings-text {
+	padding-left: 1rem;
+	color: #828282;
+	text-align: left;
+	font-size: 1rem;
+	font-style: normal;
+	font-weight: 600;
+	line-height: normal;
+	letter-spacing: -0.05rem;
+}
+
+.caution-box {
+	width: 18.25rem;
+	height: 12rem;
+	border: 1px solid #cccccc;
+	border-radius: 5px;
+	margin-left: 1rem;
+	margin-top: 1rem;
+}
+
+.general-settings-box {
+	height: 8rem;
+	border: 1px solid #cccccc;
+	border-radius: 5px;
+	margin-inline: 1rem;
+	margin-top: 1rem;
+}
+
+.profile-dropdown-item:hover > .general-settings-dropdown-btn-dark > .general-settings-dropdown-btn-text-dark,
+.profile-dropdown-item-focus:hover > .general-settings-dropdown-btn-dark > .general-settings-dropdown-btn-text-dark {
+	color: #1e1e1e;
+}
+
+.general-settings-box > :not(:last-child),
+.caution-box > :not(:last-child) {
+	border-bottom: 1px solid #cccccc;
+}

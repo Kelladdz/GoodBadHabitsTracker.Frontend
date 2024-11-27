@@ -1,0 +1,10 @@
+.debug-window {
+    background-color: white;
+    position: absolute;
+    right: 0px;
+    bottom: 0rem;
+    display: flex;
+    flex-direction: column;
+    z-index: 10000;
+    width: 30rem;
+}

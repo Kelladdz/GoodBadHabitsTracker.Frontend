@@ -10,7 +10,7 @@ import AddGroupInput from './AddGroupInput';
 import AllHabitsIcon from '../../../assets/svg/all-habits-icon.svg';
 import BadHabitsIcon from '../../../assets/svg/bad-habits-icon.svg';
 
-import { LEFT_BAR_ICON_ALTERNATE_LABELS } from '../../../constants/alternate-labels';
+import { ALL_HABITS_ICON_ALTERNATE_LABEL, GOOD_HABITS_ICON_ALTERNATE_LABEL, BAD_HABITS_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
 import { LEFT_BAR_BUTTON_LABELS } from '../../../constants/button-labels';
 import { CONTEXT_MENU_TYPES } from '../../../constants/context-menu-types';
 
@@ -61,20 +61,20 @@ const LeftBar = () => {
                 handleLeftBarButtonClick={() => handleLeftBarButtonClick(LEFT_BAR_BUTTON_LABELS.allHabits)}
                     style={{transform: 'translateY(-1px)'}}
                     icon={AllHabitsIcon} 
-                    alt={LEFT_BAR_ICON_ALTERNATE_LABELS.allHabits} 
+                    alt={ALL_HABITS_ICON_ALTERNATE_LABEL} 
                     label={LEFT_BAR_BUTTON_LABELS.allHabits} 
                     contextMenuType={CONTEXT_MENU_TYPES.none}/>
                 <LeftBarButton 
                 handleLeftBarButtonClick={() => handleLeftBarButtonClick(LEFT_BAR_BUTTON_LABELS.badHabits)}
                     icon={BadHabitsIcon} 
-                    alt={LEFT_BAR_ICON_ALTERNATE_LABELS.badHabits} 
+                    alt={BAD_HABITS_ICON_ALTERNATE_LABEL} 
                     label={LEFT_BAR_BUTTON_LABELS.badHabits} 
                     contextMenuType={CONTEXT_MENU_TYPES.badHabits}/>
                 <LeftBarButton 
                 handleLeftBarButtonClick={() => handleLeftBarButtonClick(LEFT_BAR_BUTTON_LABELS.goodHabits)}
                     style={{transform: 'rotate(180deg) scale(1.25) translateY(3px)'}}
                     icon={BadHabitsIcon} 
-                    alt={LEFT_BAR_ICON_ALTERNATE_LABELS.goodHabits} 
+                    alt={GOOD_HABITS_ICON_ALTERNATE_LABEL} 
                     label={LEFT_BAR_BUTTON_LABELS.goodHabits} 
                     contextMenuType={CONTEXT_MENU_TYPES.goodHabits}/>
             </nav>

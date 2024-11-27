@@ -1,0 +1,19 @@
+.profile-box {
+    width: 12rem;
+    margin-top: 2rem;
+    position: relative;
+    border-radius: 50%;
+    background-color: #D9D9D9;
+    height: 12rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image {
+    width: 4rem;
+}
+
+.rename-btn {
+    position: absolute;
+}

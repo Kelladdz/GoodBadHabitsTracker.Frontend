@@ -4,6 +4,9 @@ const groupsApi = createApi({
     reducerPath: 'groups',
     baseQuery: fetchBaseQuery({ 
         baseUrl: 'https://localhost:7154', 
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        },
     }),
     endpoints: (builder) => {
         return {

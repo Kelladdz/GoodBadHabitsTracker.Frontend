@@ -20,7 +20,7 @@ const HabitsAccordion = ({type, habits}) => {
                 <span className={styles.label}>{type} Habits</span>
                 <img style={isOpen ? {transform: 'rotate(180deg)'} : {}} className={styles.icon} src={Caret} alt={CARET_ALTERNATE_LABEL}/>
             </div>
-            {habits && <HabitList isOpen={isOpen} habits={habits}/>}
+            {isOpen && <HabitList habits={habits}/>}
         </>
         
     )

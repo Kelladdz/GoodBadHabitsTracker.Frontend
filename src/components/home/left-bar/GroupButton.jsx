@@ -79,7 +79,7 @@ const GroupButton = ({group, order}) => {
 		};
 	}, []);
 
-    if (groupToEdit && groupToEdit.name !== group.name) {
+    if (!groupToEdit) {
         return (
             <button className={styles[`group-button`]} onClick={handleClick} onContextMenu={showContextMenu}>
                 <div className={styles['icon-box']}>

@@ -7,13 +7,12 @@ import CalendarContext from '../context/calendar';
 
 import { CALENDAR_TYPES } from '../constants/calendar-types';
 
-
-
-
 export function useCalendar(type) {
     const dispatch = useDispatch();
     const startDate = useSelector(state => state.goodHabitCreator.startDate);
     const resultDate = useSelector(state => state.progressLoggingForm.date);
+
+    const isSundayFirstDayOfWeek = useSelector(state => state.settings.isSundayFirstDayOfWeek);
 
     const {currentDate, currentDateString, changeCurrentDate} = useContext(CalendarContext);
 
@@ -27,9 +26,10 @@ export function useCalendar(type) {
     const firstDayOfCurrentMonth = new Date(currentYear, currentMonth, 1).getDay();
     const lastDayOfPreviousMonth = new Date(currentYear, currentMonth, 0).getDay();
     const lastSundayOfPreviousMonth = numberOfLastDayOfPreviousMonth - (lastDayOfPreviousMonth);
+
     const firstDayOnCalendar = firstDayOfCurrentMonth === 0 
         ? new Date(currentYear, currentMonth, 1)
-        : new Date(currentYear, currentMonth - 1, lastSundayOfPreviousMonth);
+        : new Date(currentYear, currentMonth - 1, isSundayFirstDayOfWeek ? lastSundayOfPreviousMonth : lastSundayOfPreviousMonth + 1);
     const numberOfAllDaysInCalendar = numberOfLastDayOfCurrentMonth + firstDayOfCurrentMonth;
     const calendarRows = numberOfAllDaysInCalendar > 35 ? 6 : 5;
 
@@ -69,7 +69,7 @@ export function useCalendar(type) {
                     dispatch(changeDate(day));
                     break;
                 case CALENDAR_TYPES.filter:
-                    changeCurrentDate(day);
+                    changeCurrentDate(selectedDate);
                     break;
             }
         }
@@ -82,7 +82,7 @@ export function useCalendar(type) {
             newCalendarDays.push(nextDay.toISOString().substring(0, 10));
         }
         setCalendarDays(newCalendarDays); 
-    }, [currentMonth]);
+    }, [currentMonth, isSundayFirstDayOfWeek]);
 
     return { currentDate, currentMonth, currentDateString, startDate, resultDate, today, numberOfLastDayOfCurrentMonth, firstDayOnCalendar, calendarDays, calendarRows, previousMonth, nextMonth, handleDayClick};
 }

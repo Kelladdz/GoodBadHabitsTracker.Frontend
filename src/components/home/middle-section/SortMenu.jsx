@@ -1,7 +1,8 @@
 import { useContext } from 'react';
-import useFilter from '../../../hooks/useFilter';
-import styles from '../../../styles/SortMenu.module.css';
+
 import FilterBarContext from '../../../context/filter-bar';
+
+import styles from '../../../styles/SortMenu.module.css';
 
 const SortMenu = React.forwardRef((props, ref) => {
     const {changeOrderOption} = useContext(FilterBarContext)

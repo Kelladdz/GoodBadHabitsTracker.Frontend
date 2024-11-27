@@ -1,5 +1,6 @@
 .chart {
 	margin-inline: 2rem;
+	min-height: 16rem;
 }
 
 @media (max-width: 88rem) {

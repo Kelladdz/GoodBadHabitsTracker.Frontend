@@ -1,0 +1,15 @@
+.auth-error-box {
+	position: relative;
+	display: flex;
+	justify-content: end;
+	height: 1.5rem;
+	margin-bottom: 0.5rem;
+}
+
+.error-text {
+	position: absolute;
+	left: 0;
+	color: red;
+	margin: 0;
+	text-wrap: nowrap;
+}

@@ -1,0 +1,26 @@
+.settings-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.description {
+    margin: 0;
+    margin-bottom: 0.1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 600;
+}
+
+.text {
+    font-size: 0.625rem;
+    color: #828282;
+    font-weight: 600;
+    line-height: normal;
+}

@@ -1,0 +1,26 @@
+.auth-window {
+    position: absolute;
+    left: calc(50% - 15rem);
+    top: calc(50% - 22.5rem);
+    width: 30rem;
+    height: 45rem;
+    border-radius: 7px;
+    background-color: #fff;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    border: 1px solid #e2e2e2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+}
+
+.logo {
+	width: 50%;
+}
+
+.welcome {
+	font-size: 1.1rem;
+    font-weight: 400;
+    color: #9b9b9b;
+    margin-top: 1rem;
+}

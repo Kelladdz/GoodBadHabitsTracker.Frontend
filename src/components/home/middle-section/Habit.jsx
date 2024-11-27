@@ -5,6 +5,7 @@ import { useAddDayResultMutation } from '../../../store';
 import ContextMenuContext from '../../../context/context-menu';
 import CalendarContext from '../../../context/calendar';
 import HabitContext from '../../../context/habit';
+import ModalsContext from '../../../context/modals';
 
 import { useHabit } from '../../../hooks/useHabit';
 
@@ -20,14 +21,16 @@ import { CHECK_ICON_ALTERNATE_LABEL, THREE_DOTS_ALTERNATE_LABEL, COUNTER_ICON_AL
 import { CONTEXT_MENU_TYPES } from '../../../constants/context-menu-types';
 import { HABIT_ICONS_URLS } from '../../../constants/habit-icons';
 import { DAY_RESULT_STATUSES } from '../../../constants/habits-properties';
+import { MODAL_TYPES } from '../../../constants/modal-types';
 
 import styles from '../../../styles/Habit.module.css';
+import TimerContext from '../../../context/timer';
 
 const Habit = ({habit}) => {
     const {toggleContextMenu} = useContext(ContextMenuContext);
     const {currentDateString} = useContext(CalendarContext)
     const {toggleHabit} = useContext(HabitContext);
-
+    const {toggleTimer} = useContext(TimerContext);
     const {backgroundColor, status, progressToDisplay, breakDays} = useHabit(habit);
 
     const [newDayResult, {isLoading: isnewDayResultLoading}] = useAddDayResultMutation(); 
@@ -35,6 +38,8 @@ const Habit = ({habit}) => {
     const handleHabitClick = () => {
         toggleHabit(habit);
     }
+
+    
 
     const resultButton = () => {
         if (habit.isTimeBased) {
@@ -71,11 +76,10 @@ const Habit = ({habit}) => {
                 toggleContextMenu(CONTEXT_MENU_TYPES.habit, e.clientX, e.clientY);
                 break;
         }
-        
     }
 
     const handleTimerButtonClick = () => {
-        console.log('Timer button clicked')
+        toggleTimer(true);
     }
 
     const handleDoneButtonClick = async () => {

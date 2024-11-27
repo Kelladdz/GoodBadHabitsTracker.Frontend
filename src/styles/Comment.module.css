@@ -111,3 +111,14 @@
     background-color: #e2e2e2;
 }
 
+.input {
+    margin: 0;
+    font-size: .8rem;
+    letter-spacing: -0.03rem;
+    outline: none;
+    border: none;
+}
+
+.submit-icon {
+    transform: scale(.7);
+}
