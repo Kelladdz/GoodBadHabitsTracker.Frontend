@@ -4,35 +4,44 @@ import { goodHabitCreatorReducer } from "./slices/goodHabitCreatorSlice"
 import { progressLoggingFormReducer } from "./slices/progressLoggingFormSlice"
 import { groupsApi } from "./api/groupsApi"
 import { habitsApi } from "./api/habitsApi"
-import { authApi } from "./api/authApi"
-import { habitsReducer } from "./slices/habitsSlice"
 import { settingsReducer } from "./slices/settingsSlice"
 import { authReducer } from "./slices/authSlice"
 import { registerReducer } from "./slices/registerSlice"
+import { initializeAuth } from "./actions/authActions"
 import tokenMiddleware from "../middleware/TokenMiddleware"
+import { thunk } from "redux-thunk"
 
-export const store = configureStore({
-    reducer: {
-        goodHabitCreator: goodHabitCreatorReducer,
-        progressLoggingForm: progressLoggingFormReducer,
-        habits: habitsReducer,
-        settings: settingsReducer,
-        [groupsApi.reducerPath]: groupsApi.reducer,
-        [habitsApi.reducerPath]: habitsApi.reducer,
-        auth: authReducer,
-        register: registerReducer,
-    },
-    middleware: (getDefaultMiddleware) => { return getDefaultMiddleware({
-        serializableCheck: false
-    })
-        .concat(habitsApi.middleware)
-        .concat(groupsApi.middleware)
-        .concat(tokenMiddleware);
+const createAppStore = async () => {
+    try {
+        const store = configureStore({
+            reducer: {
+                goodHabitCreator: goodHabitCreatorReducer,
+                progressLoggingForm: progressLoggingFormReducer,
+                settings: settingsReducer,
+                [groupsApi.reducerPath]: groupsApi.reducer,
+                [habitsApi.reducerPath]: habitsApi.reducer,
+                auth: authReducer,
+                register: registerReducer,
+            },
+            middleware: (getDefaultMiddleware) => { return getDefaultMiddleware({
+                serializableCheck: false
+            })
+                .concat(habitsApi.middleware)
+                .concat(groupsApi.middleware)
+                .concat(tokenMiddleware)
+                .concat(thunk);
+            }
+        })
+        await store.dispatch(initializeAuth());
+        setupListeners(store.dispatch);
+
+        return store;
+    } catch (err) {
+        throw new Error(`Error initializing the app: ${err.message}`);
     }
-})
+}
 
-setupListeners(store.dispatch);
-
+export default createAppStore;
 export {
     changeName, 
     changeIcon,
@@ -58,9 +67,8 @@ export {
     changeDate,
     resetProgressLoggingForm,
     fillProgressLoggingForm} from "./slices/progressLoggingFormSlice";
-export {getHabit, getHabits} from "./slices/habitsSlice";
 export {changeFirstDayOfWeek, changeLanguage} from "./slices/settingsSlice";
-export {logout, setCredentials, login, getExternalTokens } from './slices/authSlice';
+export {setAccessToken, setRefreshToken, setUserData, loginSuccess, loginFail, signUpSuccess, signUpFail, logout, setCredentials, login, getExternalTokens, refreshTokenSuccess, refreshTokenFail, setInitialAuthState } from './slices/authSlice';
 export {changeUserName, toggleUserNameError, 
     changeEmail, toggleEmailError,
     changePassword, togglePasswordError,
@@ -79,4 +87,4 @@ export {
     useEditCommentMutation,
     useDeleteCommentMutation} from "./api/habitsApi";
 export {useFetchGroupQuery, useFetchGroupsQuery, useAddGroupMutation, useRenameGroupMutation, useDeleteGroupMutation} from "./api/groupsApi";
-export {useRegisterMutation} from "./api/authApi";
+

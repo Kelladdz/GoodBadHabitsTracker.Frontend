@@ -1,10 +1,10 @@
 
-import { useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import Cookies from 'js-cookie';
 
 import { useAuth } from '../../hooks/useAuth';
-
-import AuthContext from '../../context/auth';
 
 import User from '../../assets/svg/user.svg';
 import Password from '../../assets/svg/password.svg';
@@ -19,28 +19,25 @@ import AuthExternalLoginButton from './AuthExternalLoginButton';
 import { PATHS } from '../../constants/paths';
 
 import styles from '../../styles/SignIn.module.css';
-import { useDispatch } from 'react-redux';
-import { login } from '../../store/slices/authSlice';
-import axios from 'axios';
-
-
 
 const SignIn = () => {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
-	const {email, password, errors, emailChange, passwordChange} = useContext(AuthContext);
 
-	const {googleLogin, facebookLogin, handleLoginSubmit} = useAuth();
+	const signInError = useSelector(state => state.auth?.signInError);
 
-	
+	const [loading, setLoading] = useState(false);
+	const [loadingText, setLoadingText] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+
+	const {googleLogin, facebookLogin, login} = useAuth();
     
-
 	const handleEmailChange = (e) => {
-		emailChange(e.target.value);
+		setEmail(e.target.value);
 	}
 
 	const handlePasswordChange = (e) => {
-		passwordChange(e.target.value);
+		setPassword(e.target.value);
 	}
 
     const handleForgetPasswordButtonClick = () => {
@@ -51,6 +48,35 @@ const SignIn = () => {
         navigate(PATHS.signUp);
     }
 
+	const handleLoginSubmit = (e) => {
+		e.preventDefault();
+		setLoading(true);
+
+		const request = {
+			email,
+			password
+		}
+		const timeout = setTimeout(() => {
+			setLoadingText(
+			  "This is taking longer than usual. Please wait while backend services are getting started."
+			);
+		  }, 5000);
+		login(request);
+		setLoading(false);
+    	clearTimeout(timeout);
+	}
+
+	useEffect(() => {
+		const userCookie = () => {
+			if (Cookies.get('__Secure-Fgp')) {
+				return Cookies.get('__Secure-Fgp');
+		}
+	}
+		console.log(userCookie());
+		if (userCookie() !== undefined) {
+			navigate(PATHS.main);
+		}
+	});
 
     
     return (
@@ -60,7 +86,8 @@ const SignIn = () => {
 				<AuthInputBox icon={User} inputValue={email} onChange={handleEmailChange} placeholder='E-mail' />
 				<AuthInputBox icon={Password} inputValue={password} onChange={handlePasswordChange} placeholder='Password' />
 				<div style={{display: 'flex', alignItems: 'center', position: 'relative'}}>
-					<AuthErrorBox errors={errors} />
+					{signInError && <AuthErrorBox error={signInError} />}
+					{loadingText !== '' && <AuthErrorBox error={loadingText} />}
 					<div className={styles['forgot-password-btn']} onClick={handleForgetPasswordButtonClick}>
 						<span>Forgot Password?</span>
 					</div>

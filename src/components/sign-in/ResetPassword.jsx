@@ -35,7 +35,7 @@ const ResetPassword = () => {
     const handleResetPasswordSubmit = event => {
 		event.preventDefault();
 		newPassword !== confirmPassword
-			? (errors = `Passwords didn't match.`)
+			? setErrors(`Passwords didn't match.`)
 			: resetPassword(newPassword, token, email);
 	};
 

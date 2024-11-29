@@ -1,21 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const authApi = createApi({
-    reducerPath: 'auth',
-    baseQuery: fetchBaseQuery({ baseUrl: 'https://localhost:7154'}),
-    endpoints: (builder) => {
-        return {
-        register: builder.mutation({
-            query: ({userName, email, password, confirmPassword}) => {
-                return {
-                    url: `/api/auth/register`,
-                    method: 'POST',
-                    body: {userName, email, password, confirmPassword}
-                }
-            }
-        })
+export const signIn = async (formData) => {
+    try {
+      const res = await API.post(import.meta.env.VITE_REACT_APP_LOGIN_LOCALHOST_URL, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return { error: null, data: res.data }
+    } catch (error) {
+      return handleApiError(error);
     }
-}})
-
-export const {useRegisterMutation} = authApi;
-export {authApi};
+  };

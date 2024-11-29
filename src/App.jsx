@@ -1,7 +1,8 @@
-import { Suspense } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Suspense, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import Lottie from 'lottie-react';
+import Cookie from 'js-cookie';
 
 import PrivateRoute from './PrivateRoute';
 import AuthWindow from './pages/AuthWindow';
@@ -18,40 +19,43 @@ import loadingAnimationData from './assets/animations/loading-animation.json';
 import { PATHS } from './constants/paths';
 
 import './App.css'
+import AccountConfirmCheckEmail from './components/sign-in/AccountConfirmCheckEmail';
+
 
 function App() {
-  const accessToken = useSelector(state => state.auth.accessToken);
+        const userData = useSelector(state => state.auth.userData);
 
-  const router = createBrowserRouter([
-    {
-            path: PATHS.main,
-            element: <PrivateRoute/>,
-            children: [
-                    {index: true, element: <Home/>}
-            ]
+        const router = createBrowserRouter([
+        {
+                path: PATHS.main,
+                element: <PrivateRoute userData={userData}/>,
+                children: [
+                        {index: true, element: <Home/>}
+                ]
 
-    },
-    {
-            path: PATHS.auth,
-            element: <AuthWindow/>,
-            children: [
-                    {index: true, element: <SignIn/>},
-                    {path: PATHS.signUp, element: <SignUp/>},
-                    {path: PATHS.forgetPassword, element: <ForgetPassword/>},
-                    {path: PATHS.forgetPasswordConfirmEmail, element: <ForgotPasswordCheckEmail/>},
-                    {path: PATHS.resetPassword, element: <ResetPassword/>}
-            ]
-    },
-    { path: PATHS.confirmEmailCallback, element: <ConfirmEmailCallback/>},
-    { path: PATHS.googleCallback, element: <Auth0Callback provider='Google'/> },
-    { path: PATHS.facebookCallback, element: <Auth0Callback provider='Facebook'/> },
-]);
+        },
+        {
+                path: PATHS.auth,
+                element: userData ? <Navigate to={PATHS.main}/> : <AuthWindow/>,
+                children: [
+                        {index: true, element: <SignIn/>},
+                        {path: PATHS.signUp, element: <SignUp/>},
+                        {path: PATHS.signUpConfirmEmail, element: <AccountConfirmCheckEmail />},
+                        {path: PATHS.forgetPassword, element: <ForgetPassword/>},
+                        {path: PATHS.forgetPasswordConfirmEmail, element: <ForgotPasswordCheckEmail/>},
+                        {path: PATHS.resetPassword, element: <ResetPassword/>}
+                ]
+        },
+        { path: PATHS.confirmEmailCallback, element: <ConfirmEmailCallback/>},
+        { path: PATHS.googleCallback, element: <Auth0Callback provider='Google'/> },
+        { path: PATHS.facebookCallback, element: <Auth0Callback provider='Facebook'/> },
+        ]);
 
-  return (
-    <Suspense fallback={<Lottie animationData={loadingAnimationData} />}>
-      <RouterProvider router={router}/>
-    </Suspense>
-  )
+        return (
+                <Suspense fallback={<Lottie animationData={loadingAnimationData} />}>
+                        <RouterProvider router={router}/>
+                </Suspense>
+        )
   
 }
 

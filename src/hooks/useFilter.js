@@ -6,11 +6,12 @@ import CalendarContext from '../context/calendar';
 import FilterBarContext from '../context/filter-bar';
 
 import { ORDER_OPTIONS } from '../constants/order-options';
+import { useSelector } from 'react-redux';
 
 export function useFilter() {
     const {currentDate} = useContext(CalendarContext);
     const {searchString, orderOption} = useContext(FilterBarContext);
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = useSelector(state => state.auth.accessToken);
 
     const [habits, setHabits] = useState([]);
     const [filteredGoodHabits, setFilteredGoodHabits] = useState([]);

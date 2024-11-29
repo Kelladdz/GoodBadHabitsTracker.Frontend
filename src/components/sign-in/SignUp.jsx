@@ -21,7 +21,7 @@ const SignUp = () => {
     const dispatch = useDispatch();
     const registerForm = useSelector(state => state.register);
 
-    const {handleRegisterSubmit} = useAuth();
+    const {register} = useAuth();
 
     const handleUserNameChange = (e) => {
         dispatch(changeUserName(e.target.value));
@@ -41,6 +41,12 @@ const SignUp = () => {
 
     const handleBackButtonClick = () => {
         navigate(PATHS.auth);
+    }
+
+    const handleRegisterSubmit = (e) => {
+        e.preventDefault();
+        console.log(registerForm);
+        register();
     }
     
     return (

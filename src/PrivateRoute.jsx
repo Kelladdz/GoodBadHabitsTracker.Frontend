@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { Outlet } from "react-router-dom";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 
 import { useAuth } from "./hooks/useAuth";
@@ -24,19 +25,30 @@ import Timer from "./components/home/middle-section/Timer";
 import Settings from "./components/modals/settings/Settings";
 import AuthDebug from "./AuthDebug";
 
+import { PATHS } from "./constants/paths";
 
-const PrivateRoute = () => {
-    
+
+const PrivateRoute = ({userData}) => {
+    const navigate = useNavigate();
+
+    const {signOut} = useAuth();
+    const isAuthenticated = useMemo(() => {
+        return (userData, accessToken) => {
+            return userData && accessToken;
+        };
+    } ,[]);
+
     const {activeMenu, hideContextMenu} = useContext(ContextMenuContext);
     const {activeModal} = useContext(ModalsContext);
     const {activeCreator} = useContext(HabitCreatorContext);
     const {isProgressLoggerOpen} = useContext (ProgressLoggerContext);
     const {isTimerOpen} = useContext(TimerContext);
     const {isSettingsOpen} = useContext(SettingsContext);
-    
-    const {accessTokenCheck, checkCookie, cookie} = useAuth();
 
     const ref = useRef(null);
+
+    const profile = localStorage.getItem("profile");
+    const accessToken = JSON.parse(profile)?.accessToken;
 
     const handleClickOutsideContextMenu = (e) => {
         if (ref.current && !ref.current.contains(e.target)) {
@@ -47,21 +59,14 @@ const PrivateRoute = () => {
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutsideContextMenu);
-        accessTokenCheck();
         return () => {
             document.removeEventListener('mousedown', handleClickOutsideContextMenu);
         }
     },[]);
 
-    useEffect(() => {
-		const intervalId = setInterval(checkCookie, 1000);
-
-		return () => clearInterval(intervalId);
-	}, [cookie]);
-
-
-
-
+	useEffect(() => {
+		if (!localStorage.getItem('profile')) navigate('/auth');
+	},[]);
 
     return (
         <div style={{position: 'relative', height: '100vh'}}>

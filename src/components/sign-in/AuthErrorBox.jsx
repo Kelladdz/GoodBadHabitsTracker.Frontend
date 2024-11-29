@@ -1,9 +1,9 @@
 import styles from '../../styles/AuthErrorBox.module.css';
 
-const AuthErrorBox = ({ errors }) => {
+const AuthErrorBox = ({ error }) => {
     return (
         <div className={styles['auth-error-box']}>
-            {errors && <span className={styles['error-text']}>{errors}</span>}
+            {error && <span className={styles['error-text']}>{error}</span>}
         </div>)
 }
 

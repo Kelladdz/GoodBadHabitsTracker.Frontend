@@ -7,99 +7,100 @@ import Cookies from "js-cookie";
 import {jwtDecode} from "jwt-decode";
 
 import { toggleEmailError, togglePasswordError, toggleUserNameError } from "../store/slices/registerSlice";
-import { login, logout } from "../store/slices/authSlice";
+import { loginSuccess, loginFail, signUpFail, logout, getExternalTokens } from "../store/slices/authSlice";
 
 import AuthContext from "../context/auth";
 
-import { Pkce } from "../utils/pkce";
+import { Pkce } from "../utils/authUtils";
 import { PATHS } from "../constants/paths";
 
 
 
 export function useAuth() {
     const navigate = useNavigate(); 
+	const location = useLocation();
     const dispatch = useDispatch();
 
     const registerForm = useSelector(state => state.register);
-	const userFingerprint = useSelector(state => state.auth.userFingerprint);
-
-    const {email, password, loginErrors, changeEmail, changePassword, toggleErrors} = useContext(AuthContext);
-
-	const [cookie, setCookie] = useState(Cookies.get(userFingerprint));
+const authState = useSelector(state => state.auth);
 	
 
-	
+    const {email, password, loginErrors, changeEmail, changePassword, toggleErrors, toggleProfile} = useContext(AuthContext);
 
-		
-    const handleLoginSubmit = async (e) => {
-		e.preventDefault();
-        let errorData = '';
-		await axios.post(import.meta.env.VITE_REACT_APP_LOGIN_LOCALHOST_URL,
+    const login = async (request) => {
+		try {
+			const response = await axios.post(
+				import.meta.env.VITE_REACT_APP_LOGIN_LOCALHOST_URL, request,
 				{
-					email,
-					password
-				},
-				{ withCredentials: true }
-			)
-			.then(res => {
-				
-				if (res.status === 200) {
-					dispatch(login(res.data));
-				} 
-			})
-			.catch(errs => {
-				console.log(errs);
-				if (errs.status === 401) {
-					errorData = 'Invalid email or password';
-					toggleErrors(errorData);
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					withCredentials: true,
+				});
+
+			const {error, data} = response;
+			if (error) {
+				dispatch(loginFail(error));
+			} else {
+				const {accessToken, refreshToken} = data;
+
+				const userData = {
+					userId: jwtDecode(accessToken).sub,
+					email: jwtDecode(accessToken).email,
 				}
-			});
-        
-	};
+				const profile = {
+					userData,
+					accessToken,
+					refreshToken
+				};
+				localStorage.setItem("profile", JSON.stringify(profile));
+				dispatch(loginSuccess(profile));
+				navigate(PATHS.main);
+			}
+		} catch (error) {
+			dispatch(loginFail(error));
+		}
+	}
     
 
-    const handleRegisterSubmit = async (e) => {
-		e.preventDefault();
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const register = async () => {
+		const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
         if (!emailRegex.test(email)) {
-            dispatch(toggleEmailError('Invalid email'));
+            dispatch(signUpFail({property: 'email', error: 'Invalid email'}));
         }
 
         if (registerForm.userName === '') {
-            dispatch(toggleUserNameError('Username cannot be empty'));
+            dispatch(signUpFail({property: 'userName', error: 'Username cannot be empty'}));
         }
 
         if (registerForm.password !== registerForm.confirmPassword) {
-            dispatch(togglePasswordError('Passwords do not match'));
+            dispatch(signUpFail({property: 'password', error: 'Passwords do not match'}));
         }
-		await axios
-			.post(import.meta.env.VITE_REACT_APP_LOCALHOST_REGISTER_URL, {
-				userName: registerForm.userName,
-                email: registerForm.email,
-                password: registerForm.password,
-                confirmPassword: registerForm.confirmPassword
-			})
-			.then(res => {
-				console.log(res);
-				if (res.status === 201) {
-					navigate(PATHS.auth);
+		try {
+			const response = await axios.post(import.meta.env.VITE_REACT_APP_REGISTER_LOCALHOST_URL,
+					registerForm,
+					{
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						withCredentials: true,
+					});
+			const {error, data} = response;
+			if (error) {
+				if (error.contains('Username')){
+					dispatch(signUpFail({property: 'userName', error: 'This name is already taken'}));
 				}
-			})
-			.catch(errs => {
-				console.log(errs);
-				for (let err of errs.response.data) {
-					if (err.errors.contains('Failed to create user'))
-						toggleErrors(() => {
-							if (err.errors.contains('Username')) return `This name is already taken.`;
-						});
-					else if (err.code === 'DuplicateEmail')
-						toggleErrors(() => {
-							if (err.errors.contains('Email')) return `This email is already taken.`;
-						});
+				if (error.contains('Email')){
+					dispatch(signUpFail({property: 'email', error: 'This email is already taken'}));
 				}
-			});
-    }
+			} else {
+				navigate(PATHS.signUpConfirmEmail);
+			}
+		} catch (error) {
+			dispatch(signUpFail({property: 'server', error: error}));
+		}
+}
 
 	const sendResetPasswordLink = async (email) => {
 		await axios
@@ -135,44 +136,10 @@ export function useAuth() {
 			});
 	};
 
-	const newRefreshToken = async () => {
-		await axios
-			.post(import.meta.env.VITE_REACT_APP_REFRESH_TOKEN_LOCALHOST_URL,
-				{
-					accessToken: localStorage.getItem('accessToken'),
-					refreshToken: localStorage.getItem('refreshToken'),
-				},
-				{ withCredentials: true }
-			)
-			.then(res => {
-				if (res.status === 200) {
-					dispatch(login(res.data));
-				}
-			})
-			.catch(errs => {
-				console.log(errs);
-				if (errs.status === 401) {
-					errorData = 'Something goes wrong';
-					dispatch(logout());
-				}
-			});
+	const signOut = () => {
+		localStorage.removeItem("profile");
+		dispatch(logout());
 	}
-
-	const accessTokenCheck = async () => {
-		const expiresIn = jwtDecode(localStorage.getItem('accessToken')).exp;
-		if (expiresIn !== null) {
-			if (expiresIn < Date.now().valueOf() / 1000) {
-				newRefreshToken();
-			}
-		}
-	}
-
-	const checkCookie = () => {
-		const currentCookie = Cookies.get('__Secure-Fgp');
-		if (currentCookie !== cookie) {
-			setCookie(currentCookie);
-		}
-	};
 
 	
 
@@ -189,11 +156,7 @@ export function useAuth() {
 		const codeChallenge = await Pkce.codeChallengeGeneratorAsync(codeVerifier);
 		console.log(codeChallenge);
 
-		window.open(
-			`https://${import.meta.env.VITE_REACT_APP_AUTH0_DOMAIN}/authorize?response_type=code&audience=${audience}&access_type=offline&connection=google-oauth2&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&code_challenge=${codeChallenge}&code_challenge_method=S256`,
-			'_blank',
-			'width=500,height=600'
-		);
+		window.location.href = `https://${import.meta.env.VITE_REACT_APP_AUTH0_DOMAIN}/authorize?response_type=code&audience=${audience}&access_type=offline&connection=google-oauth2&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&code_challenge=${codeChallenge}&code_challenge_method=S256`;
 	};
 
 	const facebookLogin = async res => {
@@ -209,20 +172,73 @@ export function useAuth() {
 		const codeChallenge = await Pkce.codeChallengeGeneratorAsync(codeVerifier);
 		console.log(codeChallenge);
 
-		window.open(
-			`https://${import.meta.env.VITE_REACT_APP_AUTH0_DOMAIN}/authorize?response_type=code&audience=${audience}&access_type=offline&connection=facebook&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}}&code_challenge=${codeChallenge}&code_challenge_method=S256`,
-			'_blank',
-			'width=500,height=600'
-		);
+		window.location.href = `https://${import.meta.env.VITE_REACT_APP_AUTH0_DOMAIN}/authorize?response_type=code&audience=${audience}&access_type=offline&connection=facebook&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}}&code_challenge=${codeChallenge}&code_challenge_method=S256`;
 	};
 
-	// useEffect(() => {
-	// 	if (userFingerprint && userFingerprint.length > 0) {
-	// 		navigate(PATHS.main);
-	// 	} else {
-	// 		navigate(PATHS.auth);
-	// 	}
-	// },[userFingerprint, navigate]);
+	const tokenRequest = async (code, provider, codeVerifier) => {
+		await axios
+			.post(
+				`${import.meta.env.VITE_REACT_APP_ACCESS_TOKEN_LOCALHOST_URL}?provider=${provider}`,
+				{
+					grantType: 'authorization_code',
+					code: code,
+					redirectUri: provider === 'Google' ? import.meta.env.VITE_REACT_APP_GOOGLE_CALLBACK_LOCALHOST_URL : import.meta.env.VITE_REACT_APP_FACEBOOK_CALLBACK_LOCALHOST_URL,
+					clientId: import.meta.env.VITE_REACT_APP_AUTH0_CLIENT_ID,
+					codeVerifier: codeVerifier,
+				},
+				{ withCredentials: true, headers: { 'content-type': 'application/json' } }
+			)
+			.then(res => {
+				console.log(res);
+				if (res.status === 200) {
+
+					dispatch(getExternalTokens(res.data));
+				}
+			});
+	};
+
+	const externalLogin = async () => {
+			await axios
+				.post(import.meta.env.VITE_REACT_APP_EXTERNAL_LOGIN_LOCALHOST_URL,
+					{
+						accessToken: authState.accessToken,
+						expiresIn: authState.expiresIn,
+						scope: authState.scope,
+						idToken: authState.idToken,
+						refreshToken: authState.refreshToken,
+						provider: authState.provider,
+					},
+					{ withCredentials: true, headers: { 'content-type': 'application/json' } }
+				)
+				.then(res => {
+					console.log(res);
+					if (res.status === 200) {
+						
+						localStorage.removeItem('codeVerifier');
+						const userData = {
+							userId: res.data,
+							email: jwtDecode(authState.idToken)?.email,
+						}
+						const profile = {
+							userData: userData,
+							accessToken: authState.accessToken,
+							idToken: authState.idToken,
+							refreshToken: authState.refreshToken,
+							expiresIn: authState.expiresIn,
+							scope: authState.scope,
+							provider: authState.provider,
+						}
+						localStorage.setItem('profile', JSON.stringify(profile));
+						dispatch(loginSuccess({userData, accessToken: authState.accessToken, refreshToken: authState.refreshToken}));
+						navigate(PATHS.main);
+					}
+				})
+				.catch(errs => {
+					console.log(errs);
+					if (errs.response.status === 401)
+						errorData = 'Invalid email or password';
+				});
+	};
 
 	// useEffect(() => {
 	// 	const userCookie = () => {
@@ -250,5 +266,5 @@ export function useAuth() {
 	
 
 
-    return {email, password, loginErrors, changeEmail, changePassword, toggleErrors, cookie, checkCookie, handleLoginSubmit, handleRegisterSubmit, sendResetPasswordLink, resetPassword, accessTokenCheck, googleLogin, facebookLogin};
+    return {email,  tokenRequest, externalLogin, password, loginErrors, changeEmail, changePassword, toggleErrors, login, register, sendResetPasswordLink, resetPassword, signOut, googleLogin, facebookLogin};
 }

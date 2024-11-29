@@ -5,58 +5,86 @@ import { jwtDecode } from 'jwt-decode'
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    accessToken: localStorage.getItem('accessToken') ?? '',
-    refreshToken: localStorage.getItem('refreshToken') ?? '',
-    idToken: localStorage.getItem('idToken') ?? '',
-    userFingerprint: '',
+    accessToken: null,
+    refreshToken: null,
+    idToken: null,
+    userData: null,
     expiresIn: '',
     scope: '',
     provider: '',
-    firstName: '',
-    lastName: '',
-    userName: '',
-    email: '',
-    imageUrl: '',
-    
+    signInError: null,
+    signUpError: []
   },
   reducers: {
-    login: (state, action) => {
-      localStorage.setItem('accessToken', action.payload.accessToken)
-      localStorage.setItem('refreshToken', action.payload.refreshToken)
+    setAccessToken: (state, action) => {
+      state.accessToken = action.payload ? action.payload : null
+    },
+    setRefreshToken: (state, action) => {
+      state.refreshToken = action.payload ? action.payload : null
+    },
+    setUserData: (state, action) => {
+      state.userData = action.payload ? action.payload : null
+    },
+    signUpSuccess: (state) => {
+      state.signUpError = [];
+    },
+    signUpFail: (state, action) => {
+      state.signUpError = action.payload ? action.payload : []
+    },
+    loginSuccess: (state, action) => {
       state.accessToken = action.payload.accessToken
       state.refreshToken = action.payload.refreshToken
-      state.userFingerprint = jwtDecode(action.payload.accessToken).userFingerprint
-      state.firstName = jwtDecode(action.payload.accessToken).firstName
-      state.lastName = jwtDecode(action.payload.accessToken).lastName
-      state.userName = jwtDecode(action.payload.accessToken).name
+      state.userData = action.payload.userData ? action.payload.userData : null
+      state.signInError = null
+    },
+    loginFail: (state, action) => {
+      state.signInError = action.payload ? action.payload : null
     },
     getExternalTokens: (state, action) => {
-      localStorage.setItem('idToken', action.payload.idToken) 
-      localStorage.setItem('accessToken', action.payload.accessToken)
-      localStorage.setItem('refreshToken', action.payload.refreshToken)
-      state.idToken = action.payload.idToken
       state.accessToken = action.payload.accessToken
-      state.refreshToken = action.payload.refreshToken
+      state.refreshToken = action.payload.refreshToken ? action.payload.refreshToken : null
+      state.idToken = action.payload.idToken
+      state.userData = action.payload.userData ? action.payload.userData : null
       state.expiresIn = action.payload.expiresIn
       state.scope = action.payload.scope
       state.provider = action.payload.provider
+      state.signInError = null
+      console.log('getExternalTokens', state)
     },
     logout: (state) => {
-      localStorage.removeItem('accessToken') // delete token from storage
-      localStorage.removeItem('refreshToken') // delete refresh token from storage
-      state.accessToken = ''
-      state.refreshToken = ''
-      state.firstName = ''
-      state.lastName = ''
-      state.userName = ''
-      state.userFingerprint = ''
+        state.userData = null,
+        state.refreshToken = null,
+        state.accessToken = null,
+        state.signInError = null,
+        state.signUpError = []
     },
     setCredentials: (state, action ) => {
       state.userInfo = action.payload
     },
+    refreshTokenSuccess: (state, action) => {
+      state.accessToken = action.payload.accessToken
+      state.refreshToken = action.payload.refreshToken
+    },
+    refreshTokenFail: (state) => {
+      state.accessToken = null
+      state.refreshToken = null
+      state.userData = null
+      state.signInError = null,
+      state.signUpError = []
+    },
+    setInitialAuthState: (state) => {
+      state.accessToken = null,
+      state.refreshToken = null,
+      state.userData = null,
+      state.expiresIn = '',
+      state.scope = '',
+      state.provider = '',
+      state.signInError = null,
+      state.signUpError = []
+    }
   }
 })
 
-export const { logout, setCredentials, login, getExternalTokens } = authSlice.actions
+export const { setAccessToken, setRefreshToken, setUserData, loginSuccess, loginFail, signUpSuccess, signUpFail, logout, setCredentials, login, getExternalTokens, refreshTokenSuccess, refreshTokenFail, setInitialAuthState } = authSlice.actions
 
 export const authReducer = authSlice.reducer

@@ -1,34 +1,33 @@
-const tokenMiddleware =  store => next => async action => {
-    const state = store.getState();
-    const { accessToken, refreshToken } = state.auth;
+import {jwtDecode} from "jwt-decode";
+import { logout } from "../store";
+import Cookies from "js-cookie";
+import { refreshTokenAction } from "../store/actions/authActions";
+import { PATHS } from "../constants/paths";
 
-    // if (accessToken) {
-    //     const decodedToken = jwtDecode(accessToken);
-    //     const currentTime = Date.now().valueOf() / 1000;
-    //     console.log(accessToken, refreshToken, decodedToken, currentTime);
-    //     if (decodedToken.exp > currentTime) {
-    //         // Token wygasł
-    //         if (refreshToken) {
-    //             // Odśwież token
-    //             await axios
-	// 				.post(
-	// 					'https://localhost:7033/api/auth/token/refresh',
-	// 					{
-	// 						refreshToken: localStorage.getItem('refreshToken'),
-	// 					},
-	// 					{ withCredentials: true },
-    //                     {headers: { 'Authorization': localStorage.getItem('accessToken') }}
-	// 				)
-	// 				.then(res => {
-	// 					store.dispatch(login(res.data));
-	// 				});
-    //         } else {
-    //             // Wyloguj użytkownika
-    //             store.dispatch(logout());
-    //         }
-    //     }
-    // }
-
+export const tokenMiddleware = (store) => (next) => async (action) => {
+    if (action.meta && action.meta.requiresAuth) {
+      const state = store.getState();
+      const accessToken = state.auth?.accessToken;
+      if (accessToken) {
+        const expiresIn = jwtDecode(accessToken).exp;
+        if (expiresIn < Date.now().valueOf() / 1000) {
+          const refreshToken = state.auth.refreshToken;
+          try {
+            await store.dispatch(refreshTokenAction(refreshToken));
+            const newToken = store.getState().auth.accessToken;
+            if (!newToken) {
+              throw new Error("Access token not found after refresh");
+            }
+          } catch (error) {
+            
+            store.dispatch(logout());
+          }
+        }
+      } else {
+        
+        store.dispatch(logout());
+      }
+    }
     return next(action);
 };
 

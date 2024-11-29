@@ -1,12 +1,32 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const baseQuery = fetchBaseQuery({
+    baseUrl: 'https://localhost:7154',
+    prepareHeaders: (headers) => {
+      const accessToken = JSON.parse(localStorage.getItem('profile'))?.accessToken;
+      console.log(accessToken);
+      if (accessToken) {
+        headers.set('Authorization', `Bearer ${accessToken}`);
+      }
+      return headers;
+    },
+  });
+
+  const unauthorizedUserQuery = async (args, api, extraOptions) => {
+    let result = await baseQuery(args, api, extraOptions);
+  
+    if (result.error && result.error.status === 401) {
+        localStorage.removeItem('profile');
+        // api.dispatch(logout());
+        // window.location.href = PATHS.auth;
+    }
+  
+    return result;
+  };
+
 const habitsApi = createApi({
     reducerPath: 'habits',
-    baseQuery: fetchBaseQuery({ 
-        baseUrl: 'https://localhost:7154', 
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-        }}),
+    baseQuery: unauthorizedUserQuery,
     endpoints: (builder) => {
         return {
         fetchHabit: builder.query({

@@ -4,16 +4,19 @@ import { useSelector } from "react-redux";
 import styles from "./styles/AuthDebug.module.css";
 
 export const AuthDebug = () => {
-    const userData = useSelector(state => state.auth);
+    const authSlice = useSelector(state => state.auth);
 
     return (
-        userData && <div className={styles['debug-window']}>
-            <span>Access Token: {userData.accessToken}</span>
-            <span>Refresh Token: {userData.refreshToken}</span>
-            <span>User Fingerprint: {userData.userFingerprint}</span>
-            <span>First Name: {userData.firstName}</span>
-            <span>Last Name: {userData.lastName}</span>
-            <span>User Name: {userData.userName}</span>
+        <div className={styles['debug-window']}>
+            <span>Access Token: {authSlice.accessToken}</span>
+            <span>Refresh Token: {authSlice.refreshToken}</span>
+            <span>User Data: {JSON.stringify(authSlice.userData)}</span>
+            <span>Expires In: {authSlice.expiresIn}</span>
+            <span>Scope: {authSlice.scope}</span>
+            <span>Provider: {authSlice.provider}</span>
+            <span>Is Authenticated: {authSlice.isAuthenticated ? 'True' : 'False'}</span>
+            <span>Sign In Error: {authSlice.signInError}</span>
+            <span>Sign Up Error: {authSlice.signUpError.length > 0 && authSlice.signUpError.map(err => JSON.stringify(err))}</span>
         </div>
     );
 }
