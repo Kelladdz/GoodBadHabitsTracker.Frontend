@@ -20,6 +20,10 @@
     position: absolute;
     left: calc(50% - 10rem);
     top: calc(50% - 17rem);
+    z-index: 10000;
+    border: 1px solid #d4d4d4;
+    border-radius: 7px;
+    box-shadow: 1px 2px 18px 0px rgba(0, 0, 0, 0.3);
 }
 
 .primary-label {
@@ -133,6 +137,7 @@
     z-index: 2;
     width: 16.5rem;
     height: 16.5rem;
+    transform: rotate(270deg);
 }
 
 .time {
@@ -144,7 +149,7 @@
     height: 16.5rem;
     font-size: 4rem;
     width: 12rem;
-
+    transform: rotate(90deg);
     text-align: center;
     z-index: 1;
     display: flex;

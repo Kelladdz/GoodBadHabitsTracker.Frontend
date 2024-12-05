@@ -31,18 +31,18 @@ const Habit = ({habit}) => {
     const {currentDateString} = useContext(CalendarContext)
     const {toggleHabit} = useContext(HabitContext);
     const {toggleTimer} = useContext(TimerContext);
-    const {backgroundColor, status, progressToDisplay, breakDays} = useHabit(habit);
+    const {backgroundColor, status, progressToDisplay, quantityToDisplay, breakDays} = useHabit(habit);
 
-    const [newDayResult, {isLoading: isnewDayResultLoading}] = useAddDayResultMutation(); 
+
 
     const handleHabitClick = () => {
-        toggleHabit(habit);
+        toggleHabit(habit.habit);
     }
 
     
 
     const resultButton = () => {
-        if (habit.isTimeBased) {
+        if (habit.habit.isTimeBased) {
             return (
                 <HabitButton onClick={handleTimerButtonClick}>
                     <img className={styles.icon} src={CounterIcon} alt={COUNTER_ICON_ALTERNATE_LABEL}/>
@@ -61,7 +61,7 @@ const Habit = ({habit}) => {
 
     const showContextMenu = (e) => {
         e.preventDefault();
-        toggleHabit(habit);
+        toggleHabit(habit.habit);
         switch (status) {
             case DAY_RESULT_STATUSES[0]:
                 toggleContextMenu(CONTEXT_MENU_TYPES.completedHabit, e.clientX, e.clientY);
@@ -84,17 +84,18 @@ const Habit = ({habit}) => {
 
     const handleDoneButtonClick = async () => {
         try {
-            await newDayResult({id: habit.id, progress: habit.quantity, status: 0, date: currentDateString}).unwrap();
+            await newDayResult({id: habit.habit.id, progress: habit.habit.quantity, status: 0, date: currentDateString}).unwrap();
         } catch (error) {
             throw new Error(error);
         }
     }
 
+
     return (
         <div style={{backgroundColor: backgroundColor}} className={styles.habit} onClick={handleHabitClick} onContextMenu={showContextMenu}>
             <div className={styles.info}>
-                <HabitIcon icon={HABIT_ICONS_URLS[habit.iconId]}/>
-                <HabitInfo name={habit.name} habitType={habit.habitType} progress={progressToDisplay} breakDays={breakDays} quantity={habit.quantity} isTimeBased={habit.isTimeBased}/>
+                <HabitIcon icon={HABIT_ICONS_URLS[habit.habit.iconId]}/>
+                <HabitInfo name={habit.habit.name} habitType={habit.habit.habitType} progress={progressToDisplay} breakDays={breakDays} quantity={quantityToDisplay}/>
             </div>
             <div className={styles.btns}>
                 {status === DAY_RESULT_STATUSES[3] && resultButton()}

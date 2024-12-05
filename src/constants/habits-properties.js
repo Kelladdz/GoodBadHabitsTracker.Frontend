@@ -35,5 +35,5 @@ export const DAY_RESULT_PROPERTIES = {
 }
 
 export const DAY_RESULT_STATUSES = [
-    "Complete", "Failed", "Skipped", "In Progress"
+    "Complete", "Failed", "Skipped", "In Progress", "None"
 ]

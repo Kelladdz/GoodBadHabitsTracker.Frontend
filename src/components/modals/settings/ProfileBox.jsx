@@ -1,18 +1,21 @@
-import { PROFILE_IMAGE_ALTERNATE_LABEL, EDIT_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
+import { useSelector } from 'react-redux';
 
-import QuestionMark from '../../../assets/svg/question-mark.svg';
-import EditIcon from '../../../assets/svg/edit-icon.svg';
+import { PROFILE_IMAGE_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
 
 import styles from '../../../styles/ProfileBox.module.css';
 
 const ProfileBox = () => {
+    const profileImage = useSelector(state => state.user.user.picture);
+    const userName = useSelector(state => state.user.user.name);
     return (
             <div className={styles['profile-box']}>
-                <img className={styles.image} src={QuestionMark} alt={PROFILE_IMAGE_ALTERNATE_LABEL}/>
-                <div className={styles['rename-btn']}>
-                    <img src={EditIcon} alt={EDIT_ICON_ALTERNATE_LABEL}/>
-                </div>
-                
+                {profileImage ? 
+                    <div className={styles.background}>
+                        <img className={styles.image} src={profileImage} alt={PROFILE_IMAGE_ALTERNATE_LABEL}/>  
+                    </div>  
+                    :
+                    userName[0]
+                }
             </div>
     )
 }

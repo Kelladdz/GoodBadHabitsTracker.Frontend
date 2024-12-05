@@ -1,7 +1,8 @@
+import React, { useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createPortal } from 'react-dom';
 
-import { changeFirstDayOfWeek, changeLanguage } from '../../../store';
+import { changeFirstDayOfWeek } from '../../../store';
 
 import CloseButton from '../../home/shared/CloseButton';
 import ProfileBox from './ProfileBox';
@@ -11,17 +12,28 @@ import SettingsSection from './SettingsSection';
 import SettingsButton from './SettingsButton';
 
 import styles from '../../../styles/Settings.module.css';
+import ModalsContext from '../../../context/modals';
+import { MODAL_TYPES } from '../../../constants/modal-types';
 
 const Settings = () => {
     const dispatch = useDispatch();
     const settings = useSelector(state => state.settings);
+    const {toggleModal} = useContext(ModalsContext)
 
     const handleSundayAsFirstDayOfWeekSet = (flag) => {
         dispatch(changeFirstDayOfWeek(flag));
     }
 
-    const handleLanguageChange = (language) => {
-        dispatch(changeLanguage(language));
+    const handleAccountDeleteClick = () => {
+        toggleModal(MODAL_TYPES.deleteAccount);
+    }
+
+    const handleAllHabitsDeleteClick = () => {
+        toggleModal(MODAL_TYPES.deleteAllHabits);
+    }
+
+    const handleAllHabitsProgressDeleteClick = () => {
+        toggleModal(MODAL_TYPES.deleteAllHabitsProgress);
     }
     
     return (
@@ -39,17 +51,17 @@ const Settings = () => {
                                         <SettingsSection
                                         title='Delete Account' 
                                         text='All your data will be removed'>
-                                            <SettingsButton label='Delete' />
+                                            <SettingsButton label='Delete' onClick={handleAccountDeleteClick}/>
                                         </SettingsSection>
                                         <SettingsSection
                                         title='Delete All Data' 
                                         text='Delete all habits and all progress'>
-                                            <SettingsButton label='Delete' />
+                                            <SettingsButton label='Delete' onClick={handleAllHabitsDeleteClick}/>
                                         </SettingsSection>
                                         <SettingsSection
                                         title='Reset Habit Data' 
                                         text='Delete all progress from habits'>
-                                            <SettingsButton label='Delete' />
+                                            <SettingsButton label='Delete' onClick={handleAllHabitsProgressDeleteClick}/>
                                         </SettingsSection>
                                     </div>
                                 </div>

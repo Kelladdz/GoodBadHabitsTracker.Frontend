@@ -1,4 +1,5 @@
 export const isValidToken = (token) => {
+  console.log(('Checking token validity...'));
     if (!token) {
       return false;
     }

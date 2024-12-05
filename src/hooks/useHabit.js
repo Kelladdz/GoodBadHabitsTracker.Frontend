@@ -1,16 +1,22 @@
 import {useContext, useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
 
 import CalendarContext from '../context/calendar';
 
 import { DAY_RESULT_STATUSES } from '../constants/habits-properties';
+import { set } from 'lodash';
+import { useAddDayResultMutation } from '../store';
 
 export function useHabit(habit) {
-    const {currentDateString} = useContext(CalendarContext);
+    const currentDate = useSelector(state => state.calendar.currentDate);
+    const currentDateString = currentDate.toISOString().substring(0, 10);
 
     const [backgroundColor, setBackgroundColor] = useState('transparent');
     const [status, setStatus] = useState(DAY_RESULT_STATUSES[3]);
-    const [progressToDisplay , setProgressToDisplay] = useState();
+    const [progressToDisplay , setProgressToDisplay] = useState('00:00');
+    const [quantityToDisplay, setQuantityToDisplay] = useState(habit.habit.quantity);
     const [breakDays, setBreakDays] = useState(0);
+    const [addDayResult, isLoading] = useAddDayResultMutation(undefined, {skip: status !== DAY_RESULT_STATUSES[4]});
 
     let today = new Date();
     today.setHours(0,0,0,0);
@@ -19,25 +25,38 @@ export function useHabit(habit) {
 
     useEffect(() => {
         if (habit) {
-            if (habit.dayResults.some(result => result.date === currentDateString && result.status === 0)) {
+            console.log(habit)
+            if (habit.habit.dayResults.some(result => result.date === currentDateString && result.status === 0)) {
                 setStatus(DAY_RESULT_STATUSES[0]);
-            } else if (habit.dayResults.some(result => result.date === currentDateString && result.status === 1)) {
+            } else if (habit.habit.dayResults.some(result => result.date === currentDateString && result.status === 1)) {
                 setStatus(DAY_RESULT_STATUSES[1]);
-            } else if (habit.dayResults.some(result => result.date === currentDateString && result.status === 2)) {
+            } else if (habit.habit.dayResults.some(result => result.date === currentDateString && result.status === 2)) {
                 setStatus(DAY_RESULT_STATUSES[2]);
-            } else {
+            } else if (habit.habit.dayResults.some(result => result.date === currentDateString && result.status === 3)) {
                 setStatus(DAY_RESULT_STATUSES[3]);
+            } else {
+                addDayResult({habitId: habit.habit.id, date: currentDateString, status: 3, progress: 0});
             }
 
-            if (habit.dayResults.some(result => result.date === currentDateString)) {
-                console.log(habit.dayResults.find(result => result.date === currentDateString).progress)
-                setProgressToDisplay(habit.isTimeBased ? habit.dayResults.find(result => result.date === currentDateString).progress / 60 : habit.dayResults.find(result => result.date === currentDateString).progress);
+            if (habit.habit.dayResults.some(result => result.date === currentDateString)) {
+                const currentDayResult = habit.habit.dayResults.find(result => result.date === currentDateString);
+                console.log(currentDayResult.progress)
+                if (habit.habit.isTimeBased) {
+                    const minutes = Math.floor(currentDayResult.progress / 60);
+                    const remainingSeconds = currentDayResult.progress % 60;
+                    setProgressToDisplay(`${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`);
+                    setQuantityToDisplay(`${habit.habit.quantity / 60 > 9 ? '' : '0'}${habit.habit.quantity / 60} minutes`);
+                } else {
+                    setProgressToDisplay(currentDayResult.progress);
+                    setQuantityToDisplay(`${habit.habit.quantity} times`);
+                }
+                
                 
             }
 
-            if (habit.dayResults && habit.habitType === 2) {
+            if (habit.habit.dayResults && habit.habit.habitType === 2) {
                 let count = 0;
-                const dayResults = habit.dayResults.filter(result => result).sort((a, b) => b.date.localeCompare(a.date));
+                const dayResults = habit.habit.dayResults.filter(result => result).sort((a, b) => b.date.localeCompare(a.date));
                 dayResults.forEach((result, index) => {
                     if (result.status === 0) {
                         count++;
@@ -61,6 +80,9 @@ export function useHabit(habit) {
                 setBackgroundColor('#2f3400');
                 break;
             case DAY_RESULT_STATUSES[3]:
+                setBackgroundColor('#d9d9d9');
+                break;
+            case DAY_RESULT_STATUSES[4]:
                 setBackgroundColor('transparent');
                 break;
             default:
@@ -68,5 +90,5 @@ export function useHabit(habit) {
         }
     }, [status]);
 
-    return {backgroundColor, status, progressToDisplay, breakDays};
+    return {backgroundColor, status, progressToDisplay, quantityToDisplay, breakDays};
 }

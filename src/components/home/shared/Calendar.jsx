@@ -19,9 +19,13 @@ import { useSelector } from 'react-redux';
 
 const Calendar = React.forwardRef(({props, withoutArrows, cellSize, headerPadding, type}, ref) => {
     const isSundayFirstDayOfWeek = useSelector(state => state.settings.isSundayFirstDayOfWeek);
-
+    const currentDate = useSelector(state => state.calendar.currentDate);
+    const currentDateString = currentDate.toISOString().substring(0, 10);
+    const currentMonth = useSelector(state => state.calendar.currentMonth);
+    const calendarDays = useSelector(state => state.calendar.calendarDays);
+    const currentYear = useSelector(state => state.calendar.currentYear);
     const {activeHabit} = useContext(HabitContext);
-    const { currentDate, currentDateString, currentMonth, today, startDate, resultDate, calendarDays, calendarRows, previousMonth, nextMonth, handleDayClick } = useCalendar(type);
+    const {  today, startDate, resultDate, calendarRows, handlePreviousMonthClick, handleNextMonthClick, handleDayClick } = useCalendar(type);
 
     const [activeDivSprings, activeDivApi] = useSpring(() => ({ left: '0.5rem', top: '0rem', config: { duration: 100 } }));
 
@@ -63,12 +67,12 @@ const Calendar = React.forwardRef(({props, withoutArrows, cellSize, headerPaddin
         <div ref={ref} className={styles.calendar}>
             <div style={withoutArrows ? {justifyContent: 'center', padding: headerPadding} : {padding: headerPadding}} className={styles.header}>
                 {!withoutArrows && 
-                <button type='button' className={styles['arrow-btn']} onClick={previousMonth}>
+                <button type='button' className={styles['arrow-btn']} onClick={handlePreviousMonthClick}>
                     <img className={styles.arrow} src={LeftArrow} alt={LEFT_ARROW_ALTERNATE_LABEL}/>
                 </button>}
-                <span className={styles['current-month-box']}>{MONTHS[currentMonth]} {currentDate.getFullYear()}</span>
+                <span className={styles['current-month-box']}>{MONTHS[currentMonth]} {currentYear}</span>
                 {!withoutArrows && 
-                <button type='button' className={styles['arrow-btn']} onClick={nextMonth}>
+                <button type='button' className={styles['arrow-btn']} onClick={handleNextMonthClick}>
                     <img className={styles.arrow} src={RightArrow} alt={RIGHT_ARROW_ALTERNATE_LABEL}/>
                 </button>}
             </div>

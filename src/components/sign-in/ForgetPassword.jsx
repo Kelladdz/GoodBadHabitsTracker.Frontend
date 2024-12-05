@@ -40,7 +40,7 @@ const ForgetPassword = () => {
         <>
             <span className={styles.label}>Forgot something?</span>
             <form className={styles.form} onSubmit={handleForgetPasswordSubmit}>
-                <AuthInputBox icon={Email} inputValue={emailForgot} onChange={handleEmailChange} placeholder='E-mail' />
+                <AuthInputBox type='text' icon={Email} inputValue={emailForgot} onChange={handleEmailChange} placeholder='E-mail' />
 				<AuthErrorBox errors={errors} />
 				<div className={styles.btns}>
 					<AuthButton type='submit' label='Submit' />

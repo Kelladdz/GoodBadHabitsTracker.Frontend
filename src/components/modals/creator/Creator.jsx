@@ -75,7 +75,7 @@ const Creator = () => {
                 dispatch(changeFrequency(value));
                 break;
             case HABIT_PROPERTIES.group:
-                dispatch(changeGroup(groupsData[value].entity.id));
+                dispatch(changeGroup(groupsData[value].id));
             default:
                 throw new Error('Invalid property');
         }
@@ -147,7 +147,7 @@ const Creator = () => {
 
     useEffect(() => {
         if (groupsData && !groupsIsLoading && groupOptions.length === 0) {
-            setGroupOptions(groupsData.map((group) => group.entity.name));
+            setGroupOptions(groupsData.map((group) => group.name));
         }
     })
 

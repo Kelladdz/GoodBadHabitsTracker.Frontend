@@ -55,7 +55,7 @@
 }
 
 .general-settings-box {
-	height: 8rem;
+	height: 4rem;
 	border: 1px solid #cccccc;
 	border-radius: 5px;
 	margin-inline: 1rem;
@@ -70,4 +70,33 @@
 .general-settings-box > :not(:last-child),
 .caution-box > :not(:last-child) {
 	border-bottom: 1px solid #cccccc;
+}
+
+.dropdown-item {
+    height: 2rem;
+    width: 100%;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding-inline: .5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    text-wrap: nowrap;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #c9c9c9;
+}
+
+.dropdown-item-label {
+    opacity: 1;
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    color: white;
+    text-wrap: nowrap;
+    animation: fade-in .4s cubic-bezier(.39,.65,0,.99);
 }

@@ -13,6 +13,8 @@ import { CARET_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
 import Caret from '../../../assets/svg/caret.svg';
 
 import styles from '../../../styles/Timer.module.css';
+import { set } from 'lodash';
+import { easeLinear } from 'd3-ease';
 
 const Timer = () => {
     const {activeHabit} = useContext(HabitContext);
@@ -23,7 +25,7 @@ const Timer = () => {
 
     const [showOptions, setShowOptions] = useState(false);
     const [duration, setDuration] = useState(5);
-    const [seconds, setSeconds] = useState(5);
+    const [seconds, setSeconds] = useState(300);
     const [posibilities, setPosibilities] = useState([]);
     const [drawing, setDrawing] = useState(false);
     const [remainingTime, setRemainingTime] = useState(duration);
@@ -34,9 +36,9 @@ const Timer = () => {
     
     const btnRef = useRef();
     const dropdownRef = useRef();
+    const ref = useRef();
 
-    const radius = 132;
-    const circleLength = 2 * Math.PI * radius;
+    const circleLength = ref.current ? ref.current.getTotalLength() : 0;
     const minutes = Math.floor(seconds / 60);
     const displaySeconds = seconds % 60;
     const currentDayResult = activeHabit.dayResults.find(result => result.date === currentDateString);
@@ -137,11 +139,12 @@ const Timer = () => {
             strokeDasharray: circleLength
         }, 
         to: {
-            strokeDashoffset: circleLength,
+            strokeDashoffset: -circleLength,
             strokeDasharray: circleLength
         },
         config: { 
-            duration: duration * 1000
+            duration: duration * 60000,
+            precision: 0.0001
         },
         pause: isPaused && !drawing,
         reset: seconds === duration * 60,
@@ -195,6 +198,7 @@ const Timer = () => {
     },[seconds, drawing]);
 
     useEffect(() => {
+        setPosibilities([1]);
         for (let i = 5; i <= activeHabit.quantity / 60; i += 5) {
             setPosibilities(prevPosibilities => [...prevPosibilities, i]);
         }
@@ -228,8 +232,8 @@ const Timer = () => {
                 }
                 
                 {(isStarted || countingCompleted) && <div className={styles.counter}>
-                    <svg style={{transform: 'rotate(-90deg)', zIndex: 3}} width="264" height="264" viewBox="0 0 264 264" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <animated.path style={fade} d="M261 132C261 203.245 203.245 261 132 261C60.7553 261 3 203.245 3 132C3 60.7553 60.7553 3 132 3C203.245 3 261 60.7553 261 132Z" fill="none" stroke="#006411" stroke-width="6" strokeLinecap="round"/>
+                    <svg style={{transform: 'rotateX(180deg)', zIndex: 3}} width="264" height="264" viewBox="0 0 264 264" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <animated.path ref={ref} className={styles.circle} style={fade} d="M261 132C261 203.245 203.245 261 132 261C60.7553 261 3 203.245 3 132C3 60.7553 60.7553 3 132 3C203.245 3 261 60.7553 261 132Z" fill="none" stroke="#006411" stroke-width="6" strokeLinecap="round"/>
                     </svg>
 
                     <div className={styles.check}>
@@ -248,6 +252,7 @@ const Timer = () => {
                     <div className={`${styles[`timer-fill`]} ${countingCompleted ? styles.complete : ''}`}>
                 
                     </div>
+                    
 
                 </div>}
                 {buttons()}

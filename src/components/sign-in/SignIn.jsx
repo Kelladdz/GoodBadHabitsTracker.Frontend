@@ -83,8 +83,8 @@ const SignIn = () => {
         <>
             <span className={styles.label}>Sign In</span>
             <form className={styles.form} onSubmit={handleLoginSubmit}>
-				<AuthInputBox icon={User} inputValue={email} onChange={handleEmailChange} placeholder='E-mail' />
-				<AuthInputBox icon={Password} inputValue={password} onChange={handlePasswordChange} placeholder='Password' />
+				<AuthInputBox type='text' icon={User} inputValue={email} onChange={handleEmailChange} placeholder='E-mail' />
+				<AuthInputBox type='password' icon={Password} inputValue={password} onChange={handlePasswordChange} placeholder='Password' />
 				<div style={{display: 'flex', alignItems: 'center', position: 'relative'}}>
 					{signInError && <AuthErrorBox error={signInError} />}
 					{loadingText !== '' && <AuthErrorBox error={loadingText} />}

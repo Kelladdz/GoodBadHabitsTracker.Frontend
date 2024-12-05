@@ -8,6 +8,9 @@ import { settingsReducer } from "./slices/settingsSlice"
 import { authReducer } from "./slices/authSlice"
 import { registerReducer } from "./slices/registerSlice"
 import { initializeAuth } from "./actions/authActions"
+import { userReducer } from "./slices/userSlice"
+import { calendarReducer } from "./slices/calendarSlice"
+import { groupsReducer } from "./slices/groupsSlice"
 import tokenMiddleware from "../middleware/TokenMiddleware"
 import { thunk } from "redux-thunk"
 
@@ -21,7 +24,9 @@ const createAppStore = async () => {
                 [groupsApi.reducerPath]: groupsApi.reducer,
                 [habitsApi.reducerPath]: habitsApi.reducer,
                 auth: authReducer,
+                user: userReducer,
                 register: registerReducer,
+                calendar: calendarReducer
             },
             middleware: (getDefaultMiddleware) => { return getDefaultMiddleware({
                 serializableCheck: false
@@ -69,19 +74,23 @@ export {
     fillProgressLoggingForm} from "./slices/progressLoggingFormSlice";
 export {changeFirstDayOfWeek, changeLanguage} from "./slices/settingsSlice";
 export {setAccessToken, setRefreshToken, setUserData, loginSuccess, loginFail, signUpSuccess, signUpFail, logout, setCredentials, login, getExternalTokens, refreshTokenSuccess, refreshTokenFail, setInitialAuthState } from './slices/authSlice';
+export {getUser} from './slices/userSlice';
 export {changeUserName, toggleUserNameError, 
     changeEmail, toggleEmailError,
     changePassword, togglePasswordError,
     changeConfirmPassword, toggleConfirmPasswordError} from './slices/registerSlice';
+export {changeCurrentDate, previousMonth, nextMonth, setCalendarDays, changeFirstDayOfWeekToMonday, changeFirstDayOfWeekToSunday, setFirstDayOnCalendar} from "./slices/calendarSlice";   
 export {
     useFetchHabitQuery, 
     useFetchHabitsQuery, 
     useSearchHabitsQuery, 
     useAddHabitMutation, 
     useDeleteHabitMutation, 
+    useDeleteAllHabitsMutation,
     useAddToGroupMutation, 
     useAddDayResultMutation, 
     useUpdateDayResultMutation,
+    useDeleteAllProgressMutation,
     useDailyUpdateMutation,
     useAddCommentMutation,
     useEditCommentMutation,

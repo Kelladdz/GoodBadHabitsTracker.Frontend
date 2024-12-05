@@ -1,13 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Cookies from "js-cookie";
 
 import {jwtDecode} from "jwt-decode";
 
-import { toggleEmailError, togglePasswordError, toggleUserNameError } from "../store/slices/registerSlice";
-import { loginSuccess, loginFail, signUpFail, logout, getExternalTokens } from "../store/slices/authSlice";
+import { loginSuccess, loginFail, signUpFail, logout, getExternalTokens, setInitialAuthState } from "../store/slices/authSlice";
 
 import AuthContext from "../context/auth";
 
@@ -18,11 +16,10 @@ import { PATHS } from "../constants/paths";
 
 export function useAuth() {
     const navigate = useNavigate(); 
-	const location = useLocation();
     const dispatch = useDispatch();
 
     const registerForm = useSelector(state => state.register);
-const authState = useSelector(state => state.auth);
+	const authState = useSelector(state => state.auth);
 	
 
     const {email, password, loginErrors, changeEmail, changePassword, toggleErrors, toggleProfile} = useContext(AuthContext);
@@ -191,7 +188,6 @@ const authState = useSelector(state => state.auth);
 			.then(res => {
 				console.log(res);
 				if (res.status === 200) {
-
 					dispatch(getExternalTokens(res.data));
 				}
 			});
@@ -208,7 +204,11 @@ const authState = useSelector(state => state.auth);
 						refreshToken: authState.refreshToken,
 						provider: authState.provider,
 					},
-					{ withCredentials: true, headers: { 'content-type': 'application/json' } }
+					{ 
+						withCredentials: true, 
+						headers: { 
+						'content-type': 'application/json'
+					} }
 				)
 				.then(res => {
 					console.log(res);
@@ -240,6 +240,23 @@ const authState = useSelector(state => state.auth);
 				});
 	};
 
+	const deleteAccount = async () => {
+		await axios
+			.delete(import.meta.env.VITE_REACT_APP_DELETE_ACCOUNT_LOCALHOST_URL, {
+				withCredentials: true,
+				headers: {
+						'Authorization': `Bearer ${JSON.parse(localStorage.getItem('profile'))?.accessToken}`
+				}
+			})
+			.then(res => {
+				console.log(res);
+				if (res.status === 204) {
+					dispatch(setInitialAuthState());
+					navigate(PATHS.auth);
+				}
+			});
+	}
+
 	// useEffect(() => {
 	// 	const userCookie = () => {
 	// 		return Cookies.get('__Secure-Fgp');
@@ -266,5 +283,5 @@ const authState = useSelector(state => state.auth);
 	
 
 
-    return {email,  tokenRequest, externalLogin, password, loginErrors, changeEmail, changePassword, toggleErrors, login, register, sendResetPasswordLink, resetPassword, signOut, googleLogin, facebookLogin};
+    return {email,  tokenRequest, externalLogin, password, loginErrors, changeEmail, changePassword, toggleErrors, login, register, sendResetPasswordLink, resetPassword, signOut, googleLogin, facebookLogin, deleteAccount};
 }

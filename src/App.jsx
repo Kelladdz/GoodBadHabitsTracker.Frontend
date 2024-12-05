@@ -23,12 +23,11 @@ import AccountConfirmCheckEmail from './components/sign-in/AccountConfirmCheckEm
 
 
 function App() {
-        const userData = useSelector(state => state.auth.userData);
-
+        const accessToken = JSON.parse(localStorage.getItem('profile'))?.accessToken;
         const router = createBrowserRouter([
         {
                 path: PATHS.main,
-                element: <PrivateRoute userData={userData}/>,
+                element: <PrivateRoute/>,
                 children: [
                         {index: true, element: <Home/>}
                 ]
@@ -36,7 +35,7 @@ function App() {
         },
         {
                 path: PATHS.auth,
-                element: userData ? <Navigate to={PATHS.main}/> : <AuthWindow/>,
+                element: accessToken ? <Navigate to={PATHS.main}/> : <AuthWindow/>,
                 children: [
                         {index: true, element: <SignIn/>},
                         {path: PATHS.signUp, element: <SignUp/>},

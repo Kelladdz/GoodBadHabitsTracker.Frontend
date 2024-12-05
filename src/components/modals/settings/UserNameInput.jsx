@@ -5,9 +5,11 @@ import { EDIT_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
 import EditIcon from '../../../assets/svg/edit-icon.svg';
 
 import styles from '../../../styles/UserNameInput.module.css';
+import { useSelector } from 'react-redux';
 const UserNameInput = () => {
+
     const [editMode, setEditMode] = useState(false);
-    const [userName, setUserName] = useState('Kella');
+    const [userName, setUserName] = useState(useSelector(state => state.user.user.name));
 
     const handleClick = () => {
         setEditMode(true);

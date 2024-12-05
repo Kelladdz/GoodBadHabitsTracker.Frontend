@@ -4,6 +4,7 @@ import { setAccessToken, setRefreshToken, setUserData } from "../slices/authSlic
 import { refreshTokenSuccess, refreshTokenFail } from "../slices/authSlice";
 
 const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
+const idToken = JSON.parse(localStorage.getItem("profile"))?.idToken;
 
 export const initializeAuth = () => async (dispatch) => {
   const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
@@ -11,19 +12,50 @@ export const initializeAuth = () => async (dispatch) => {
 
   if (accessToken && refreshToken) {
     if (isValidToken(accessToken)) {
+      console.log("Access token is valid");
       dispatch(setAccessToken(accessToken));
       dispatch(setRefreshToken(refreshToken));
       dispatch(setUserData(JSON.parse(localStorage.getItem("profile")).userData));
     } else {
-      await dispatch(refreshTokenAction(refreshToken));
+      console.log("Access token is invalid");
+      if (idToken === null) {
+        await dispatch(refreshTokenAction(refreshToken))
+      } else {
+        await dispatch(oauthRefreshTokenAction(refreshToken))
+      }
     }
+  }
+};
+
+export const oauthRefreshTokenAction = (refreshToken) => async (dispatch) => {
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_REACT_APP_AUTH0_DOMAIN}/oauth/token`, {
+      grantType: "refresh_token",
+      clientId: import.meta.env.VITE_REACT_APP_AUTH0_CLIENT_ID,
+      clientSecret: import.meta.env.VITE_REACT_APP_AUTH0_CLIENT_SECRET,
+      refreshToken: refreshToken
+    },
+    {
+        headers: { 
+            'content-type': 'application/x-www-form-urlencoded',
+            'Authorization': `Bearer ${accessToken}`
+         }
+    })
+    
+    const profile = JSON.parse(localStorage.getItem("profile"));
+    const payload = response.data;
+    localStorage.setItem("profile", JSON.stringify({ ...profile, ...payload }));
+    dispatch(refreshTokenSuccess(payload));
+  } catch (error) {
+    localStorage.removeItem("profile");
+    dispatch(refreshTokenFail());
   }
 };
 
 export const refreshTokenAction = (refreshToken) => async (dispatch) => {
   try {
     const response = await axios.post(import.meta.env.VITE_REACT_APP_REFRESH_TOKEN_LOCALHOST_URL, {
-      refreshToken,
+      refreshToken
     },
     {
         headers: { 

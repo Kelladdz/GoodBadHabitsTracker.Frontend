@@ -4,7 +4,9 @@ import { createPortal } from 'react-dom';
 import { useSpringRef, useSpring, animated, useTransition, useChain } from 'react-spring';
 import { easeElastic, easeExpOut } from 'd3-ease';
 
-import { useDeleteGroupMutation, useDeleteHabitMutation, useUpdateDayResultMutation } from '../../store';
+import { useDeleteAllHabitsMutation, useDeleteGroupMutation, useDeleteHabitMutation, useUpdateDayResultMutation, useDeleteAllProgressMutation } from '../../store';
+
+import { useAuth } from '../../hooks/useAuth';
 
 import LeftBarContext from '../../context/left-bar'
 import ModalsContext from '../../context/modals';
@@ -19,8 +21,8 @@ import { PRIMARY_MODAL_LABELS, SECONDARY_MODAL_LABEL } from '../../constants/mod
 
 import styles from '../../styles/Modal.module.css';
 
-const Modal = ({activeModal}) => {
-    const {toggleModal} = useContext(ModalsContext);
+const Modal = () => {
+    const {activeModal, toggleModal} = useContext(ModalsContext);
     const {activeGroup} = useContext(LeftBarContext);
     const {activeHabit} = useContext(HabitContext);
     const {currentDateString} = useContext(CalendarContext);
@@ -28,6 +30,10 @@ const Modal = ({activeModal}) => {
     const [deleteGroup, {isLoading: isGroupDeleteLoading}] = useDeleteGroupMutation();
     const [deleteHabit, {isLoading: isHabitDeleteLoading}] = useDeleteHabitMutation();
     const [updateDayResult, {isLoading: isUpdateDayResultLoading}] = useUpdateDayResultMutation();
+    const [deleteAllHabits, {isLoading: isDeleteAllHabitsLoading}] = useDeleteAllHabitsMutation();
+    const [deleteAllDayResults, {isLoading: isDeleteAllDayResultsLoading}] = useDeleteAllProgressMutation();
+
+    const {deleteAccount} = useAuth();
 
     const [isOpen, setIsOpen] = useState(true);
 
@@ -59,12 +65,60 @@ const Modal = ({activeModal}) => {
         switch (activeModal) {
             case MODAL_TYPES.deleteGroup:
                 return PRIMARY_MODAL_LABELS.deleteGroup;
+            case MODAL_TYPES.afterDeleteGroup:
+                return PRIMARY_MODAL_LABELS.afterDeleteGroup;
             case MODAL_TYPES.deleteHabit:
                 return PRIMARY_MODAL_LABELS.deleteHabit;
+            case MODAL_TYPES.afterDeleteHabit:
+                return PRIMARY_MODAL_LABELS.afterDeleteHabit;
             case MODAL_TYPES.undo:
                 return PRIMARY_MODAL_LABELS.undo;
+            case MODAL_TYPES.deleteAccount:
+                return PRIMARY_MODAL_LABELS.deleteAccount;
+            case MODAL_TYPES.deleteAllHabits:
+                return PRIMARY_MODAL_LABELS.deleteAllHabits;
+            case MODAL_TYPES.afterDeleteAllHabits:
+                return PRIMARY_MODAL_LABELS.afterDeleteAllHabits;
+            case MODAL_TYPES.deleteAllHabitsProgress:
+                return PRIMARY_MODAL_LABELS.deleteAllHabitsProgress;
+            case MODAL_TYPES.afterDeleteAllHabitsProgress:
+                return PRIMARY_MODAL_LABELS.afterDeleteAllHabitsProgress;
             default:
                 return '';
+        }
+    }
+
+    const secondaryLabel = () => {
+        if (activeModal === MODAL_TYPES.afterDeleteGroup || activeModal === MODAL_TYPES.afterDeleteHabit
+            || activeModal === MODAL_TYPES.afterDeleteAllHabits || activeModal === MODAL_TYPES.afterDeleteAllHabitsProgress) {
+            return '';
+        } else {
+            return SECONDARY_MODAL_LABEL;
+        }
+    }
+
+    const buttons = () => {
+        if (activeModal === MODAL_TYPES.deleteGroup || activeModal === MODAL_TYPES.deleteHabit
+            || activeModal === MODAL_TYPES.deleteAccount || activeModal === MODAL_TYPES.deleteAllHabits
+            || activeModal === MODAL_TYPES.deleteAllHabitsProgress
+        ) {
+            return (
+                <>
+                    <ModalButton className={styles.confirm} onClick={handleDeleteButtonClick} label={BUTTON_LABELS.delete}/>
+                    <ModalButton className={styles.cancel} onClick={handleCancelButtonClick} label={BUTTON_LABELS.cancel} />
+                </>
+            )
+        } else if (activeModal === MODAL_TYPES.undo) {
+            return (
+                <>
+                    <ModalButton className={styles.confirm} onClick={handleUndoButtonClick} label={BUTTON_LABELS.confirm}/>
+                    <ModalButton className={styles.cancel} onClick={handleCancelButtonClick} label={BUTTON_LABELS.cancel} />
+                </>
+            )
+        } else {
+            return (
+                <ModalButton className={styles.cancel} onClick={handleCancelButtonClick} label={BUTTON_LABELS.back} />
+            )
         }
     }
 
@@ -76,7 +130,7 @@ const Modal = ({activeModal}) => {
             } catch (err) {
                 console.error('Deleting group failed', err);
             } finally {
-                toggleModal(null);
+                toggleModal(MODAL_TYPES.afterDeleteGroup);
             }
         } else if (activeModal === MODAL_TYPES.deleteHabit) {
             const id = activeHabit.id;
@@ -85,7 +139,33 @@ const Modal = ({activeModal}) => {
             } catch (err) {
                 console.error('Deleting habit failed', err);
             } finally {
+                toggleModal(MODAL_TYPES.afterDeleteHabit);
+            }
+        } else if (activeModal === MODAL_TYPES.deleteAccount) {
+            console.log('Delete account');
+            try {
+                await deleteAccount();
+            } catch (err) {
+                console.error('Deleting account failed', err);
+            } finally {
                 toggleModal(null);
+            }
+        } else if (activeModal === MODAL_TYPES.deleteAllHabits) {
+            try {
+                await deleteAllHabits().unwrap();
+            } catch (err) {
+                console.error('Deleting all habits failed', err);
+            } finally {
+                toggleModal(MODAL_TYPES.afterDeleteAllHabits);
+            }
+        } else if (activeModal === MODAL_TYPES.deleteAllHabitsProgress) {
+            try {
+                await deleteAllDayResults();
+            } catch (err) {
+                console.error('Deleting all progress failed', err);
+            } finally {
+                console.log('Finally block executed for deleteAllHabitsProgress'); // Dodaj logowanie
+                toggleModal(MODAL_TYPES.afterDeleteAllHabitsProgress);
             }
         }
     }
@@ -117,14 +197,9 @@ const Modal = ({activeModal}) => {
                     {modalTransition((style, item) => 
                     (<animated.div ref={ref} style={{...style}} className={styles.container}>
                         <span className={styles['primary-text']}>{primaryLabel()}</span>
-                        <span className={styles['secondary-text']}>{SECONDARY_MODAL_LABEL}</span>
+                        <span className={styles['secondary-text']}>{secondaryLabel()}</span>
                         <div className={styles.btns}>
-                            {activeModal !== MODAL_TYPES.undo ? 
-                                <ModalButton className={styles.confirm} onClick={handleDeleteButtonClick} label={BUTTON_LABELS.delete}/>
-                                :
-                                <ModalButton className={styles.confirm} onClick={handleUndoButtonClick} label={BUTTON_LABELS.confirm}/>
-                            }
-                            <ModalButton className={styles.cancel} onClick={handleCancelButtonClick} label={BUTTON_LABELS.cancel} />
+                            {buttons()}
                         </div>
                     </animated.div>))}
                 </animated.div>,

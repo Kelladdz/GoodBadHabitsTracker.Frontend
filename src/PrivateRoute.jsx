@@ -24,19 +24,17 @@ import DebugWindow from "./DebugWindow";
 import Timer from "./components/home/middle-section/Timer";
 import Settings from "./components/modals/settings/Settings";
 import AuthDebug from "./AuthDebug";
-
+import CalendarDebugWindow from "./CalendarDebugWindow";
 import { PATHS } from "./constants/paths";
+import { jwtDecode } from "jwt-decode";
+import { getUser } from "./store";
 
 
-const PrivateRoute = ({userData}) => {
+const PrivateRoute = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const {signOut} = useAuth();
-    const isAuthenticated = useMemo(() => {
-        return (userData, accessToken) => {
-            return userData && accessToken;
-        };
-    } ,[]);
+
 
     const {activeMenu, hideContextMenu} = useContext(ContextMenuContext);
     const {activeModal} = useContext(ModalsContext);
@@ -48,8 +46,6 @@ const PrivateRoute = ({userData}) => {
     const ref = useRef(null);
 
     const profile = localStorage.getItem("profile");
-    const accessToken = JSON.parse(profile)?.accessToken;
-
     const handleClickOutsideContextMenu = (e) => {
         if (ref.current && !ref.current.contains(e.target)) {
             console.log('Clicked outside context menu');
@@ -65,7 +61,18 @@ const PrivateRoute = ({userData}) => {
     },[]);
 
 	useEffect(() => {
-		if (!localStorage.getItem('profile')) navigate('/auth');
+		if (!profile) {
+            navigate('/auth');
+        } else if (JSON.parse(profile).idToken) {
+            const user = jwtDecode(JSON.parse(profile).idToken);
+            dispatch(getUser(user));
+            console.log(user);
+        } else {
+            const user = jwtDecode(JSON.parse(profile).accessToken);
+            dispatch(getUser(user));
+            console.log(user);
+        }
+        
 	},[]);
 
     return (
@@ -75,12 +82,12 @@ const PrivateRoute = ({userData}) => {
                         <GroupsProvider>
                                 {activeCreator && <Creator />}
                                 {activeMenu && <ContextMenu ref={ref}/>}
-                                {activeModal && <Modal activeModal={activeModal}/>}
+                                {activeModal && <Modal/>}
                                 {isTimerOpen && <Timer/>}
                                 {isSettingsOpen && <Settings />}
                                 <Header />
                                 <Outlet />
-                                <AuthDebug />
+                                <CalendarDebugWindow />
                         </GroupsProvider>
                     </HabitProvider>
                 </LeftBarProvider>

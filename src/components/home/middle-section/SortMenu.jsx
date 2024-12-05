@@ -9,9 +9,8 @@ const SortMenu = React.forwardRef((props, ref) => {
 
     return (
         <ul ref={ref} className={styles['sort-menu']}>
-            <li className={styles.item} onClick={() => changeOrderOption(1)}>Sort by name</li>
-            <li className={styles.item} onClick={() => changeOrderOption(2)}>Sort by streak</li>
-            <li className={styles.item} onClick={() => changeOrderOption(3)}>Custom order</li>
+            <li className={styles.item} onClick={() => changeOrderOption(1)}>Sort by name ascending</li>
+            <li className={styles.item} onClick={() => changeOrderOption(2)}>Sort by name descending</li>
         </ul>
     )
 });

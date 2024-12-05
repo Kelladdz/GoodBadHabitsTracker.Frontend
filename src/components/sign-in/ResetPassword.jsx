@@ -48,9 +48,9 @@ const ResetPassword = () => {
             <span className={styles.label}>Reset Password</span>
             <p className={styles.paragraph}>Enter a new password</p>
             <form className={styles.form} onSubmit={handleResetPasswordSubmit}>
-                <AuthInputBox icon={Password} inputValue={newPassword} onChange={handlePasswordChange} placeholder='New Password' />
+                <AuthInputBox type='password' icon={Password} inputValue={newPassword} onChange={handlePasswordChange} placeholder='New Password' />
 				<AuthErrorBox errors={errors} />
-                <AuthInputBox icon={Password} inputValue={confirmPassword} onChange={handleConfirmPasswordChange} placeholder='Confirm Password' />
+                <AuthInputBox type='password' icon={Password} inputValue={confirmPassword} onChange={handleConfirmPasswordChange} placeholder='Confirm Password' />
 				<AuthErrorBox errors={errors} />
 				<div className={styles.btns}>
 					<AuthButton type='submit' label='Submit' />

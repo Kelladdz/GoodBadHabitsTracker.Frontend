@@ -53,13 +53,13 @@ const SignUp = () => {
         <>
             <span className={styles.label}>Sign Up</span>
             <form className={styles.form} onSubmit={handleRegisterSubmit}>
-				<AuthInputBox icon={User} inputValue={registerForm.userName} onChange={handleUserNameChange} placeholder='User Name' />
+				<AuthInputBox type='text' icon={User} inputValue={registerForm.userName} onChange={handleUserNameChange} placeholder='User Name' />
                 <AuthErrorBox errors={registerForm.userNameError} />
-                <AuthInputBox icon={Email} inputValue={registerForm.email} onChange={handleEmailChange} placeholder='E-mail' />
+                <AuthInputBox type='text' icon={Email} inputValue={registerForm.email} onChange={handleEmailChange} placeholder='E-mail' />
 				<AuthErrorBox errors={registerForm.emailError} />
-                <AuthInputBox icon={Password} inputValue={registerForm.password} onChange={handlePasswordChange} placeholder='Password' />
+                <AuthInputBox type='password' icon={Password} inputValue={registerForm.password} onChange={handlePasswordChange} placeholder='Password' />
 				<AuthErrorBox errors={registerForm.passwordError} />
-                <AuthInputBox icon={Password} inputValue={registerForm.confirmPassword} onChange={handleConfirmPasswordChange} placeholder='Confirm Password' />
+                <AuthInputBox type='password' icon={Password} inputValue={registerForm.confirmPassword} onChange={handleConfirmPasswordChange} placeholder='Confirm Password' />
                 <AuthErrorBox errors={registerForm.passwordError} />
 				<div className={styles.btns}>
 					<AuthButton type='submit' label='Register' />

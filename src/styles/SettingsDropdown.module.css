@@ -1,3 +1,7 @@
+.settings-dropdown {
+    position: relative;
+}
+
 .btn {
     background-color: #3662CC;
     border: 1px solid #2a4fa5;
@@ -22,3 +26,18 @@
     color: white;
     text-wrap: nowrap;
 }
+
+.list {
+    list-style-type: none;
+    background-color: #fff;
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 2.25rem;
+    left: 0;
+    overflow: hidden;
+    z-index: 1000;
+}
+

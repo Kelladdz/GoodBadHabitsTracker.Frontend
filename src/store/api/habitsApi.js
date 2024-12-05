@@ -74,6 +74,15 @@ const habitsApi = createApi({
                 }
             }
         }),
+        deleteAllHabits: builder.mutation({
+            invalidatesTags: ['Habits'],
+            query: () => {
+                return {
+                    url: `/api/habits`,
+                    method: 'DELETE'
+                }
+            }
+        }),
         addToGroup: builder.mutation({
             invalidatesTags: ['Habits'],
             query: ({habitId, groupId}) => {
@@ -130,6 +139,15 @@ const habitsApi = createApi({
                             }
                         }
                     ]
+                }
+            }
+        }),
+        deleteAllProgress: builder.mutation({
+            invalidatesTags: ['Habits'],
+            query: () => {
+                return {
+                    url: `/api/habits/reset`,
+                    method: 'PATCH'
                 }
             }
         }),
@@ -204,5 +222,5 @@ const habitsApi = createApi({
     }
 }})
 
-export const {useFetchHabitQuery, useFetchHabitsQuery, useSearchHabitsQuery, useAddHabitMutation, useDeleteHabitMutation, useAddToGroupMutation, useAddDayResultMutation, useUpdateDayResultMutation, useDailyUpdateMutation, useAddCommentMutation, useEditCommentMutation, useDeleteCommentMutation} = habitsApi;
+export const {useFetchHabitQuery, useFetchHabitsQuery, useSearchHabitsQuery, useAddHabitMutation, useDeleteHabitMutation, useDeleteAllHabitsMutation, useAddToGroupMutation, useAddDayResultMutation, useUpdateDayResultMutation, useDeleteAllProgressMutation, useDailyUpdateMutation, useAddCommentMutation, useEditCommentMutation, useDeleteCommentMutation} = habitsApi;
 export {habitsApi};

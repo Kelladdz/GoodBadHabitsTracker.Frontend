@@ -4,12 +4,14 @@ const HabitContext = createContext();
 
 function HabitProvider({children}) {
     const [activeHabit, setActiveHabit] = useState(null);
-    const [dayResults, setDayResults] = useState(null);
+    
     const [completedResultsCount, setCompletedResultsCount] = useState(0);
     const [failedResultsCount, setFailedResultsCount] = useState(0);
     const [skippedResultsCount, setSkippedResultsCount] = useState(0);
     const [totalResultsCount, setTotalResultsCount] = useState(0);
     const [streak, setStreak] = useState(0);
+
+    const dayResults = activeHabit ? activeHabit.dayResults : [];
 
     const toggleHabit = (habit) => {
         setActiveHabit(habit);
@@ -49,18 +51,12 @@ function HabitProvider({children}) {
     }
 
     useEffect(() => {
-        if (activeHabit) {
-            setDayResults(activeHabit.dayResults);
-        }
-    }, [activeHabit]);
-
-    useEffect(() => {
         if (dayResults) {
             console.log('dayResults', dayResults);
             setCompletedResultsCount(dayResults.filter(result => result.status === 0).length );
             setFailedResultsCount(dayResults.filter(result => result.status === 1).length );
             setSkippedResultsCount(dayResults.filter(result => result.status === 2).length );
-            setTotalResultsCount(dayResults.filter(result => result.status !== 3).length );
+            setTotalResultsCount(dayResults.filter(result => result.status !== 3 && result.status !== 4).length );
             getStreak();
         }
         

@@ -1,6 +1,7 @@
 import { useContext, useState, useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-import { useRenameGroupMutation } from '../../../store';
+import { useRenameGroupMutation, useFetchGroupQuery } from '../../../store';
 
 import LeftBarContext from '../../../context/left-bar';
 import ContextMenuContext from '../../../context/context-menu';
@@ -12,11 +13,13 @@ import GroupIcon from '../../../assets/svg/group-icon.svg';
 
 import styles from '../../../styles/GroupButton.module.css';
 
+
 const GroupButton = ({group, order}) => {
+    const accessToken = useSelector(state => state.auth.accessToken);
     const {toggleContextMenu} = useContext(ContextMenuContext);
     const {toggleActiveGroup, toggleOrder, toggleEditModeToGroup, groupToEdit} = useContext(LeftBarContext);
 
-    const [renameGroup, {isLoading: renameGroupLoading}] = useRenameGroupMutation(); 
+    const [renameGroup, {isLoading: renameGroupLoading}] = useRenameGroupMutation(undefined, {skip: !accessToken}); 
 
     const [name, setName] = useState(group.name);
 
@@ -56,6 +59,8 @@ const GroupButton = ({group, order}) => {
             throw new Error('Group name is the same');
         }
     }
+
+
 
     useEffect(() => {
 		const handleKeyDown = event => {
