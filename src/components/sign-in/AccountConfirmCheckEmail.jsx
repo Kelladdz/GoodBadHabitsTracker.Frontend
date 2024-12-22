@@ -5,12 +5,21 @@ import AuthButton from './AuthButton'
 import { PATHS } from "../../constants/paths";
 
 import styles from '../../styles/AccountConfirmCheckEmail.module.css'
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { signUpSuccess } from '../../store';
+
 const AccountConfirmCheckEmail = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleBackButtonClick = () => {
         navigate(PATHS.auth);
     }
+
+    useEffect(() => {
+        dispatch(signUpSuccess());
+    },[])
 
     return (
         <>

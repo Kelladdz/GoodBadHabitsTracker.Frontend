@@ -19,6 +19,10 @@
     background-color: #d1d1d1;
 }
 
+.group-button:hover {
+    background-color: rgba(1, 1, 1, 0.07);
+}
+
 
 .icon-box {
     width: 1rem;
@@ -41,6 +45,9 @@
     color: #1e1e1e;
     text-wrap: nowrap;
     z-index: 2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .input {
@@ -50,4 +57,12 @@
     background-color: transparent;
     border: none;
     outline: none;
+    max-width: 5.5rem;
+}
+
+@media (max-width: 81.875rem) {
+    .group-button {
+        padding-right: 0.5rem;
+        height: 2rem;
+    }
 }

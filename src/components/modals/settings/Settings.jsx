@@ -20,6 +20,9 @@ const Settings = () => {
     const settings = useSelector(state => state.settings);
     const {toggleModal} = useContext(ModalsContext)
 
+    const checkedMondayClass = !settings.isSundayFirstDayOfWeek ? 'checked-' : '';
+    const checkedSundayClass = settings.isSundayFirstDayOfWeek ? 'checked-' : '';
+
     const handleSundayAsFirstDayOfWeekSet = (flag) => {
         dispatch(changeFirstDayOfWeek(flag));
     }
@@ -72,10 +75,10 @@ const Settings = () => {
                                         title='First Day of the Week' 
                                         text='Choose a day on which a week stars on the app'>
                                             <SettingsDropdown label={settings.isSundayFirstDayOfWeek ? 'Sunday' : 'Monday'}>
-                                                <li className={styles['dropdown-item']} onClick={() => handleSundayAsFirstDayOfWeekSet(false)}>
+                                                <li className={styles[`${checkedMondayClass}dropdown-item`]} onClick={() => handleSundayAsFirstDayOfWeekSet(false)}>
                                                     <span className={styles['dropdown-item-label']}>Monday</span>
                                                 </li>
-                                                <li className={styles['dropdown-item']} onClick={() => handleSundayAsFirstDayOfWeekSet(true)}>
+                                                <li className={styles[`${checkedSundayClass}dropdown-item`]} onClick={() => handleSundayAsFirstDayOfWeekSet(true)}>
                                                     <span className={styles['dropdown-item-label']}>Sunday</span>
                                                 </li>
                                             </SettingsDropdown>

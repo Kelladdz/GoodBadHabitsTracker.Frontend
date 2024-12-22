@@ -4,16 +4,20 @@
     justify-content: start;
     align-items: center;
     border: none;
-    
     margin-inline: 0.5rem;
     height: 2.25rem;
     border-radius: 5px;
     padding-left: 0.5rem;
     gap: 0.5rem; 
+    cursor: pointer;
 }
 
 .left-bar-button {
     background-color: transparent;
+}
+
+.left-bar-button:hover {
+    background-color: rgba(1,1,1,0.07);
 }
 
 .left-bar-button-active {
@@ -36,4 +40,11 @@
     letter-spacing: -0.03rem;
     color: #1e1e1e;
     text-wrap:  nowrap;
+}
+
+@media (max-width: 81.875rem) {
+    .left-bar-button {
+        padding-right: 0.5rem;
+        height: 2rem;
+    }
 }

@@ -1,8 +1,8 @@
 import React, {useContext, useState} from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { changeGroup, fillForm, 
-    fillProgressLoggingForm, useAddToGroupMutation, useUpdateDayResultMutation } from '../store';
+    fillProgressLoggingForm, useAddToGroupMutation, useUpdateDayResultMutation, useFetchGroupsQuery } from '../store';
 
 import ContextMenuContext from '../context/context-menu';
 import LeftBarContext from '../context/left-bar';
@@ -27,24 +27,43 @@ const ContextMenu = React.forwardRef((props, ref) => {
     const {activeMenu, hideContextMenu} = useContext(ContextMenuContext);
     const {toggleEditModeToGroup, toggleOrder, order, toggleActiveGroup, activeGroup} = useContext(LeftBarContext)
     const {toggleModal} = useContext(ModalsContext);
-    const {toggleCreator} = useContext(HabitCreatorContext);
+    const {toggleCreator, toggleEditor} = useContext(HabitCreatorContext);
     const {activeHabit, addResultToStatistics} = useContext(HabitContext);
-    const {currentDateString} = useContext(CalendarContext)
-    const {groups} = useContext(GroupsContext);
+    const currentDateString = useSelector(state => state.calendar.currentDate).toISOString().substring(0, 10);
+    
     const {toggleProgressLogger, isProgressLoggerOpen} = useContext(ProgressLoggerContext);
 
-    const currentDateResult = activeHabit.dayResults.find(result => result.date === currentDateString);
 
+    const [isGroupsListOpen, setIsGroupsListOpen] = useState(false);
+    const {data, error, isLoading} = useFetchGroupsQuery(undefined, {skip: !isGroupsListOpen}) || [];
     const [updateDayResult, {isLoading: isDoneLoading}] = useUpdateDayResultMutation(); 
     const [addToGroup, {isLoading: isAddToGroupLoading}] = useAddToGroupMutation();
 
-    const [isGroupsListOpen, setIsGroupsListOpen] = useState(false);
+    
 
     const handleResultClick = async (number) => {
-        const dayResultIndex = activeHabit.dayResults.findIndex(result => result.date === currentDateString);
+        const currentDateResult = activeHabit.habit.dayResults.find(result => result.date === currentDateString);
+        let request;
+
+        if (activeHabit.habit.habitType !== 2){
+            request = {
+                habitId: activeHabit.habit.id,
+                id: currentDateResult.id,
+                progress: number === 0 ? activeHabit.habit.quantity : currentDateResult.progress,
+                status: number
+            }
+        } else {
+            request = {
+                habitId: activeHabit.habit.id,
+                id: currentDateResult.id,
+                status: number
+            }
+        }
+        
         try {
-            await updateDayResult({id: activeHabit.id, index: dayResultIndex, date: currentDateString, progress: number === 0 ? activeHabit.quantity : currentDateResult.progress, status: number})
-            addResultToStatistics(number)
+            await updateDayResult({habitId: activeHabit.habit.id, id: currentDateResult.id, progress: number === 0 ? activeHabit.habit.quantity : currentDateResult.progress, status: number})
+            addResultToStatistics(number);
+                                        
         } catch (error) {
             throw new Error(error);
         } finally {
@@ -54,8 +73,9 @@ const ContextMenu = React.forwardRef((props, ref) => {
 
     const handleLogProgressButtonClick = () => {
         toggleProgressLogger(true);
+        const currentDateResult = activeHabit.habit.dayResults.find(result => result.date === currentDateString);
 
-        const progress = currentDateResult ? (activeHabit.isTimeBased ? currentDateResult.progress / 60 : currentDateResult.progress) : 0;
+        const progress = currentDateResult ? (activeHabit.habit.isTimeBased ? currentDateResult.progress / 60 : currentDateResult.progress) : 0;
         const status = currentDateResult ? currentDateResult.status : 3;
         const date = currentDateResult ? currentDateResult.date : currentDateString;
         dispatch(fillProgressLoggingForm({progress, status, date}));
@@ -64,8 +84,8 @@ const ContextMenu = React.forwardRef((props, ref) => {
 
     const handleHabitEditButtonClick = () => {
         hideContextMenu();
-        toggleCreator(CREATOR_TYPES.goodHabit);
-        dispatch(fillForm(activeHabit));
+        toggleEditor(CREATOR_TYPES.goodHabit);
+        dispatch(fillForm(activeHabit.habit));
     }
 
     const handleHabitDeleteButtonClick = () => {
@@ -79,7 +99,7 @@ const ContextMenu = React.forwardRef((props, ref) => {
 
     const handleDestinationGroupClick = async (id) => {
         hideContextMenu();
-        await addToGroup({habitId: activeHabit.id, groupId: id}.unwrap());
+        await addToGroup({habitId: activeHabit.habit.id, groupId: id}).unwrap();
     }
 
     const handleUndoButtonClick = () => {
@@ -151,6 +171,8 @@ const ContextMenu = React.forwardRef((props, ref) => {
                         <li className={styles.item} onClick={handleUndoButtonClick}>Undo Complete</li>
                         <li className={styles.item} onClick={handleLogProgressButtonClick}>Log progress</li>
                         <li className={styles.item} onClick={handleHabitEditButtonClick}>Edit</li>
+                        <li className={styles.item} onClick={handleHabitDeleteButtonClick}>Delete</li>
+                        <li className={styles.item} onClick={handleAddHabitToGroupButtonClick}>Move to group</li>
                     </ul>
                 );
             case CONTEXT_MENU_TYPES.failedHabit:
@@ -159,6 +181,8 @@ const ContextMenu = React.forwardRef((props, ref) => {
                         <li className={styles.item} onClick={handleUndoButtonClick}>Undo Fail</li>
                         <li className={styles.item} onClick={handleLogProgressButtonClick}>Log progress</li>
                         <li className={styles.item} onClick={handleHabitEditButtonClick}>Edit</li>
+                        <li className={styles.item} onClick={handleHabitDeleteButtonClick}>Delete</li>
+                        <li className={styles.item} onClick={handleAddHabitToGroupButtonClick}>Move to group</li>
                     </ul>
                 );
             case CONTEXT_MENU_TYPES.skippedHabit:
@@ -167,6 +191,8 @@ const ContextMenu = React.forwardRef((props, ref) => {
                         <li className={styles.item} onClick={handleUndoButtonClick}>Undo Skip</li>
                         <li className={styles.item} onClick={handleLogProgressButtonClick}>Log progress</li>
                         <li className={styles.item} onClick={handleHabitEditButtonClick}>Edit</li>
+                        <li className={styles.item} onClick={handleHabitDeleteButtonClick}>Delete</li>
+                        <li className={styles.item} onClick={handleAddHabitToGroupButtonClick}>Move to group</li>
                     </ul>
                 );
             case CONTEXT_MENU_TYPES.customGroup:
@@ -204,12 +230,13 @@ const ContextMenu = React.forwardRef((props, ref) => {
                     <>
                         <div ref={ref} style={{left: activeMenu.position.x, top: activeMenu.position.y}} className={styles['context-menu']}>
                             {list()}
-                        </div>
-                        {isGroupsListOpen && groups && groups.length > 0 &&
+                            {isGroupsListOpen && data && data.length > 0 &&
                         <ul className={styles.groups}>
-                            {groups.map(group => 
-                            <li key={group.id} className={styles.group} onClick={() => handleDestinationGroupClick(group.id)}>{group.name}</li>)}
+                            {data.map(group => 
+                            <li key={group.group.id} className={styles.group} onClick={() => handleDestinationGroupClick(group.group.id)}>{group.group.name}</li>)}
                         </ul>}
+                        </div>
+                        
                     </>
                     :
                     <div style={{left: activeMenu.position.x, top: activeMenu.position.y}} className={styles['progress-logger-box']}>

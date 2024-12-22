@@ -17,7 +17,7 @@ const ProgressInput = () => {
 
     const [inputValue, setInputValue] = useState(progress ? progress : 0);
 
-    const unit = activeHabit.isTimeBased ? HABITS_QUANTITY_UNITS[0] : HABITS_QUANTITY_UNITS[1];
+    const unit = activeHabit.habit.isTimeBased ? HABITS_QUANTITY_UNITS[0] : HABITS_QUANTITY_UNITS[1];
 
     const handleInputChange = (e) => {
         const value = parseInt(e.target.value, 10);
@@ -29,7 +29,7 @@ const ProgressInput = () => {
     }
 
     useEffect(() => {
-        activeHabit && activeHabit.isTimeBased 
+        activeHabit.habit && activeHabit.habit.isTimeBased 
             ? dispatch(changeProgress(inputValue * 60))
             : dispatch(changeProgress(inputValue));
     }, [activeHabit, inputValue])

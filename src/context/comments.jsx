@@ -10,7 +10,7 @@ function CommentsProvider({children}) {
     }
 
     const onCommentsFetch = (comments) => {
-        setComments(prev => [...prev, ...comments]);
+        setComments(comments);
     }
 
     const onCommentDelete = (id) => {

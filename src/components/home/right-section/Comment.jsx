@@ -32,7 +32,7 @@ const Comment = ({comment, index}) => {
         e.preventDefault();
         if (body.trim().length > 0) {
             const request = {
-                id: activeHabit.id,
+                id: activeHabit.habit.id,
                 body: body,
                 date: currentDateString,
                 index: index
@@ -62,12 +62,11 @@ const Comment = ({comment, index}) => {
 
     const handleDeleteClick = async () => {
         const request = {
-            id: activeHabit.id,
+            id: activeHabit.habit.id,
             index: index
         }
         try {
             await deleteComment(request).unwrap();
-            onCommentDelete(comment.id);
         } catch (error) {
             throw new Error(error);
         }

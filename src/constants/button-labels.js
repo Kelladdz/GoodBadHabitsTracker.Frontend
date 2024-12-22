@@ -1,7 +1,8 @@
 export const LEFT_BAR_BUTTON_LABELS = {
     allHabits: "All Habits",
     goodHabits: "Good Habits",
-    badHabits: "Bad Habits"
+    badHabits: "Bad Habits",
+    logout: "Logout"
 }
 
 export const FILTER_BAR_BUTTON_LABELS = {

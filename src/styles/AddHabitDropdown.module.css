@@ -22,7 +22,7 @@
 }
 
 .add-habit-dropdown {
-    width: 8rem;
+
     animation: expand .4s cubic-bezier(.39,.65,0,.99);
 }
 
@@ -61,6 +61,7 @@
     color: white;
     text-wrap: nowrap;
     animation: fade-in .4s cubic-bezier(.39,.65,0,.99);
+    line-height: 0.2;
 }
 
 .wrapped-label {
@@ -118,6 +119,27 @@
     cursor: pointer;
 }
 
+.mobile-icon {
+    display: none;
+}
+
 .item:hover {
     background-color: #c9c9c9;
+}
+
+@media (max-width: 24rem) {
+    .mobile-icon {
+        display: block;
+    }
+
+    .icon,
+    .label {
+        display: none;
+    }
+}
+
+@media (min-width: 24rem) {
+    .add-habit-dropdown {
+        width: 8rem;
+    }
 }

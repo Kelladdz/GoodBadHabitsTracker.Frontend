@@ -12,16 +12,68 @@ export function useHabit(habit) {
     const currentDateString = currentDate.toISOString().substring(0, 10);
 
     const [backgroundColor, setBackgroundColor] = useState('transparent');
-    const [status, setStatus] = useState(DAY_RESULT_STATUSES[3]);
-    const [progressToDisplay , setProgressToDisplay] = useState('00:00');
-    const [quantityToDisplay, setQuantityToDisplay] = useState(habit.habit.quantity);
+    const [status, setStatus] = useState();
     const [breakDays, setBreakDays] = useState(0);
-    const [addDayResult, isLoading] = useAddDayResultMutation(undefined, {skip: status !== DAY_RESULT_STATUSES[4]});
+
+    
 
     let today = new Date();
     today.setHours(0,0,0,0);
     today.setDate(today.getDate() + 1);
     today = today.toISOString().substring(0, 10);
+
+    const getProgressToDisplay = () => {
+        console.log(habit.habit)
+        if (habit.habit.dayResults.some(result => result.date === currentDateString)) {
+            const currentDayResult = habit.habit.dayResults.find(result => result.date === currentDateString);
+            if (habit.habit.isTimeBased) {
+                const minutes = Math.floor(currentDayResult.progress / 60);
+                const remainingSeconds = currentDayResult.progress % 60;
+
+                return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            } else {
+                return currentDayResult.progress;
+            }
+        } else {
+            if (habit.habit.isTimeBased) {
+                return '00:00';
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    const getQuantityToDisplay = () => {
+        if (habit.habit.isTimeBased) {
+            return `${habit.habit.quantity / 60 > 9 ? '' : '0'}${habit.habit.quantity / 60}:00 minutes`;
+        } else {
+            return `${habit.habit.quantity} times`;
+        }
+    }
+
+    const getBreakDays = () => {
+        if (habit.habit.habitType === 2) {
+        let count = 0;
+        let results = habit.habit.dayResults.filter(result => result).sort((a, b) => b.date.localeCompare(a.date));
+        console.log('results: ', results);
+        for (let i = 0; i < results.length; i++) {
+            if (results[i].status === 0) {
+                count++;
+                continue;
+            } else if (results[i].status !== 0) {
+                if (count === 0) {
+                    continue;
+                } else {
+                    break;
+                }
+            }
+        }
+        setBreakDays(count);
+    }
+}
+
+    const progressToDisplay = getProgressToDisplay();
+    const quantityToDisplay = getQuantityToDisplay();
 
     useEffect(() => {
         if (habit) {
@@ -32,39 +84,13 @@ export function useHabit(habit) {
                 setStatus(DAY_RESULT_STATUSES[1]);
             } else if (habit.habit.dayResults.some(result => result.date === currentDateString && result.status === 2)) {
                 setStatus(DAY_RESULT_STATUSES[2]);
-            } else if (habit.habit.dayResults.some(result => result.date === currentDateString && result.status === 3)) {
-                setStatus(DAY_RESULT_STATUSES[3]);
             } else {
-                addDayResult({habitId: habit.habit.id, date: currentDateString, status: 3, progress: 0});
-            }
+                setStatus(DAY_RESULT_STATUSES[3]);
+            } 
+            console.log(habit.habit.dayResults.some(result => result.date === currentDateString))
+            getBreakDays();
 
-            if (habit.habit.dayResults.some(result => result.date === currentDateString)) {
-                const currentDayResult = habit.habit.dayResults.find(result => result.date === currentDateString);
-                console.log(currentDayResult.progress)
-                if (habit.habit.isTimeBased) {
-                    const minutes = Math.floor(currentDayResult.progress / 60);
-                    const remainingSeconds = currentDayResult.progress % 60;
-                    setProgressToDisplay(`${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`);
-                    setQuantityToDisplay(`${habit.habit.quantity / 60 > 9 ? '' : '0'}${habit.habit.quantity / 60} minutes`);
-                } else {
-                    setProgressToDisplay(currentDayResult.progress);
-                    setQuantityToDisplay(`${habit.habit.quantity} times`);
-                }
-                
-                
-            }
-
-            if (habit.habit.dayResults && habit.habit.habitType === 2) {
-                let count = 0;
-                const dayResults = habit.habit.dayResults.filter(result => result).sort((a, b) => b.date.localeCompare(a.date));
-                dayResults.forEach((result, index) => {
-                    if (result.status === 0) {
-                        count++;
-                    } if (result.status !== 0 && currentDateString !== today) {
-                        setBreakDays(count);
-                    }
-                })
-            }
+            
         }
     }, [habit, currentDateString]);
 

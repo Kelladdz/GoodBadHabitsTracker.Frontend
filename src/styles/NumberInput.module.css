@@ -1,0 +1,105 @@
+.number-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 6rem;
+    height: 2rem;
+    border-radius: 7px;
+    position: relative;
+    border: 1px solid #c2c2c2;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    animation: show 0.2s cubic-bezier(.39,.65,0,.99);
+    overflow: hidden;
+}
+
+.disabled {
+    height: 0;
+    width: 0rem;
+    box-shadow: none;
+    border: none;
+    animation: hide .2s cubic-bezier(.39,.65,0,.99);
+}
+
+@keyframes hide {
+    0% {
+        height: 2rem;
+        width: 6rem;
+    }
+    50% {
+        height: 2rem;
+        width: 0rem;
+    }
+    100% {
+        height: 0rem;
+        width: 0rem;
+    }
+}
+
+@keyframes show {
+    0% {
+        height: 0rem;
+        width: 0rem;
+        
+    }
+    50% {
+        height: 2rem;
+        width: 0rem;
+    }
+    100% {
+        height: 2rem;
+        width: 6rem;
+    }
+}
+
+.quantity-input:active {
+    box-shadow: none;
+    transform: translate(1px, 1px);
+}
+
+.input {
+    padding-left: 0.5rem;
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: -0.03rem;
+    color: #1e1e1e;
+}
+
+.input::-webkit-inner-spin-button,
+.input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.btns {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-right: 0.25rem;
+}
+
+
+
+.btn {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: default!important;
+}
+
+
+.btn:first-of-type {
+    align-items: flex-end;
+    padding-bottom: 0.1rem;
+}
+
+.btn:last-of-type {
+    align-items: flex-start;
+    padding-top: 0.1rem;
+}

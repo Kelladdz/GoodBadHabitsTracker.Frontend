@@ -6,6 +6,7 @@ import { changeProgress, resetProgressLoggingForm, useUpdateDayResultMutation } 
 import HabitsContext from '../../../context/habit';
 import ProgressLoggerContext from '../../../context/progress-logger';
 import ContextMenuContext from '../../../context/context-menu';
+import CalendarContext from '../../../context/calendar';
 
 import { useProgressLoggerValidation } from '../../../hooks/useProgressLoggerValidation';
 
@@ -32,7 +33,7 @@ const ProgressLogger = () => {
     const {activeHabit} = useContext(HabitsContext);
     const {toggleProgressLogger} = useContext(ProgressLoggerContext);
     const {hideContextMenu} = useContext(ContextMenuContext);
-
+    const {currentDateString} = useContext(CalendarContext)
     const [updateDayResult, {isLoading: isUpdateDayResultLoading}] = useUpdateDayResultMutation();
 
     const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
@@ -49,10 +50,10 @@ const ProgressLogger = () => {
         e.preventDefault();
 
         if (isValid()) {
+            const currentDateResult = activeHabit.habit.dayResults.find(result => result.date === currentDateString);
             const request = {
-                id: activeHabit.id,
-                index: activeHabit.dayResults.findIndex(result => result.date === form.date),
-                date: form.date,
+                habitId: activeHabit.habit.id,
+                id: currentDateResult.id,
                 progress: form.progress,
                 status: form.status,
             }

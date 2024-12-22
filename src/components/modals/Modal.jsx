@@ -20,6 +20,7 @@ import { MODAL_TYPES } from '../../constants/modal-types';
 import { PRIMARY_MODAL_LABELS, SECONDARY_MODAL_LABEL } from '../../constants/modal-labels';
 
 import styles from '../../styles/Modal.module.css';
+import Timer from '../home/middle-section/Timer';
 
 const Modal = () => {
     const {activeModal, toggleModal} = useContext(ModalsContext);
@@ -60,6 +61,21 @@ const Modal = () => {
     useChain(isOpen
         ? [backgroundSpringRef, modalTransitionRef]
         : [modalTransitionRef, backgroundSpringRef], [0, 0.2]);
+
+    const getModal = () => {
+        if (activeModal === MODAL_TYPES.counter) {
+            return <Timer handleCancelButtonClick={handleCancelButtonClick}/>
+        } else {
+            return (
+            <>
+                <span className={styles['primary-text']}>{primaryLabel()}</span>
+                <span className={styles['secondary-text']}>{secondaryLabel()}</span>
+                <div className={styles.btns}>
+                    {buttons()}
+                </div>
+            </>)
+        }
+    }
 
     const primaryLabel = () => {
         switch (activeModal) {
@@ -133,7 +149,7 @@ const Modal = () => {
                 toggleModal(MODAL_TYPES.afterDeleteGroup);
             }
         } else if (activeModal === MODAL_TYPES.deleteHabit) {
-            const id = activeHabit.id;
+            const id = activeHabit.habit.id;
             try {
                 await deleteHabit(id).unwrap();
             } catch (err) {
@@ -171,11 +187,11 @@ const Modal = () => {
     }
 
     const handleUndoButtonClick = async () => {
-        const id = activeHabit.id;
-        const date = currentDateString;
-        const resultIndex = activeHabit.dayResults.findIndex(result => result.date === currentDateString);
+        console.log(activeHabit)
+        const currentDayResult = activeHabit.habit.dayResults.find(dr => dr.date === currentDateString) 
+        console.log(currentDayResult);
         try {
-            await updateDayResult({id: id, index: resultIndex, progress: 0, status: 3, date: date}).unwrap();
+            await updateDayResult({habitId: activeHabit.habit.id, id: currentDayResult.id, progress: 0, status: 3}).unwrap();
         } catch (err) {
             console.error('Updating day result failed', err);
         } finally {
@@ -196,11 +212,7 @@ const Modal = () => {
             {createPortal(<animated.div style={backgroundSprings} className={styles.modal}>
                     {modalTransition((style, item) => 
                     (<animated.div ref={ref} style={{...style}} className={styles.container}>
-                        <span className={styles['primary-text']}>{primaryLabel()}</span>
-                        <span className={styles['secondary-text']}>{secondaryLabel()}</span>
-                        <div className={styles.btns}>
-                            {buttons()}
-                        </div>
+                        {getModal()}
                     </animated.div>))}
                 </animated.div>,
                 document.querySelector('.modal-container')

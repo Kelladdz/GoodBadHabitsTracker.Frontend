@@ -29,7 +29,6 @@ const Chart = () => {
 	};
 
 	const streaksOptions = {
-		responsive: true,
 		plugins: {
 			legend: {
 				position: 'top',
@@ -54,7 +53,6 @@ const Chart = () => {
 		],
 	};
 	const completesOptions = {
-		responsive: true,
 		plugins: {
 			legend: {
 				position: 'top',
@@ -79,7 +77,6 @@ const Chart = () => {
 		],
 	};
 	const failsOptions = {
-		responsive: true,
 		plugins: {
 			legend: {
 				position: 'top',

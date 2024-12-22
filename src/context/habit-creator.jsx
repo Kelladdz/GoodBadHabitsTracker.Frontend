@@ -5,13 +5,17 @@ const HabitCreatorContext = createContext();
 
 function HabitCreatorProvider({children}) {
     const [activeCreator, setActiveCreator] = useState();
-
+    const [activeEditor, setActiveEditor] = useState();
     const toggleCreator = (type) => {
         setActiveCreator(type);
     }
+    const toggleEditor = (type) => {
+        setActiveEditor(type)
+    }
 
         return <HabitCreatorContext.Provider value={{
-            activeCreator, toggleCreator}}>
+            activeCreator, toggleCreator,
+            activeEditor, toggleEditor}}>
 			{children}
 			</HabitCreatorContext.Provider>;
 } 

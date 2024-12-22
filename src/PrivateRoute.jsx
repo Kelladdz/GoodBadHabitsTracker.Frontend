@@ -28,18 +28,19 @@ import CalendarDebugWindow from "./CalendarDebugWindow";
 import { PATHS } from "./constants/paths";
 import { jwtDecode } from "jwt-decode";
 import { getUser } from "./store";
+import CreatorDebugWindow from "./CreatorDebugWindow";
+import TimerDebugWindow from "./TimerDebugWindow";
+import { MODAL_TYPES } from "./constants/modal-types";
+import { logoutAction } from "./store/actions/authActions";
 
 
 const PrivateRoute = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-
-
+    const accessToken = useSelector(state => state.auth.accessToken);
     const {activeMenu, hideContextMenu} = useContext(ContextMenuContext);
     const {activeModal} = useContext(ModalsContext);
-    const {activeCreator} = useContext(HabitCreatorContext);
-    const {isProgressLoggerOpen} = useContext (ProgressLoggerContext);
+    const {activeCreator, activeEditor} = useContext(HabitCreatorContext);
     const {isTimerOpen} = useContext(TimerContext);
     const {isSettingsOpen} = useContext(SettingsContext);
 
@@ -61,8 +62,10 @@ const PrivateRoute = () => {
     },[]);
 
 	useEffect(() => {
-		if (!profile) {
-            navigate('/auth');
+		if (accessToken === null) {
+            localStorage.clear();
+            navigate(PATHS.auth);
+            
         } else if (JSON.parse(profile).idToken) {
             const user = jwtDecode(JSON.parse(profile).idToken);
             dispatch(getUser(user));
@@ -73,25 +76,25 @@ const PrivateRoute = () => {
             console.log(user);
         }
         
-	},[]);
+	},[accessToken, profile]);
 
     return (
         <div style={{position: 'relative', height: '100vh'}}>
                 <LeftBarProvider>
                     <HabitProvider>
                         <GroupsProvider>
-                                {activeCreator && <Creator />}
+                                {(activeCreator || activeEditor) && <Creator />}
                                 {activeMenu && <ContextMenu ref={ref}/>}
                                 {activeModal && <Modal/>}
-                                {isTimerOpen && <Timer/>}
+                                
                                 {isSettingsOpen && <Settings />}
                                 <Header />
                                 <Outlet />
-                                <CalendarDebugWindow />
+                                {/* {(activeCreator || activeEditor) && <CreatorDebugWindow />} */}
+                                {/* {activeModal === MODAL_TYPES.counter && <TimerDebugWindow/>} */}
                         </GroupsProvider>
                     </HabitProvider>
                 </LeftBarProvider>
-                {(activeCreator || isProgressLoggerOpen) && <DebugWindow />}
         </div>
     )
 }

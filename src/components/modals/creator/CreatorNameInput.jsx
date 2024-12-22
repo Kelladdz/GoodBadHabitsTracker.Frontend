@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { changeName } from '../../../store';
+import { changeName, useFetchHabitQuery } from '../../../store';
 
 import {EDIT_ICON_ALTERNATE_LABEL} from '../../../constants/alternate-labels';
 
@@ -12,9 +12,8 @@ import styles from '../../../styles/CreatorNameInput.module.css';
 const CreatorNameInput = () => {
     const dispatch = useDispatch();
     const name = useSelector(state => state.goodHabitCreator.name);
-
     const [nameEditMode, setNameEditMode] = useState(true);
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState(name);
 
     const handleClick = () => {
         setNameEditMode(true);
@@ -41,7 +40,7 @@ const CreatorNameInput = () => {
         <div className={styles['creator-name-input']}>
             {nameEditMode 
             ? 
-            <input minLength={3} maxLength={50} autoFocus type="text" placeholder='Habit name...' className={styles.input} value={inputValue} onChange={handleNameChange} onKeyDown={handleKeyDown}/>
+            <input minLength={3} maxLength={50} type="text" placeholder='Habit name...' className={styles.input} value={inputValue} onChange={handleNameChange} onKeyDown={handleKeyDown}/>
             : <>
                 {name.length > 2 
                 ? <span className={styles.name}>{name}</span> 

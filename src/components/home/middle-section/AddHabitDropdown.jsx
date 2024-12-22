@@ -74,6 +74,7 @@ const AddHabitDropdown = () => {
     return(
         <div style={{position: 'relative'}}>  
             <button ref={btnRef} className={styles[`${wrappedClass}add-habit-dropdown`]} onClick={handleClick}>
+                <img className={styles['mobile-icon']} src={PlusSign} alt={PLUS_SIGN_ALTERNATE_LABEL}/>
                 {!isSearchBarOpen ?
                     <>
                         <img className={styles.icon} src={PlusSign} alt={PLUS_SIGN_ALTERNATE_LABEL}/>

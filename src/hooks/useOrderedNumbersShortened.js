@@ -9,12 +9,15 @@ export function useOrderedNumbersShortened() {
     const [orderedNumbersShortened, setOrderedNumbersShortened] = useState([]);
 
     useEffect(() => {
-        if (repeatDaysOfMonth.length > 0) {
+        if (repeatDaysOfMonth && repeatDaysOfMonth.length > 0) {
             let newNumbersArray = [];
             repeatDaysOfMonth.forEach((number) => {
                 newNumbersArray.push(ORDERED_DAYS_OF_MONTH_SHORT[number - 1]);
             });
             setOrderedNumbersShortened([newNumbersArray]);
+        }
+        else {
+            setOrderedNumbersShortened([]);
         }
     }, [repeatDaysOfMonth]);
 

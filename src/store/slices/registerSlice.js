@@ -33,6 +33,9 @@ const registerSlice = createSlice({
         },
         changeConfirmPassword: (state, action) => {
             state.confirmPassword = action.payload;
+        },
+        toggleConfirmPasswordError: (state, action) => {
+            state.confirmPasswordError = action.payload;
         }
     }
 })

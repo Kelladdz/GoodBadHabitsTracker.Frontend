@@ -1,9 +1,10 @@
 .progress-logger {
-    
+    position: relative;
+    z-index: 1000;
     background-color: #ececec;
     border-radius: 7px;
     padding: 0.1rem 0.5rem 0.25rem;
-    
+    width: 32rem;
     box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
     border: 1px solid #a1a1a1;
 }
@@ -34,6 +35,10 @@
     justify-content: center;
     margin-top: .75rem;
     border-radius: 7px;
+}
+
+.btn:first-of-type{
+    margin-left: 5.5rem;
 }
 
 .btn:hover {

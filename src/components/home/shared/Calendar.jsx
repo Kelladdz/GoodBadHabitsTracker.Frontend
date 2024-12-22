@@ -24,10 +24,10 @@ const Calendar = React.forwardRef(({props, withoutArrows, cellSize, headerPaddin
     const currentMonth = useSelector(state => state.calendar.currentMonth);
     const calendarDays = useSelector(state => state.calendar.calendarDays);
     const currentYear = useSelector(state => state.calendar.currentYear);
-    const {activeHabit} = useContext(HabitContext);
+    const {activeHabit, dayResults} = useContext(HabitContext);
     const {  today, startDate, resultDate, calendarRows, handlePreviousMonthClick, handleNextMonthClick, handleDayClick } = useCalendar(type);
 
-    const [activeDivSprings, activeDivApi] = useSpring(() => ({ left: '0.5rem', top: '0rem', config: { duration: 100 } }));
+    const [activeDivSprings, activeDivApi] = useSpring(() => ({ left: '0rem', top: '0rem', config: { duration: 100 } }));
 
     useEffect(() => {
         if (type === CALENDAR_TYPES.form && calendarDays && calendarDays.some(day => day === startDate)) {
@@ -60,7 +60,9 @@ const Calendar = React.forwardRef(({props, withoutArrows, cellSize, headerPaddin
         }
     },[startDate, resultDate, currentDateString, calendarDays]);
 
-
+    useEffect(() => {
+        
+    },[dayResults]);
 
 
     return (
@@ -85,19 +87,35 @@ const Calendar = React.forwardRef(({props, withoutArrows, cellSize, headerPaddin
                     <span key={index} className={styles['day-of-week']}>{day}</span>
                 </div>)}
             </div>
-            <div style={{gridTemplateRows: `repeat(${calendarRows}, ${cellSize})`, gridTemplateColumns: `repeat(7, ${cellSize})`}} className={styles['days-of-month']}>
+            <div style={{gridTemplateRows: `repeat(${calendarRows}, ${cellSize})`}} className={styles['days-of-month']}>
                 {calendarDays && calendarDays.map((day, index) => {
-                    const disabledDayClass = new Date(day) < new Date(today.getFullYear(), today.getMonth(), today.getDate()) && type === CALENDAR_TYPES.form ? 'disabled-' : '';
+                    let disabledDayClass;
+                    switch (type){
+                        case CALENDAR_TYPES.form:
+                            disabledDayClass = new Date(day) < new Date(today.getFullYear(), today.getMonth(), today.getDate()) ? 'disabled-' : '';
+                            break;
+                        case CALENDAR_TYPES.filter:
+                            disabledDayClass = new Date(day) < new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7) 
+                            || new Date(day) > new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3) ? 'disabled-' : '';
+                            break;
+                        case CALENDAR_TYPES.logger:
+                            disabledDayClass = new Date(day) > new Date(today.getFullYear(), today.getMonth(), today.getDate()) ? 'disabled-' : '';
+                            break;
+                        default:
+                            break;
+                    }
+                    
                     let status;
-                    if (type === CALENDAR_TYPES.main && activeHabit.dayResults.some(result => result.date === day)){
-                        status = activeHabit.dayResults.find(result => result.date === day).status;
+                    console.log('activeHabit: ', activeHabit);
+                    if (type === CALENDAR_TYPES.main && activeHabit.habit.dayResults && activeHabit.habit.dayResults.some(result => result.date === day)){
+                        status = activeHabit.habit.dayResults.find(result => result.date === day).status;
                         console.log('status: ', day, status);
                     }
                     
                     return <>
                      <div className={styles[`${disabledDayClass}day-of-month-box`]} onClick={() => handleDayClick(day)}>
                         <span key={index} className={styles['day-of-month']}>{day.split('-')[2]}</span>      
-                        {type === CALENDAR_TYPES.main && activeHabit.dayResults.some(result => result.date === day) && 
+                        {type === CALENDAR_TYPES.main && activeHabit.habit.dayResults.some(result => result.date === day) && 
 
 <ResultCircle status={status}/>
 }     
@@ -106,7 +124,7 @@ const Calendar = React.forwardRef(({props, withoutArrows, cellSize, headerPaddin
                     </>
                     
                    })}
-                {(type === CALENDAR_TYPES.form || type === CALENDAR_TYPES.filter || type === CALENDAR_TYPES.logger) && calendarDays && calendarDays.some(day => day === startDate || day === currentDateString) && <animated.div style={activeDivSprings} className={styles['floating-circle']}></animated.div>}
+                {(type === CALENDAR_TYPES.form || type === CALENDAR_TYPES.filter || type === CALENDAR_TYPES.logger) && calendarDays && calendarDays.some(day => day === currentDateString) && <animated.div style={activeDivSprings} className={styles['floating-circle']}></animated.div>}
             </div>
         </div>  
     )

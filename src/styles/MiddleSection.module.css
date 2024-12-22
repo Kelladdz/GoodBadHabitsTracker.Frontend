@@ -1,22 +1,36 @@
 .middle-section {
     width: 45%;
     border-right: 1px solid #c2c2c2;
+    overflow-y: overlay;
 }
 
-.animated-box {
-    overflow: hidden;
+.middle-section::-webkit-scrollbar {
+    width: .5rem;
 }
 
-@media (max-width: 75rem) {
-    .middle-section {
-        width: 50%;
-    }
-    
+.middle-section::-webkit-scrollbar-track {
+    background-image: linear-gradient(to bottom, rgb(245, 245, 245), 2rem, white, 90%,  rgb(245, 245, 245) 100%);
+    width: .5rem;
+    border-radius: 50px;
 }
 
-@media (max-width: 55rem) {
+.middle-section::-webkit-scrollbar-thumb {
+    background-color: #1e1e1e;
+    border-radius: 30px;
+    width: .5rem;
+} 
+
+
+
+@media (max-width: 81.875rem) {
     .middle-section {
         width: 100%;
-        border-right: none;
+        height: 100%;
+        max-height: calc(100% - 7.5rem);
     }
+
+    .hide {
+        display: none;
+    }
+    
 }

@@ -14,14 +14,14 @@ import { CREATOR_TYPES } from '../../../constants/creator-types';
 
 import styles from '../../../styles/CreatorDropdown.module.css';
 
-const CreatorDropdown = ({style, options, property, handleOptionChange}) => {
+const CreatorDropdown = ({style, options, property, handleOptionChange, selectedGroup}) => {
     const groupId = useSelector(state => state.goodHabitCreator.groupId);
 
     const {activeGroup} = useContext(LeftBarContext);
-    const {activeCreator} = useContext(HabitCreatorContext);
+    const {activeCreator, activeEditor} = useContext(HabitCreatorContext);
 
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(groupId && property === HABIT_PROPERTIES.group ? activeGroup.name : options[0]);
+    const [selectedOption, setSelectedOption] = useState(selectedGroup?.group.name || options[0]);
 
     const dropdownRef = useRef();
     const listRef = useRef();
@@ -58,20 +58,20 @@ const CreatorDropdown = ({style, options, property, handleOptionChange}) => {
     }
 
     useEffect(() => {
-        if (dropdownRef.current && activeCreator === CREATOR_TYPES.quitHabit && property !== HABIT_PROPERTIES.group) {
+        if (dropdownRef.current && (activeCreator === CREATOR_TYPES.quitHabit || activeEditor === CREATOR_TYPES.quitHabit) && property !== HABIT_PROPERTIES.group) {
             dropdownRef.current.classList.add(styles.disabled);     
-        } else if (dropdownRef.current && activeCreator !== CREATOR_TYPES.quitHabit) {
+        } else if (dropdownRef.current && activeCreator !== CREATOR_TYPES.quitHabit && activeEditor !== CREATOR_TYPES.quitHabit) {
             dropdownRef.current.classList.remove(styles.disabled);     
         }
-    },[activeCreator])
+    },[activeCreator, activeEditor])
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutsideDropdown);
-
+        console.log(selectedGroup)
         return () => {
             document.removeEventListener('mousedown', handleClickOutsideDropdown);
         }
-    })
+    },[])
 
     return (
         <div style={style} className={styles.container} ref={dropdownRef}>

@@ -8,8 +8,9 @@ export function useChart() {
     const [dayResults, setDayResults] = useState();
 
     const getStreaks = (month) => {
-        if (activeHabit) {
-            const currentMonthResults = activeHabit.dayResults.filter(result => new Date(result.date).getMonth() === month).sort((a, b) => b.date.localeCompare(a.date));
+        if (activeHabit.habit) {
+            console.log(activeHabit.habit);
+            const currentMonthResults = activeHabit.habit.dayResults.filter(result => new Date(result.date).getMonth() === month).sort((a, b) => b.date.localeCompare(a.date));
             console.log(currentMonthResults);
             let streak = 0;
             let newStreak = 0;
@@ -30,20 +31,20 @@ export function useChart() {
     }
 
     const getCompletes = (month) => {
-        if (activeHabit) {
-            return activeHabit.dayResults.filter(result => new Date(result.date).getMonth() === month && result.status === 0).length;
+        if (activeHabit.habit) {
+            return activeHabit.habit.dayResults.filter(result => new Date(result.date).getMonth() === month && result.status === 0).length;
         }
     }
 
     const getFails = (month) => {
-        if (activeHabit) {
-            return activeHabit.dayResults.filter(result => new Date(result.date).getMonth() === month && result.status === 1).length;
+        if (activeHabit.habit) {
+            return activeHabit.habit.dayResults.filter(result => new Date(result.date).getMonth() === month && result.status === 1).length;
         }
     }
 
     useEffect(() => {
-        if (activeHabit) {
-            const results = activeHabit.dayResults;
+        if (activeHabit.habit) {
+            const results = activeHabit.habit.dayResults;
             setDayResults(results);
         }
     }, [activeHabit]);

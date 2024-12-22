@@ -8,7 +8,7 @@ import { LEFT_BAR_BUTTON_LABELS } from "../../../constants/button-labels";
 
 import styles from '../../../styles/HabitList.module.css';
 
-const HabitList = ({habits, close}) => {
+const HabitList = ({habits}) => {
     const {activeGroup} = useContext(LeftBarContext);
 
     const habitTransition = useTransition(habits, {
@@ -18,13 +18,13 @@ const HabitList = ({habits, close}) => {
         config: {duration: 200}
     });
 
-    useEffect(() => {
-        if (activeGroup === LEFT_BAR_BUTTON_LABELS.goodHabits && habits.length > 0 && habits[0].habitType !== 0
-            || activeGroup === LEFT_BAR_BUTTON_LABELS.badHabits && habits.length > 0 && habits[0].habitType === 0
-        ) {
-            close();
-        }
-    },[activeGroup]);   
+    // useEffect(() => {
+    //     if (activeGroup === LEFT_BAR_BUTTON_LABELS.goodHabits && habits.length > 0 && habits[0].habitType !== 0
+    //         || activeGroup === LEFT_BAR_BUTTON_LABELS.badHabits && habits.length > 0 && habits[0].habitType === 0
+    //     ) {
+    //         close();
+    //     }
+    // },[activeGroup]);   
 
     return (
         <>

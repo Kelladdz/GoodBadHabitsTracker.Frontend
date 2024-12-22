@@ -1,16 +1,19 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import {jwtDecode} from "jwt-decode";
 
-import { loginSuccess, loginFail, signUpFail, logout, getExternalTokens, setInitialAuthState } from "../store/slices/authSlice";
+import { loginSuccess, loginFail, signUpFail, logout, getExternalTokens, sendResetPasswordLinkFailed } from "../store/slices/authSlice";
 
 import AuthContext from "../context/auth";
 
 import { Pkce } from "../utils/authUtils";
 import { PATHS } from "../constants/paths";
+import { useAuthValidation } from "./useAuthValidation";
+import { toggleUserNameError, toggleEmailError, togglePasswordError, toggleConfirmPasswordError } from "../store";
+import { logoutAction } from "../store/actions/authActions";
 
 
 
@@ -20,10 +23,11 @@ export function useAuth() {
 
     const registerForm = useSelector(state => state.register);
 	const authState = useSelector(state => state.auth);
-	
+	const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
+	const signUpError = useSelector(state => state.auth.signUpError);
 
     const {email, password, loginErrors, changeEmail, changePassword, toggleErrors, toggleProfile} = useContext(AuthContext);
-
+	const {isRegisterFormValid} = useAuthValidation();
     const login = async (request) => {
 		try {
 			const response = await axios.post(
@@ -39,7 +43,7 @@ export function useAuth() {
 			if (error) {
 				dispatch(loginFail(error));
 			} else {
-				const {accessToken, refreshToken} = data;
+				const {accessToken} = data;
 
 				const userData = {
 					userId: jwtDecode(accessToken).sub,
@@ -47,8 +51,7 @@ export function useAuth() {
 				}
 				const profile = {
 					userData,
-					accessToken,
-					refreshToken
+					accessToken
 				};
 				localStorage.setItem("profile", JSON.stringify(profile));
 				dispatch(loginSuccess(profile));
@@ -61,42 +64,31 @@ export function useAuth() {
     
 
     const register = async () => {
-		const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-
-        if (!emailRegex.test(email)) {
-            dispatch(signUpFail({property: 'email', error: 'Invalid email'}));
-        }
-
-        if (registerForm.userName === '') {
-            dispatch(signUpFail({property: 'userName', error: 'Username cannot be empty'}));
-        }
-
-        if (registerForm.password !== registerForm.confirmPassword) {
-            dispatch(signUpFail({property: 'password', error: 'Passwords do not match'}));
-        }
-		try {
-			const response = await axios.post(import.meta.env.VITE_REACT_APP_REGISTER_LOCALHOST_URL,
-					registerForm,
-					{
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						withCredentials: true,
-					});
-			const {error, data} = response;
-			if (error) {
-				if (error.contains('Username')){
-					dispatch(signUpFail({property: 'userName', error: 'This name is already taken'}));
-				}
-				if (error.contains('Email')){
-					dispatch(signUpFail({property: 'email', error: 'This email is already taken'}));
-				}
-			} else {
-				navigate(PATHS.signUpConfirmEmail);
-			}
-		} catch (error) {
-			dispatch(signUpFail({property: 'server', error: error}));
-		}
+		if(isRegisterFormValid(registerForm)){
+			await axios.post(import.meta.env.VITE_REACT_APP_REGISTER_LOCALHOST_URL,
+						registerForm,
+						{
+							headers: {
+								'Content-Type': 'application/json',
+							},
+							withCredentials: true,
+						})
+				.then(res => {
+					console.log(res);
+					if (res.status === 201) {
+						navigate(PATHS.signUpConfirmEmail);
+					}
+				})
+				.catch(errs => {
+					console.log(errs);
+					if (errs.status === 400) {
+						const errors = errs.response.data.errors.map(error => {
+							return {property: error.propertyName, error: error.errorMessage};
+						})
+						dispatch(signUpFail(errors));
+					}});
+		} 
+		
 }
 
 	const sendResetPasswordLink = async (email) => {
@@ -112,18 +104,24 @@ export function useAuth() {
 			})
 			.catch(errs => {
 				console.log(errs);
-				if (errs.status === 401) {
-					toggleErrors('Invalid email');
-				}
-			});
+				if (errs.status === 400) {
+					console.log(errs.response.data.errors[0]);
+					const error = {property: errs.response.data.errors[0].propertyName, error: errs.response.data.errors[0].errorMessage};
+					dispatch(sendResetPasswordLinkFailed(error));
+				}});
 	}
 
-	const resetPassword = async (password, token, email) => {
+	const resetPassword = async (email, token, password) => {
 		await axios
 			.patch(import.meta.env.VITE_REACT_APP_RESET_PASSWORD_LOCALHOST_URL, {
 				password,
 				token,
 				email,
+			},{
+				headers: {
+					'Authorization': `Bearer ${accessToken}`,
+				},
+				withCredentials: true,
 			})
 			.then(res => {
 				console.log(res);
@@ -133,9 +131,25 @@ export function useAuth() {
 			});
 	};
 
-	const signOut = () => {
-		localStorage.removeItem("profile");
-		dispatch(logout());
+	const signOut = async () => {
+		// await axios.post(import.meta.env.VITE_REACT_APP_LOGOUT_LOCALHOST_URL, {},
+		// 	{ 
+		// 		withCredentials: true, 
+		// 		headers: { 
+		// 		'Authorization': `Bearer ${accessToken}`
+		// 	} }
+			
+		// )
+		// 	.then(res => {
+		// 		console.log(res);
+		// 		if (res.status === 204) {
+		// 			localStorage.removeItem("profile");
+					
+		// 			navigate(PATHS.auth);
+		// 			dispatch(logout());
+		// 		}
+		// 	});
+		logoutAction();
 	}
 
 	
@@ -243,19 +257,45 @@ export function useAuth() {
 	const deleteAccount = async () => {
 		await axios
 			.delete(import.meta.env.VITE_REACT_APP_DELETE_ACCOUNT_LOCALHOST_URL, {
-				withCredentials: true,
 				headers: {
-						'Authorization': `Bearer ${JSON.parse(localStorage.getItem('profile'))?.accessToken}`
-				}
+					'Authorization': `Bearer ${authState.accessToken}`,
+				},
+				withCredentials: true,
 			})
 			.then(res => {
 				console.log(res);
 				if (res.status === 204) {
-					dispatch(setInitialAuthState());
+					dispatch(logout());
 					navigate(PATHS.auth);
 				}
 			});
 	}
+
+	useEffect(() => {
+		if (signUpError.length > 0) {
+			signUpError.forEach(error => {
+				switch(error.property) {
+					case 'UserName':
+						dispatch(toggleUserNameError(error.error));
+						break;
+					case 'Username':
+						dispatch(toggleUserNameError(error.error));
+						break;
+					case 'Email':
+						dispatch(toggleEmailError(error.error));
+						break;
+					case 'Password':
+						dispatch(togglePasswordError(error.error));
+						break;
+					case 'ConfirmPassword':
+						dispatch(toggleConfirmPasswordError(error.error));
+						break;
+					default:
+						break;
+				} 
+			});
+		}
+	},[signUpError]);
 
 	// useEffect(() => {
 	// 	const userCookie = () => {

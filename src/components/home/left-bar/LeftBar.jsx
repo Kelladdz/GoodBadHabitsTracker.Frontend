@@ -3,27 +3,38 @@ import { useSpring, animated } from 'react-spring';
 
 import LeftBarContext from '../../../context/left-bar';
 
+import { useAuth } from '../../../hooks/useAuth';
+
 import LeftBarButton from './LeftBarButton';
 import GroupList from './GroupList';
 import AddGroupInput from './AddGroupInput';
 
 import AllHabitsIcon from '../../../assets/svg/all-habits-icon.svg';
 import BadHabitsIcon from '../../../assets/svg/bad-habits-icon.svg';
+import LogoutIcon from '../../../assets/svg/logout-icon.svg';
 
-import { ALL_HABITS_ICON_ALTERNATE_LABEL, GOOD_HABITS_ICON_ALTERNATE_LABEL, BAD_HABITS_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
+import { ALL_HABITS_ICON_ALTERNATE_LABEL, GOOD_HABITS_ICON_ALTERNATE_LABEL, BAD_HABITS_ICON_ALTERNATE_LABEL, LOGOUT_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
 import { LEFT_BAR_BUTTON_LABELS } from '../../../constants/button-labels';
 import { CONTEXT_MENU_TYPES } from '../../../constants/context-menu-types';
 
 import styles from '../../../styles/LeftBar.module.css';
+import { useDispatch } from 'react-redux';
+import { logoutAction } from '../../../store/actions/authActions';
 
 const LeftBar = () => {
+    const dispatch = useDispatch();
     const {activeGroup, toggleActiveGroup, order, toggleOrder} = useContext(LeftBarContext)
     const [activeDivSprings, activeDivApi] = useSpring(() => ({top: '0.5rem', config: {duration: 100}}));  
     
+
     
     const handleLeftBarButtonClick = (label) => {
         toggleOrder(null);
         toggleActiveGroup(label);
+    }
+
+    const handleLogoutClick = () => {
+        dispatch(logoutAction())
     }
     
     useEffect(() => {
@@ -80,6 +91,15 @@ const LeftBar = () => {
             </nav>
             <GroupList />
             <AddGroupInput />
+            <div className={styles['logout-btn']}>
+            <LeftBarButton 
+                handleLeftBarButtonClick={() => handleLogoutClick()}
+                    style={{transform: 'rotate(180deg) scale(1.25) translateY(3px)'}}
+                    icon={LogoutIcon} 
+                    alt={GOOD_HABITS_ICON_ALTERNATE_LABEL} 
+                    label={LEFT_BAR_BUTTON_LABELS.logout} 
+                    contextMenuType={CONTEXT_MENU_TYPES.none}/>
+            </div>
         </div>
     )
 }

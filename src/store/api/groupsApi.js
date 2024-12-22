@@ -1,9 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import Cookies from 'js-cookie';
+
 import { logout } from "../slices/authSlice";
 import { PATHS } from "../../constants/paths";
+import { useAuth } from "../../hooks/useAuth";
+import { logoutAction, refreshTokenAction } from "../actions/authActions";
+import { useDispatch } from "react-redux";
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'https://localhost:7154',
+    credentials: 'include',
     prepareHeaders: (headers) => {
       const accessToken = JSON.parse(localStorage.getItem('profile'))?.accessToken;
       if (accessToken) {
@@ -13,16 +19,26 @@ const baseQuery = fetchBaseQuery({
     },
   });
 
-const unauthorizedUserQuery = async (args, api, extraOptions) => {
-    let result = await baseQuery(args, api, extraOptions);
-  
+const unauthorizedUserQuery = async (args, store, extraOptions) => {
+    
+    let result = await baseQuery(args, store, extraOptions);
+    console.log(result);    
     if (result.error && result.error.status === 401) {
-        localStorage.removeItem('profile');
-        api.dispatch(logout());
-        window.location.href = PATHS.auth;
+        const accessToken = JSON.parse(localStorage.getItem('profile'))?.accessToken;
+        console.log('Unauthorized user query');
+        const refreshToken = Cookies.get("__Secure-Rt");
+        console.log(refreshToken);
+        if (!accessToken || !refreshToken) {
+            store.dispatch(logoutAction());
+        }
+        const payload = await store.dispatch(refreshTokenAction(refreshToken));
+        if (payload) {
+            result = await baseQuery(args, store, extraOptions);
+        } else {
+            store.dispatch(logoutAction());
+        }
     }
-  
-    return result;
+      return result;
   };
 
 const groupsApi = createApi({

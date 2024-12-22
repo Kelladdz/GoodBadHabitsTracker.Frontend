@@ -9,4 +9,5 @@ export const MODAL_TYPES = {
     afterDeleteAllHabits: 'afterDeleteAllHabits',
     deleteAllHabitsProgress: 'deleteAllHabitsProgress',
     afterDeleteAllHabitsProgress: 'afterDeleteAllHabitsProgress',
+    counter: 'counter',
 }

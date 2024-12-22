@@ -39,5 +39,6 @@
     left: 0;
     overflow: hidden;
     z-index: 1000;
+    width: 100%;
 }
 

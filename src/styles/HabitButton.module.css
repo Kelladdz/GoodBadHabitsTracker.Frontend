@@ -10,6 +10,8 @@
     padding-inline: .75rem;
     min-width: 2.25rem;
     box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    position:relative;
+    z-index: 10;
 }
 
 .habit-button:not(:last-of-type) {

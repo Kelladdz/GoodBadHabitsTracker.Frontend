@@ -1,14 +1,17 @@
 import axios from "axios";
 import { isValidToken } from "../../utils/authUtils";
-import { setAccessToken, setRefreshToken, setUserData } from "../slices/authSlice";
+import { logout, setAccessToken, setRefreshToken, setUserData } from "../slices/authSlice";
 import { refreshTokenSuccess, refreshTokenFail } from "../slices/authSlice";
+import Cookies from "js-cookie";
 
 const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
 const idToken = JSON.parse(localStorage.getItem("profile"))?.idToken;
 
+
 export const initializeAuth = () => async (dispatch) => {
+  
   const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
-  const refreshToken = JSON.parse(localStorage.getItem("profile"))?.refreshToken;
+  const refreshToken = Cookies.get("__Secure-Rt");
 
   if (accessToken && refreshToken) {
     if (isValidToken(accessToken)) {
@@ -18,12 +21,37 @@ export const initializeAuth = () => async (dispatch) => {
       dispatch(setUserData(JSON.parse(localStorage.getItem("profile")).userData));
     } else {
       console.log("Access token is invalid");
-      if (idToken === null) {
-        await dispatch(refreshTokenAction(refreshToken))
-      } else {
-        await dispatch(oauthRefreshTokenAction(refreshToken))
-      }
+      refreshTokenAction(refreshToken);
     }
+  }
+};
+
+export const refreshTokenAction = (refreshToken) => async (dispatch) => {
+  console.log("refreshTokenAction");
+  console.log(idToken);
+  if (idToken === undefined) {
+    try {
+      const response = await axios.post(import.meta.env.VITE_REACT_APP_REFRESH_TOKEN_LOCALHOST_URL, {
+        refreshToken
+      },
+      {
+          headers: { 
+              'content-type': 'application/json',
+              'Authorization': `Bearer ${accessToken}`
+           },
+           withCredentials: true
+      })
+      const profile = JSON.parse(localStorage.getItem("profile"));
+      const payload = response.data;
+      localStorage.setItem("profile", JSON.stringify({ ...profile, ...payload }));
+      dispatch(refreshTokenSuccess(payload));
+      return payload;
+    } catch (error) {
+      dispatch(refreshTokenFail());
+    }
+  } else {
+    const payload = await dispatch(oauthRefreshTokenAction(refreshToken))
+    return payload;
   }
 };
 
@@ -46,30 +74,29 @@ export const oauthRefreshTokenAction = (refreshToken) => async (dispatch) => {
     const payload = response.data;
     localStorage.setItem("profile", JSON.stringify({ ...profile, ...payload }));
     dispatch(refreshTokenSuccess(payload));
+    return payload;
   } catch (error) {
-    localStorage.removeItem("profile");
     dispatch(refreshTokenFail());
   }
 };
 
-export const refreshTokenAction = (refreshToken) => async (dispatch) => {
-  try {
-    const response = await axios.post(import.meta.env.VITE_REACT_APP_REFRESH_TOKEN_LOCALHOST_URL, {
-      refreshToken
-    },
-    {
-        headers: { 
-            'content-type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`
-         }
-    })
+export const logoutAction = () => async (dispatch) => {
+  await axios.post(import.meta.env.VITE_REACT_APP_LOGOUT_LOCALHOST_URL, {},
+    { 
+      withCredentials: true, 
+      headers: { 
+      'Authorization': `Bearer ${accessToken}`
+    } }
     
-    const profile = JSON.parse(localStorage.getItem("profile"));
-    const payload = response.data;
-    localStorage.setItem("profile", JSON.stringify({ ...profile, ...payload }));
-    dispatch(refreshTokenSuccess(payload));
-  } catch (error) {
-    localStorage.removeItem("profile");
-    dispatch(refreshTokenFail());
-  }
+  )
+    .then(res => {
+      console.log(res);
+      if (res.status === 204) {
+        localStorage.removeItem("profile");
+        
+        
+        dispatch(logout());
+      }
+    });
 };
+

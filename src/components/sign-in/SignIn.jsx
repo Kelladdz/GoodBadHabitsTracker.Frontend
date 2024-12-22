@@ -19,6 +19,7 @@ import AuthExternalLoginButton from './AuthExternalLoginButton';
 import { PATHS } from '../../constants/paths';
 
 import styles from '../../styles/SignIn.module.css';
+import { sign } from 'chart.js/helpers';
 
 const SignIn = () => {
 	const navigate = useNavigate();
@@ -31,6 +32,8 @@ const SignIn = () => {
 	const [password, setPassword] = useState('');
 
 	const {googleLogin, facebookLogin, login} = useAuth();
+
+	const profile = localStorage.getItem("profile");
     
 	const handleEmailChange = (e) => {
 		setEmail(e.target.value);
@@ -67,16 +70,16 @@ const SignIn = () => {
 	}
 
 	useEffect(() => {
-		const userCookie = () => {
-			if (Cookies.get('__Secure-Fgp')) {
-				return Cookies.get('__Secure-Fgp');
+		if (!profile) {
+            navigate('/auth');
 		}
-	}
-		console.log(userCookie());
-		if (userCookie() !== undefined) {
-			navigate(PATHS.main);
+	},[profile]);
+
+	useEffect(() => {
+		if (signInError) {
+			console.log(signInError);
 		}
-	});
+	},[signInError]);
 
     
     return (
@@ -85,18 +88,23 @@ const SignIn = () => {
             <form className={styles.form} onSubmit={handleLoginSubmit}>
 				<AuthInputBox type='text' icon={User} inputValue={email} onChange={handleEmailChange} placeholder='E-mail' />
 				<AuthInputBox type='password' icon={Password} inputValue={password} onChange={handlePasswordChange} placeholder='Password' />
-				<div style={{display: 'flex', alignItems: 'center', position: 'relative'}}>
-					{signInError && <AuthErrorBox error={signInError} />}
+				<div className={styles['under-password']}>
+					<AuthErrorBox error={signInError} />
 					{loadingText !== '' && <AuthErrorBox error={loadingText} />}
 					<div className={styles['forgot-password-btn']} onClick={handleForgetPasswordButtonClick}>
 						<span>Forgot Password?</span>
 					</div>
 				</div>
-				<div className={styles.btns}>
-					<AuthButton type='button' onClick={handleRegisterButtonClick} label='Register' />
+				<div className={styles['auth-btn-box']}>
 					<AuthButton type='submit' label='Login' />
 				</div>						
 			</form>
+			<div className={styles['register-btn-box']}>
+				<span>Don't have an account?</span>
+				<div className={styles['register-btn']} onClick={handleRegisterButtonClick}>
+					<span style={{fontWeight: 700}}>Register</span>
+				</div>
+			</div>
 			<div className={styles['or-with-box']}>
 				<div className={styles['line']}></div>
 				<span>or</span>

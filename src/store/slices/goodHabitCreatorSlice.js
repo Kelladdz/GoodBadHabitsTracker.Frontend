@@ -10,7 +10,7 @@ const goodHabitCreatorSlice = createSlice({
         habitType: 0,
         quantity: 60,
         isTimeBased: true,
-        frequency: 1,
+        frequency: 0,
         repeatMode: 1,
         repeatDaysOfWeek: [0, 1, 2, 3, 4, 5, 6],
         repeatDaysOfMonth: [],
@@ -27,9 +27,40 @@ const goodHabitCreatorSlice = createSlice({
         },
         changeHabitType: (state, action) => {
             state.habitType = action.payload;
+            switch (action.payload) {
+                case 0:
+                    !state.quantity ? state.quantity = 1 : state.quantity = state.quantity;
+                    !state.isTimeBased ? state.isTimeBased = true : state.isTimeBased = state.isTimeBased;
+                    !state.frequency ? state.frequency = 1 : state.frequency = state.frequency;
+                    state.repeatMode = 1;
+                    state.repeatDaysOfWeek = [0, 1, 2, 3, 4, 5, 6];
+                    state.repeatDaysOfMonth = [];
+                    state.repeatInterval = state.repeatInterval;
+                    break;
+                case 1:
+                    !state.quantity ? state.quantity = 1 : state.quantity = state.quantity;
+                    !state.isTimeBased ? state.isTimeBased = true : state.isTimeBased = state.isTimeBased;
+                    !state.frequency ? state.frequency = 1 : state.frequency = state.frequency;
+                    state.repeatMode = 0;
+                    state.repeatDaysOfWeek = null;
+                    state.repeatDaysOfMonth = null;
+                    state.repeatInterval = null;
+                    break;
+                case 2:
+                    state.quantity = null;
+                    state.isTimeBased = null;
+                    state.frequency = null;
+                    state.repeatMode = 0;
+                    state.repeatDaysOfWeek = null;
+                    state.repeatDaysOfMonth = null;
+                    state.repeatInterval = null;
+                    break;
+                default:
+                    break;
+            }
         },
         changeQuantity: (state, action) => {
-            state.quantity = action.payload;
+            state.quantity = action.payload * 60;
         },
         changeIsTimeBased: (state, action) => {
             state.isTimeBased = action.payload;

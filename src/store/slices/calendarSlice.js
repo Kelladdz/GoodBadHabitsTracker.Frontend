@@ -12,6 +12,7 @@ const calendarSlice = createSlice({
     },
     reducers: {
         changeCurrentDate: (state, action) => {
+            console.log('action.payload: ', action.payload);
             state.currentDate = action.payload;
             state.currentDay = action.payload.getDay();
         },

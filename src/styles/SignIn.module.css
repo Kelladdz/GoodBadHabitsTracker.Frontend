@@ -14,7 +14,11 @@
 	gap: 1rem;
 }
 
-
+.under-password {
+	display: flex;
+	position:relative;
+	align-items: center;
+}
 
 .btns {
     display: flex;
@@ -46,6 +50,7 @@
 	position: absolute;
 	right: 0;
 	top: -0.5rem;
+	cursor: pointer;
 }
 
 .submit-btn {
@@ -62,13 +67,7 @@
 	bottom: 3rem;
 }
 
-.register-btn {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	transform: translatey(6rem) scaleX(0.8599739583);
-	height: 2.5rem;
-}
+
 
 .register-btn a {
 	width: 87%;
@@ -125,3 +124,31 @@
 	margin: 0 1rem;
 }
 
+.register-btn-box {
+	margin-top: 1rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	gap: 0.5rem;
+
+}
+
+.register-btn {
+	cursor: pointer;
+}
+
+.auth-btn-box {
+	margin-top: 2rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	gap: 0.5rem;
+}
+
+@media (max-width: 30rem) {
+	.under-password {
+		flex-direction: column;
+        align-items: start;	}
+}

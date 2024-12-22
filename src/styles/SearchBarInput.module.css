@@ -7,6 +7,7 @@
     box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
+    flex-grow: inherit;
 }
 
 .input {
@@ -34,4 +35,8 @@
 
 .icon {
     transform: scale(0.9);
+}
+
+@media (max-width: 31.5rem) {
+
 }

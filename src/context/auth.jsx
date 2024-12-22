@@ -25,13 +25,6 @@ function AuthProvider({children}) {
         setProfile(prof);
     }
 
-    useEffect(() => {
-        if (profile) {
-            console.log('profile: ', profile);
-        }
-    }, [profile]);
-   
-
     return <AuthContext.Provider value={{
         email, emailChange,
         password, passwordChange,

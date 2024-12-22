@@ -252,11 +252,11 @@ const CreatorRepeatDropdown = () => {
     },[])
 
     useEffect(() => {
-        if (repeatDaysOfWeek.length === 7) {
+        if (repeatDaysOfWeek && repeatDaysOfWeek.length === 7) {
                 setSelectedOptions('Daily');
-        } else if (repeatDaysOfWeek.length > 0 && repeatDaysOfWeek.length < 7) {
+        } else if (repeatDaysOfWeek && repeatDaysOfWeek.length > 0 && repeatDaysOfWeek.length < 7) {
                 setSelectedOptions(DAYS_OF_WEEK_SHORT.filter((day, index) => repeatDaysOfWeek.includes(index)).join(', '));
-        } else if (repeatDaysOfMonth.length > 0) {
+        } else if (repeatDaysOfWeek && repeatDaysOfMonth.length > 0) {
                 setSelectedOptions(ORDERED_DAYS_OF_MONTH_SHORT.filter((day, index) => repeatDaysOfMonth.includes(index + 1)).join(', '));
         } else if (repeatInterval) {
                 setSelectedOptions(`Every ${repeatInterval} days`);

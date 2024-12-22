@@ -21,7 +21,7 @@ const AuthWindow = () => {
 				<Outlet />
 				
 			</div>
-			<AuthDebug />
+			{/* <AuthDebug /> */}
 		</div>
 	)
 }

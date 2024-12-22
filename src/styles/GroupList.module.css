@@ -22,7 +22,7 @@
     gap: 0.5rem;
 }
 
-@media (max-width: 75rem) {
+@media (max-width: 81.875rem) {
     .group-list {
         padding-bottom: 0;
     }

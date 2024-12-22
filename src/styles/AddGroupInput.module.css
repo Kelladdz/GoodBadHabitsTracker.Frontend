@@ -49,6 +49,7 @@
     background-color: transparent;
     border: none;
     outline: none;
+    max-width: 5.5rem;
 }
 
 .btn {
@@ -56,9 +57,10 @@
     height: 0;
 }
 
-@media (max-width: 75rem) {
+@media (max-width: 81.875rem) {
     .add-group-input {
-        transform: translateY(1px);
+        height: 2rem;
+        padding-right: 0.5rem;
     }
     
 }

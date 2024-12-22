@@ -1,6 +1,7 @@
 export const ALL_HABITS_ICON_ALTERNATE_LABEL = "All Habits Icon"
 export const GOOD_HABITS_ICON_ALTERNATE_LABEL = "Good Habits Icon"
 export const BAD_HABITS_ICON_ALTERNATE_LABEL = "Bad Habits Icon"
+export const LOGOUT_ICON_ALTERNATE_LABEL = "Logout Icon"
 export const SETTINGS_ICON_ALTERNATE_LABEL = "Settings Icon"
 export const PROFILE_ICON_ALTERNATE_LABEL = "Profile Icon"
 export const GROUP_ICON_ALTERNATE_LABEL = "Group Icon"

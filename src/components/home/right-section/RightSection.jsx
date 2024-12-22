@@ -13,16 +13,17 @@ import { CHART_TYPES } from '../../../constants/chart-types';
 import ChartContext from '../../../context/chart';
 
 const RightSection = () => {
-    const {activeHabit} = useContext(HabitContext);
+    const {activeHabit,toggleHabit, activeDetails, toggleDetails} = useContext(HabitContext);
     const {toggleChart} = useContext(ChartContext   );
 
     const handleChartTypeClick = (type) => {
         toggleChart(type);
     }
     return (
-        <div className={styles['right-section']}>
+        <div className={`${styles['right-section']} ${!activeDetails ? styles.hide : ''}`}>
             <div className={styles['label-box']}>
-                <span className={styles.label}>{activeHabit.name}</span>
+                <button className={styles['back-btn']} onClick={() => toggleDetails(false)}>Back</button>
+                <span className={styles.label}>{activeHabit.habit.name}</span>
             </div>
             <div className={styles['habit-data']}>
                 <div className={styles['l-side']}>
@@ -49,7 +50,7 @@ const RightSection = () => {
                         </div>
 
                     </div>
-                    <Calendar withoutArrows cellSize='2.93rem' headerPadding='0.5rem' type={CALENDAR_TYPES.main}/>
+                    <Calendar withoutArrows cellSize='2.5rem' headerPadding='0.5rem' type={CALENDAR_TYPES.main}/>
                 </div>
                 <div className={styles['r-side']}>
                     <Chart />

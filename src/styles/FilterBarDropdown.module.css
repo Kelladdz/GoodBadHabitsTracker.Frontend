@@ -57,6 +57,7 @@
     text-wrap: nowrap;
     opacity: 1;
     animation: fade-in .4s cubic-bezier(.39,.65,0,.99);
+    line-height: 1;
 }
 
 .wrapped-label {
@@ -93,6 +94,7 @@
     z-index: 1000;
     border-radius: 7px;
     right: 0rem;
+    width: 15rem;
 }
 
 .icon {
@@ -104,4 +106,27 @@
 .wrapped-icon {
     opacity: 0;
     animation: fade-out .2s cubic-bezier(.39,.65,0,.99);
+}
+
+.mobile-icon {
+    display: none;
+}
+
+@media (max-width: 31.5rem) {
+    .label,
+    .caret {
+        display: none;
+    }
+
+    .mobile-icon {
+        display: block;
+    }
+
+    .icon {
+        display: none;
+    }
+}
+
+@media (max-width: 24rem) {
+
 }

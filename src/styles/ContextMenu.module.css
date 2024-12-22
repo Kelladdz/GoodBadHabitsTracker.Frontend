@@ -28,7 +28,16 @@
     cursor: pointer;
 }
 
-.item:hover {
+.groups {
+    left: 6.75rem;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #c2c2c2;
+    border-radius: 7px;
+    bottom: 0rem;
+}
+
+.item:hover, .group:hover {
     background-color: #c9c9c9;
 }
 

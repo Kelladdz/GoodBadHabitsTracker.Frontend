@@ -1,9 +1,9 @@
 .auth-error-box {
-	position: relative;
 	display: flex;
 	justify-content: end;
-	height: 1.5rem;
+	max-height: 1.5rem;
 	margin-bottom: 0.5rem;
+	position:relative;
 }
 
 .error-text {
@@ -12,4 +12,12 @@
 	color: red;
 	margin: 0;
 	text-wrap: nowrap;
+	top:-0.5rem;
+}
+
+@media (max-width: 26rem) {
+	.error-text {
+		font-size: 0.75rem;
+		top: -0.3rem;
+	}
 }

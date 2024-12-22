@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { jwtDecode } from 'jwt-decode'
+import ForgetPassword from '../../components/sign-in/ForgetPassword'
 
 
 const authSlice = createSlice({
@@ -13,7 +14,8 @@ const authSlice = createSlice({
     scope: '',
     provider: '',
     signInError: null,
-    signUpError: []
+    signUpError: [],
+    forgetPasswordError: '',
   },
   reducers: {
     setAccessToken: (state, action) => {
@@ -29,6 +31,7 @@ const authSlice = createSlice({
       state.signUpError = [];
     },
     signUpFail: (state, action) => {
+      console.log('signUpFail', action.payload)
       state.signUpError = action.payload ? action.payload : []
     },
     loginSuccess: (state, action) => {
@@ -38,7 +41,15 @@ const authSlice = createSlice({
       state.signInError = null
     },
     loginFail: (state, action) => {
-      state.signInError = action.payload ? action.payload : null
+      console.log('loginFail', action.payload.response.data.errors)
+      state.signInError = action.payload ? action.payload.response.data.errors : null
+    },
+    sendResetPasswordLinkFailed: (state, action) => {
+      console.log('sendResetPasswordLinkFailed', action.payload)
+      state.forgetPasswordError = action.payload ? action.payload : null
+    },
+    sendResetPasswordLinkSuccess: (state) => {
+      state.forgetPasswordError = ''
     },
     getExternalTokens: (state, action) => {
       state.accessToken = action.payload.accessToken
@@ -52,11 +63,15 @@ const authSlice = createSlice({
       console.log('getExternalTokens', state)
     },
     logout: (state) => {
-        state.userData = null,
-        state.refreshToken = null,
-        state.accessToken = null,
-        state.signInError = null,
-        state.signUpError = []
+      console.log('Logout...')
+      state.accessToken = null,
+      state.refreshToken = null,
+      state.userData = null,
+      state.expiresIn = '',
+      state.scope = '',
+      state.provider = '',
+      state.signInError = null,
+      state.signUpError = []
     },
     setCredentials: (state, action ) => {
       state.userInfo = action.payload
@@ -71,20 +86,10 @@ const authSlice = createSlice({
       state.userData = null
       state.signInError = null,
       state.signUpError = []
-    },
-    setInitialAuthState: (state) => {
-      state.accessToken = null,
-      state.refreshToken = null,
-      state.userData = null,
-      state.expiresIn = '',
-      state.scope = '',
-      state.provider = '',
-      state.signInError = null,
-      state.signUpError = []
     }
   }
 })
 
-export const { setAccessToken, setRefreshToken, setUserData, loginSuccess, loginFail, signUpSuccess, signUpFail, logout, setCredentials, login, getExternalTokens, refreshTokenSuccess, refreshTokenFail, setInitialAuthState } = authSlice.actions
+export const { setAccessToken, setRefreshToken, setUserData, loginSuccess, loginFail, signUpSuccess, signUpFail, logout, setCredentials, login, sendResetPasswordLinkSuccess, sendResetPasswordLinkFailed, getExternalTokens, refreshTokenSuccess, refreshTokenFail } = authSlice.actions
 
 export const authReducer = authSlice.reducer

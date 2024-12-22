@@ -9,14 +9,14 @@
 }
 
 .timer {
-    background-color: white;
+    background-color: #fff;
     width: 20rem;
     min-height: 34rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding-inline: 2rem;
+    justify-content: space-between;
+    padding: 2rem 2rem;
     position: absolute;
     left: calc(50% - 10rem);
     top: calc(50% - 17rem);
@@ -76,6 +76,7 @@
     letter-spacing: -0.03rem;
     color: #1e1e1e;
     text-wrap: nowrap;
+    background-color: #fff;
 }
 
 .btn:active {
@@ -142,6 +143,10 @@
 
 .time {
     z-index: 3;
+    transform: rotate(90deg);
+    font-size: 4rem;
+    font-weight: 700;
+    letter-spacing: -0.19rem;
 }
 
 .check {
@@ -149,7 +154,6 @@
     height: 16.5rem;
     font-size: 4rem;
     width: 12rem;
-    transform: rotate(90deg);
     text-align: center;
     z-index: 1;
     display: flex;
@@ -160,7 +164,6 @@
 
 .timer-fill {
     position: absolute;
-
     width: 16.5rem;
     height: 16.5rem;
     border-radius: 50%;
@@ -172,6 +175,12 @@
     z-index: 0;
 }
 
+.failed {
+    background-color: #EE667D;
+    transition: background-color 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+}
+
 .timer-fill.complete {
 	width: 5rem;
     height: 5rem;
@@ -181,4 +190,43 @@
     align-items: center;
     justify-content: center;
     position: absolute;
+}
+
+
+.duration-input-box,
+.checkbox-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.checkbox-box {
+    margin-top: 1rem;
+}
+
+.disabled > * {
+    color: #c2c2c2;
+    opacity: 0.5;
+}
+
+.label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: -0.03rem;
+}
+.upper-side {
+    min-height: 5rem;
+}
+.secondary-label {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    color: #1e1e1e;
+    text-align: center;
+}
+
+.check-icon {
+    z-index: 100000;
+    transform: rotate(90deg);
 }

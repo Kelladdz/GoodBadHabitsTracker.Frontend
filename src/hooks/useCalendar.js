@@ -21,6 +21,8 @@ export function useCalendar(type) {
     const currentDay = useSelector(state => state.calendar.currentDay);
 
     const today = new Date();
+    today.setHours(1,0,0,0);
+    const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
     const numberOfLastDayOfCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     const numberOfLastDayOfPreviousMonth = new Date(currentYear, currentMonth, 0).getDate();
     const firstDayOfCurrentMonth = new Date(currentYear, currentMonth, 1).getDay();
@@ -44,6 +46,7 @@ export function useCalendar(type) {
     const handleDayClick = (day) => {
         if (type !== CALENDAR_TYPES.main) {
             const selectedDate = new Date(day);
+            selectedDate.setHours(1,0,0,0);
             if (selectedDate.getMonth() < currentMonth) {
                 dispatch(previousMonth());
             } else if (selectedDate.getMonth() > currentMonth) {
@@ -51,13 +54,21 @@ export function useCalendar(type) {
             } 
             switch (type) {
                 case CALENDAR_TYPES.form:
-                    dispatch(changeStartDate(selectedDate));
+                    console.log(selectedDate)
+                    console.log(today)
+                    if (selectedDate >= today) {
+                        dispatch(changeStartDate(selectedDate.toISOString().substring(0, 10)));
+                    }
+                    
                     break;
                 case CALENDAR_TYPES.logger:
-                    dispatch(changeDate(selectedDate));
+                    dispatch(changeDate(selectedDate.toISOString().substring(0, 10)));
                     break;
                 case CALENDAR_TYPES.filter:
-                    dispatch(changeCurrentDate(selectedDate));
+                    console.log(selectedDate <= tomorrow);
+                    if (selectedDate <= tomorrow) {
+                        dispatch(changeCurrentDate(selectedDate));
+                    }
                     break;
             }
         }

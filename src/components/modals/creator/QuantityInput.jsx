@@ -11,14 +11,16 @@ import { DECREMENT_ICON_ALTERNATE_LABEL, INCREMENT_ICON_ALTERNATE_LABEL } from '
 import { CREATOR_TYPES } from '../../../constants/creator-types';
 
 import styles from '../../../styles/QuantityInput.module.css';
+import { set } from 'lodash';
 
 const QuantityInput = () => {
     const dispatch = useDispatch();
     const isTimeBased = useSelector(state => state.goodHabitCreator.isTimeBased);
+    const quantity = useSelector(state => state.goodHabitCreator.quantity);
     
-    const [quantityToDisplay, setQuanityToDisplay] = useState(1);
+    const [quantityToDisplay, setQuanityToDisplay] = useState(quantity/60);
     
-    const {activeCreator} = useContext(HabitCreatorContext);
+    const {activeCreator, activeEditor} = useContext(HabitCreatorContext);
 
     const ref = useRef();
 
@@ -40,18 +42,16 @@ const QuantityInput = () => {
     }
 
     useEffect(() => {
-        if (ref.current && activeCreator === CREATOR_TYPES.quitHabit) {
+        if (ref.current && (activeCreator === CREATOR_TYPES.quitHabit || activeEditor === CREATOR_TYPES.quitHabit)) {
             ref.current.classList.add(styles.disabled);     
-        } else if (ref.current && activeCreator !== CREATOR_TYPES.quitHabit) {
+        } else if (ref.current && activeCreator !== CREATOR_TYPES.quitHabit && activeEditor !== CREATOR_TYPES.quitHabit) {
             ref.current.classList.remove(styles.disabled);     
         }
-    },[activeCreator])
+    },[activeCreator, activeEditor])
 
     useEffect(() => {
-        isTimeBased 
-            ? dispatch(changeQuantity(quantityToDisplay * 60))
-            : dispatch(changeQuantity(quantityToDisplay));
-    }, [isTimeBased, quantityToDisplay])
+        dispatch(changeQuantity(quantityToDisplay));
+    }, [quantityToDisplay])
 
     return (
         <div ref={ref} className={styles['quantity-input']}>
@@ -64,8 +64,7 @@ const QuantityInput = () => {
                     <img className={styles.icon} style={{transform: 'rotate(180deg)'}} src={IncrementButton} alt={DECREMENT_ICON_ALTERNATE_LABEL}/>
                 </button>
             </div>
-        </div>
-        
+        </div> 
     )
 }
 

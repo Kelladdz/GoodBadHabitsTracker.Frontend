@@ -10,8 +10,7 @@ import { registerReducer } from "./slices/registerSlice"
 import { initializeAuth } from "./actions/authActions"
 import { userReducer } from "./slices/userSlice"
 import { calendarReducer } from "./slices/calendarSlice"
-import { groupsReducer } from "./slices/groupsSlice"
-import tokenMiddleware from "../middleware/TokenMiddleware"
+import { timerReducer } from "./slices/timerSlice"
 import { thunk } from "redux-thunk"
 
 const createAppStore = async () => {
@@ -26,14 +25,14 @@ const createAppStore = async () => {
                 auth: authReducer,
                 user: userReducer,
                 register: registerReducer,
-                calendar: calendarReducer
+                calendar: calendarReducer,
+                timer: timerReducer
             },
             middleware: (getDefaultMiddleware) => { return getDefaultMiddleware({
                 serializableCheck: false
             })
                 .concat(habitsApi.middleware)
                 .concat(groupsApi.middleware)
-                .concat(tokenMiddleware)
                 .concat(thunk);
             }
         })
@@ -42,7 +41,7 @@ const createAppStore = async () => {
 
         return store;
     } catch (err) {
-        throw new Error(`Error initializing the app: ${err.message}`);
+        throw new Error(err.message);
     }
 }
 
@@ -73,13 +72,16 @@ export {
     resetProgressLoggingForm,
     fillProgressLoggingForm} from "./slices/progressLoggingFormSlice";
 export {changeFirstDayOfWeek, changeLanguage} from "./slices/settingsSlice";
-export {setAccessToken, setRefreshToken, setUserData, loginSuccess, loginFail, signUpSuccess, signUpFail, logout, setCredentials, login, getExternalTokens, refreshTokenSuccess, refreshTokenFail, setInitialAuthState } from './slices/authSlice';
+export {setAccessToken, setRefreshToken, setUserData, loginSuccess, loginFail, signUpSuccess, signUpFail, sendResetPasswordLinkSuccess, sendResetPasswordLinkFailed, logout, setCredentials, login, getExternalTokens, refreshTokenSuccess, refreshTokenFail } from './slices/authSlice';
 export {getUser} from './slices/userSlice';
 export {changeUserName, toggleUserNameError, 
     changeEmail, toggleEmailError,
     changePassword, togglePasswordError,
     changeConfirmPassword, toggleConfirmPasswordError} from './slices/registerSlice';
 export {changeCurrentDate, previousMonth, nextMonth, setCalendarDays, changeFirstDayOfWeekToMonday, changeFirstDayOfWeekToSunday, setFirstDayOnCalendar} from "./slices/calendarSlice";   
+export{changeTimerState, changeCountingDirection, toggleEndlessTimer, 
+    changeDuration, durationIncrement, durationDecrement, timeCount,
+    countingStartForGoodHabit, countingStartForLimitHabit, countingStartForEndlessTimer, reset} from './slices/timerSlice'
 export {
     useFetchHabitQuery, 
     useFetchHabitsQuery, 
@@ -94,6 +96,7 @@ export {
     useDailyUpdateMutation,
     useAddCommentMutation,
     useEditCommentMutation,
+    useUpdateHabitMutation,
     useDeleteCommentMutation} from "./api/habitsApi";
 export {useFetchGroupQuery, useFetchGroupsQuery, useAddGroupMutation, useRenameGroupMutation, useDeleteGroupMutation} from "./api/groupsApi";
 

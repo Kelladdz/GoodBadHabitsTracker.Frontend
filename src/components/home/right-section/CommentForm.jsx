@@ -22,15 +22,15 @@ const CommentForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (comment.trim().length > 0) {
+            
             const request = {
-                id: activeHabit.id,
+                habitId: activeHabit.habit.id,
                 body: comment,
                 date: currentDateString
             }
 
             try {
                 addComment(request).unwrap();
-                onCommentAdd(request);
             } catch (error) {
                 throw new Error(error);
             } finally {

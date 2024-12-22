@@ -11,7 +11,7 @@
     border-radius: 50%;
 }
 
-.header-button:first-of-type {
+.header-button:not(:last-of-type) {
     background-color: transparent;
 }
 
@@ -20,7 +20,23 @@
     height: 4.1rem;
 }
 
-.header-button:first-of-type .icon {
+.header-button:last-of-type{
+    display: none;
+}
+
+.header-button:not(:last-of-type) .icon {
     width: 3rem;
     height: 3rem;
+}
+
+@media (max-width: 67rem) {
+    .header-button:last-of-type{
+        display: flex;
+        background-color: transparent;
+    }
+
+    .header-button:last-of-type .icon {
+        width: 3rem;
+        height: 3rem;
+    }
 }

@@ -19,10 +19,12 @@ import CalendarIcon from '../../../assets/svg/calendar-icon.svg';
 import FilterIcon from '../../../assets/svg/filter-icon.svg';
 
 import styles from '../../../styles/FilterBar.module.css';
+import { useSelector } from 'react-redux';
 
 const FilterBar = () => {
     const {activeGroup} = useContext(LeftBarContext);
-    const {currentDateString} = useContext(CalendarContext);
+    const currentDate = useSelector(state => state.calendar.currentDate);
+    const currentDateString = currentDate.toISOString().substring(0, 10);
     const todayString = new Date().toISOString().substring(0, 10);
 
     const calendarRef = useRef(null);

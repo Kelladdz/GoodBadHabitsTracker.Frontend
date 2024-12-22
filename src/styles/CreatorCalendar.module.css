@@ -30,8 +30,8 @@
 .days-of-month {
     display: grid;
     width: 100%;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(5, 3.1rem);
+    grid-template-columns: repeat(7, calc(100% / 7));
+    grid-template-rows: repeat(5, 2rem);
 }
 
 .day-of-month-box {

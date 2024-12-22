@@ -33,7 +33,7 @@ export const StatisticCell = ({property}) => {
 
     useEffect(() => {
         value();
-    },[completedResultsCount, failedResultsCount, skippedResultsCount, totalResultsCount, streak]);
+    },[]);
     return (
         <div className={styles['statistic-cell']}>
             {property === HABIT_STATISTICS_PROPERTIES.streak && <img className={styles['streak-icon']} src={StreakIcon} alt={STREAK_ICON_ALTERNATE_LABEL}/>}

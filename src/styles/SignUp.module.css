@@ -8,6 +8,7 @@
     margin-top: 2rem;
 	display: flex;
 	flex-direction: column;
+	gap: 1rem;
 }
 
 
@@ -22,3 +23,14 @@
     width: calc(100% - 6rem);
 }
 
+.password-requirments {
+	margin-top: -.5rem;
+    transform: scale(0.75) translateX(-4rem);
+}
+
+@media (max-width: 30rem) {
+	.password-requirments {
+		margin-top: 1rem;
+		transform: scale(1) translateX(0);
+	}
+}

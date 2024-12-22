@@ -16,10 +16,11 @@ const FilterBarDropdown = ({icon, alt, label, content, onClick}) => {
     return (
         <div style={{position: 'relative'}}>
             <button className={styles[`${wrappedClass}filter-bar-dropdown`]} onClick={onClick}>
+            <img className={styles['mobile-icon']} src={icon} alt={alt}/>
                 {!isSearchBarOpen ? 
                 <>
                     <span className={styles[`${wrappedClass}label`]}>{label}</span>
-                    <img className={styles[`${wrappedClass}icon`]} src={Caret} alt={CARET_ALTERNATE_LABEL}/>
+                    <img className={styles[`${wrappedClass}caret`]} src={Caret} alt={CARET_ALTERNATE_LABEL}/>
                 </>
                  :
                 <img className={styles.icon} src={icon} alt={alt}/>}

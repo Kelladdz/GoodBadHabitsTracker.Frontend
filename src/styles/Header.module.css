@@ -23,11 +23,11 @@
         position: absolute;
         bottom: 0rem;
         width: 100%;
+        z-index: 10;
     }
 
     .logo {
-        position: absolute;
-        left: calc(50% - 5rem);
+        display: none;
     }
 
     .r-side {
