@@ -1,0 +1,16 @@
+{
+  "record": {
+    "hosts": [
+      "localhost",
+      "25.54.62.56",
+      "172.27.0.1",
+      "192.168.1.24",
+      "127.0.0.1"
+    ],
+    "hash": {
+      "key": "21a7bd82aa532510eb8f690d5a8d68a968d900441e5a0cb18f338331f7b70894",
+      "cert": "989a2a54a99a599fbe96f5f2f959e83a31d78d95948f5d46dca5e4f0460f8d0c"
+    }
+  },
+  "configFilePath": "C:\\Users\\dobre\\.vite-plugin-mkcert\\config.json"
+}
