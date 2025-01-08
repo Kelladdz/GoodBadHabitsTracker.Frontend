@@ -57,7 +57,7 @@
     text-wrap: nowrap;
     opacity: 1;
     animation: fade-in .4s cubic-bezier(.39,.65,0,.99);
-    line-height: 1;
+    line-height: .3;
 }
 
 .wrapped-label {
@@ -94,7 +94,7 @@
     z-index: 1000;
     border-radius: 7px;
     right: 0rem;
-    width: 15rem;
+    width: calc(14rem + 3px);
 }
 
 .icon {

@@ -2,15 +2,15 @@ import React, {useContext, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { changeGroup, fillForm, 
-    fillProgressLoggingForm, useAddToGroupMutation, useUpdateDayResultMutation, useFetchGroupsQuery } from '../store';
+    fillProgressLoggingForm, useAddToGroupMutation, useUpdateDayResultMutation, useFetchGroupsQuery,
+    addResult,
+    addCompletedResult, addFailedResult, addSkippedResult, addStreak } from '../store';
 
 import ContextMenuContext from '../context/context-menu';
 import LeftBarContext from '../context/left-bar';
 import ModalsContext from '../context/modals';
 import HabitCreatorContext from '../context/habit-creator';
 import HabitContext from '../context/habit';
-import CalendarContext from '../context/calendar';
-import GroupsContext from '../context/groups';
 import ProgressLoggerContext from '../context/progress-logger';
 
 import ProgressLogger from './home/middle-section/ProgressLogger';
@@ -44,7 +44,8 @@ const ContextMenu = React.forwardRef((props, ref) => {
     const handleResultClick = async (number) => {
         const currentDateResult = activeHabit.habit.dayResults.find(result => result.date === currentDateString);
         let request;
-
+        console.log(activeHabit);
+        console.log(currentDateString);
         if (activeHabit.habit.habitType !== 2){
             request = {
                 habitId: activeHabit.habit.id,
@@ -61,12 +62,21 @@ const ContextMenu = React.forwardRef((props, ref) => {
         }
         
         try {
-            await updateDayResult({habitId: activeHabit.habit.id, id: currentDateResult.id, progress: number === 0 ? activeHabit.habit.quantity : currentDateResult.progress, status: number})
-            addResultToStatistics(number);
-                                        
+            await updateDayResult({habitId: activeHabit.habit.id, id: currentDateResult.id, progress: number === 0 ? activeHabit.habit.quantity : currentDateResult.progress, status: number})                                       
         } catch (error) {
             throw new Error(error);
         } finally {
+            switch (number) {
+                case 0:
+                    dispatch(addCompletedResult());
+                    break;
+                case 1:
+                    dispatch(addFailedResult());
+                    break;
+                case 2:
+                    dispatch(addSkippedResult());
+                    break;
+            }
             hideContextMenu();
         }
     }

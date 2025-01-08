@@ -213,8 +213,8 @@ const Timer = React.forwardRef(({props, handleCancelButtonClick}, ref) => {
         }
     }
  
- const [goodHabitsTimerSprings, goodHabitsTimerApi] = useSpring(() => ({ strokeDashoffset: 0, strokeDasharray: 1, config: { duration: duration * 200 } }));
- const [limitHabitsTimerSprings, limitHabitsTimerApi] = useSpring(() => ({ strokeDashoffset: 1, strokeDasharray: 1, config: { duration: duration * 200 } }));
+ const [goodHabitsTimerSprings, goodHabitsTimerApi] = useSpring(() => ({ strokeDashoffset: 0, strokeDasharray: 1, config: { duration: duration * 1000 } }));
+ const [limitHabitsTimerSprings, limitHabitsTimerApi] = useSpring(() => ({ strokeDashoffset: 1, strokeDasharray: 1, config: { duration: duration * 1000 } }));
 
 
     const showCheck = useSpring({
@@ -237,7 +237,7 @@ const Timer = React.forwardRef(({props, handleCancelButtonClick}, ref) => {
                 setTimeElapsed(prev => prev + 1)
                 setRemainingTime(prev => prev - 1)
             }, 1000);
-        }else if (timerState === TIMER_STATES.stop || timerState === TIMER_STATES.finish) {
+        } else if (timerState === TIMER_STATES.stop || timerState === TIMER_STATES.finish) {
             clearInterval(countingInterval);
         }
         return () => {
@@ -258,6 +258,7 @@ const Timer = React.forwardRef(({props, handleCancelButtonClick}, ref) => {
             logProgress()
         }
     },[timerState])
+
 
 
 
@@ -347,7 +348,7 @@ const Timer = React.forwardRef(({props, handleCancelButtonClick}, ref) => {
                                 </>}
                             
                         </div></>}
-                        {timerState !== TIMER_STATES.init && timerState !== TIMER_STATES.stop && <div className={`${styles[`timer-fill`]} ${timeElapsed + currentDayResult.progress >= activeHabit.habit.quantity ? styles.failed : ''} ${timerState === TIMER_STATES.finish ? styles.complete : ''}`}>
+                        {timerState !== TIMER_STATES.init && timerState !== TIMER_STATES.stop && <div className={`${styles[`timer-fill`]} ${timeElapsed + currentDayResult.progress < activeHabit.habit.quantity && timerState === TIMER_STATES.finish ? styles.failed : ''} ${timerState === TIMER_STATES.finish ? styles.complete : ''}`}>
                         {(timerState === TIMER_STATES.play || timerState === TIMER_STATES.pause) && countingDirection === COUNTING_DIRECTIONS.clockwise &&
                                 <>
                                     <span style={{ zIndex: 3 }} className={styles.time}>
@@ -358,7 +359,7 @@ const Timer = React.forwardRef(({props, handleCancelButtonClick}, ref) => {
                             </div>}     
                         {timerState === TIMER_STATES.finish &&
                             isLimitHabitComplete &&
-                                <svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="25" height="25" viewBox="0 0 25 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <animated.path className={styles['check-icon']} style={showCheck} d="M7.80453 17.8812L5.54959 20.3573C5.39926 20.0272 4.69271 18.7726 3.06915 16.3955C1.0848 15.0089 0.889373 16.9733 1.0397 18.1288C1.56586 18.8716 2.84366 20.9021 3.74563 23.081C4.64761 25.26 6.45156 22.9985 7.12805 22.0906C6.90255 22.1731 7.39864 21.942 12.0889 16.3955C16.3733 11.6909 18.1773 9.95762 24.9421 3.2721C25.3029 1.09312 23.8898 0.878522 23.1381 1.0436C20.4322 3.60225 14.4341 9.51192 12.0889 12.6814C10.285 14.6622 8.48101 16.9733 7.80453 17.8812Z" stroke="#006411" stroke-width="3"/>
                                 </svg>}
                                 {timerState === TIMER_STATES.finish &&

@@ -3,6 +3,7 @@ import { isValidToken } from "../../utils/authUtils";
 import { logout, setAccessToken, setRefreshToken, setUserData } from "../slices/authSlice";
 import { refreshTokenSuccess, refreshTokenFail } from "../slices/authSlice";
 import Cookies from "js-cookie";
+import { PATHS } from "../../constants/paths";
 
 const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
 const idToken = JSON.parse(localStorage.getItem("profile"))?.idToken;
@@ -81,22 +82,27 @@ export const oauthRefreshTokenAction = (refreshToken) => async (dispatch) => {
 };
 
 export const logoutAction = () => async (dispatch) => {
-  await axios.post(import.meta.env.VITE_REACT_APP_LOGOUT_LOCALHOST_URL, {},
-    { 
-      withCredentials: true, 
-      headers: { 
-      'Authorization': `Bearer ${accessToken}`
-    } }
-    
-  )
-    .then(res => {
-      console.log(res);
-      if (res.status === 204) {
-        localStorage.removeItem("profile");
-        
-        
-        dispatch(logout());
-      }
-    });
+  try {
+    await axios.post(import.meta.env.VITE_REACT_APP_LOGOUT_LOCALHOST_URL, {},
+      { 
+        withCredentials: true, 
+        headers: { 
+        'Authorization': `Bearer ${accessToken}`
+      } }
+      
+    )
+      .then(res => {
+        console.log(res);
+        if (res.status === 204) {
+          localStorage.removeItem("profile");
+          dispatch(logout());
+        }
+      });
+  } catch (err) {
+    throw Error(err)
+  } finally {
+    window.location.href = "https://localhost:8080/auth"
+  }
+  
 };
 

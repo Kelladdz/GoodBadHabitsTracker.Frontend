@@ -8,7 +8,9 @@
     height: 2.25rem;
     border-radius: 5px;
     padding-left: .5rem;
+    margin-bottom: .5rem;
     gap: 0.5rem;
+    width: calc(100% - 0.5rem);
 }
 
 .group-button {
@@ -64,5 +66,6 @@
     .group-button {
         padding-right: 0.5rem;
         height: 2rem;
+        margin-bottom: 0;
     }
 }

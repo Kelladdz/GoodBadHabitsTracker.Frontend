@@ -1,9 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import ProgressLoggerContext from "./context/progress-logger";
-import HabitCreatorContext from "./context/habit-creator";
-
 import styles from "./styles/DebugWindow.module.css";
 import HabitContext from "./context/habit";
 import CalendarContext from "./context/calendar";
@@ -33,6 +30,9 @@ export const TimerDebugWindow = () => {
                     setTimeElapsed(prev => prev + 1)
                 }, 1000);
             }else if (timer.timerState === TIMER_STATES.stop || timer.timerState === TIMER_STATES.finish) {
+                clearInterval(countingInterval);
+            } else if (timer.timerState === TIMER_STATES.stop){
+                setTimeElapsed(0);
                 clearInterval(countingInterval);
             }
             return () => {

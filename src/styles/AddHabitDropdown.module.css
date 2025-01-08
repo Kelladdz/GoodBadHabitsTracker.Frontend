@@ -61,7 +61,7 @@
     color: white;
     text-wrap: nowrap;
     animation: fade-in .4s cubic-bezier(.39,.65,0,.99);
-    line-height: 0.2;
+    line-height: 0.3;
 }
 
 .wrapped-label {

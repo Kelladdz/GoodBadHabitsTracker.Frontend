@@ -1,6 +1,5 @@
 import { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setFirstDayOnCalendar } from "./store";
 import ProgressLoggerContext from "./context/progress-logger";
 import HabitCreatorContext from "./context/habit-creator";
 

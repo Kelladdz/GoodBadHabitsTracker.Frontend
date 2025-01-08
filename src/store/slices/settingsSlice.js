@@ -5,10 +5,14 @@ import { LANGUAGES } from '../../constants/settings';
 const settingsSlice = createSlice({
     name: 'settings',
     initialState: {
+        name: "User",
         isSundayFirstDayOfWeek: true,
         language: LANGUAGES.english,
     },
     reducers: {
+        changeName: (state, action) => {
+            state.name = action.payload;
+        },
         changeFirstDayOfWeek: (state, action) => {
             state.isSundayFirstDayOfWeek = action.payload;
         },
@@ -18,5 +22,5 @@ const settingsSlice = createSlice({
     }
 })
 
-export const {changeFirstDayOfWeek, changeLanguage} = settingsSlice.actions;
+export const {changeFirstDayOfWeek, changeLanguage, changeName} = settingsSlice.actions;
 export const settingsReducer = settingsSlice.reducer;

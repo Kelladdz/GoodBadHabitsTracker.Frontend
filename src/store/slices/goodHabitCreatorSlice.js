@@ -60,9 +60,10 @@ const goodHabitCreatorSlice = createSlice({
             }
         },
         changeQuantity: (state, action) => {
-            state.quantity = action.payload * 60;
+            state.quantity = action.payload;
         },
         changeIsTimeBased: (state, action) => {
+            console.log('change to ', action.payload)
             state.isTimeBased = action.payload;
         },
         changeFrequency: (state, action) => {
@@ -107,7 +108,7 @@ const goodHabitCreatorSlice = createSlice({
             state.name = '';
             state.iconIndex = 0;
             state.habitType = 0;
-            state.quantity = 1;
+            state.quantity = 60;
             state.isTimeBased = true;
             state.frequency = 1;
             state.repeatMode = 1;

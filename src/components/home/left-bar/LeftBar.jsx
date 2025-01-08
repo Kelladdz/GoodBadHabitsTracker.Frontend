@@ -38,13 +38,13 @@ const LeftBar = () => {
     }
     
     useEffect(() => {
-        if (order) {
+        if (order > 0) {
             const translateDistance = 12.75 + ((order - 1) * 2.75);
             console.log(order)
             console.log('translateDistance', translateDistance)
             activeDivApi.start({top: `${translateDistance}rem`});    
         }
-    },[order])
+    },[activeGroup, order])
 
     useEffect(() => {
         if (activeGroup) {
@@ -89,8 +89,11 @@ const LeftBar = () => {
                     label={LEFT_BAR_BUTTON_LABELS.goodHabits} 
                     contextMenuType={CONTEXT_MENU_TYPES.goodHabits}/>
             </nav>
-            <GroupList />
-            <AddGroupInput />
+            <span className={styles.label}>Groups</span>
+            <div className={styles['group-section']}>
+                <GroupList />
+                <AddGroupInput />
+            </div>
             <div className={styles['logout-btn']}>
             <LeftBarButton 
                 handleLeftBarButtonClick={() => handleLogoutClick()}

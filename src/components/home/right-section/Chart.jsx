@@ -15,6 +15,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 const Chart = () => {
 	const {getStreaks, getCompletes, getFails} = useChart();
 	const {chartType} = useContext(ChartContext);
+	
     const chart = () => {
 		switch (chartType) {
 			case 'streaks':

@@ -1,16 +1,15 @@
 import { act, createContext, useContext, useEffect, useState } from 'react';
-import { a } from 'react-spring';
+import { setTotalResultsCount, setStreak, setCompletedResultsCount, setFailedResultsCount, setSkippedResultsCount, addResult,
+    addCompletedResult, addFailedResult, addSkippedResult, addStreak  } from '../store';
 import CalendarContext from './calendar';
+import { useDispatch } from 'react-redux';
 
 const HabitContext = createContext();
 
 function HabitProvider({children}) {
+    const dispatch = useDispatch();
+
     const [activeHabit, setActiveHabit] = useState(null);
-    const [completedResultsCount, setCompletedResultsCount] = useState(0);
-    const [failedResultsCount, setFailedResultsCount] = useState(0);
-    const [skippedResultsCount, setSkippedResultsCount] = useState(0);
-    const [totalResultsCount, setTotalResultsCount] = useState(0);
-    const [streak, setStreak] = useState(0);
     const [dayResults, setDayResults] = useState([]);
     const [activeDetails, setActiveDetails] = useState(false);
     const [breakDays, setBreakDays] = useState(0);
@@ -41,32 +40,31 @@ function HabitProvider({children}) {
                 }
             }
         }
-        setStreak(count);
+        dispatch(setStreak(count));
     }
 
-    const incrementStreak = () => {
-        setStreak(prev => prev + 1);
-    }
+
 
     const addResultToStatistics = (number) => {
 
         switch (number) {
             case 0:
-                setCompletedResultsCount(prev => prev + 1);
+                dispatch(addCompletedResult());
                 if (currentDateString === new Date().toISOString().substring(0, 10)){
-                    incrementStreak();
+                    dispatch(addStreak());
                 }
                 break;
             case 1:
-                setFailedResultsCount(prev => prev + 1);
+                dispatch(addFailedResult());
                 break;
             case 2:
-                setSkippedResultsCount(prev => prev + 1);
+                dispatch(addSkippedResult());
                 break;
             default:
                 break;
         }
-        setTotalResultsCount(prev => prev + 1);
+        dispatch(addResult());
+        getStreak();
     }
 
     useEffect(() => {
@@ -77,18 +75,16 @@ function HabitProvider({children}) {
 
     useEffect(() => {
         if (dayResults && dayResults.length > 0) {
-            setCompletedResultsCount(dayResults.filter(result => result.status === 0).length );
-            setFailedResultsCount(dayResults.filter(result => result.status === 1).length );
-            setSkippedResultsCount(dayResults.filter(result => result.status === 2).length );
-            setTotalResultsCount(dayResults.filter(result => result.status !== 3 && result.status !== 4).length );
+            dispatch(setCompletedResultsCount(dayResults.filter(result => result.status === 0).length ));
+            dispatch(setFailedResultsCount(dayResults.filter(result => result.status === 1).length ));
+            dispatch(setSkippedResultsCount(dayResults.filter(result => result.status === 2).length ));
+            dispatch(setTotalResultsCount(dayResults.filter(result => result.status !== 3 && result.status !== 4).length ));
             getStreak();
         }
     },[dayResults]);
 
     return <HabitContext.Provider value={{
-        activeHabit, toggleHabit, 
-        completedResultsCount, failedResultsCount,
-        skippedResultsCount, totalResultsCount, streak,
+        activeHabit, toggleHabit,
         addResultToStatistics, toggleDetails, activeDetails, breakDays}}>
             {children}
 		</HabitContext.Provider>;

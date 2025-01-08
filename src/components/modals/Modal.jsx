@@ -21,12 +21,18 @@ import { PRIMARY_MODAL_LABELS, SECONDARY_MODAL_LABEL } from '../../constants/mod
 
 import styles from '../../styles/Modal.module.css';
 import Timer from '../home/middle-section/Timer';
+import { LEFT_BAR_BUTTON_LABELS } from '../../constants/button-labels';
+import { useSelector } from 'react-redux';
+import { PATHS } from '../../constants/paths';
+import { useNavigate } from 'react-router-dom';
 
 const Modal = () => {
+    const navigate = useNavigate();
     const {activeModal, toggleModal} = useContext(ModalsContext);
-    const {activeGroup} = useContext(LeftBarContext);
-    const {activeHabit} = useContext(HabitContext);
-    const {currentDateString} = useContext(CalendarContext);
+    const {activeGroup, toggleActiveGroup} = useContext(LeftBarContext);
+    const {activeHabit, toggleHabit} = useContext(HabitContext);
+    const currentDate = useSelector(state => state.calendar.currentDate)
+    const currentDateString = currentDate.toISOString().substring(0,10);
 
     const [deleteGroup, {isLoading: isGroupDeleteLoading}] = useDeleteGroupMutation();
     const [deleteHabit, {isLoading: isHabitDeleteLoading}] = useDeleteHabitMutation();
@@ -146,6 +152,7 @@ const Modal = () => {
             } catch (err) {
                 console.error('Deleting group failed', err);
             } finally {
+                toggleActiveGroup(LEFT_BAR_BUTTON_LABELS.allHabits)
                 toggleModal(MODAL_TYPES.afterDeleteGroup);
             }
         } else if (activeModal === MODAL_TYPES.deleteHabit) {
@@ -155,6 +162,7 @@ const Modal = () => {
             } catch (err) {
                 console.error('Deleting habit failed', err);
             } finally {
+                toggleHabit(null)
                 toggleModal(MODAL_TYPES.afterDeleteHabit);
             }
         } else if (activeModal === MODAL_TYPES.deleteAccount) {
@@ -165,6 +173,7 @@ const Modal = () => {
                 console.error('Deleting account failed', err);
             } finally {
                 toggleModal(null);
+                navigate(PATHS.auth)
             }
         } else if (activeModal === MODAL_TYPES.deleteAllHabits) {
             try {
@@ -172,6 +181,7 @@ const Modal = () => {
             } catch (err) {
                 console.error('Deleting all habits failed', err);
             } finally {
+                toggleHabit(null);
                 toggleModal(MODAL_TYPES.afterDeleteAllHabits);
             }
         } else if (activeModal === MODAL_TYPES.deleteAllHabitsProgress) {
@@ -188,6 +198,7 @@ const Modal = () => {
 
     const handleUndoButtonClick = async () => {
         console.log(activeHabit)
+        console.log(currentDateString);
         const currentDayResult = activeHabit.habit.dayResults.find(dr => dr.date === currentDateString) 
         console.log(currentDayResult);
         try {

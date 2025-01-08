@@ -2,9 +2,10 @@ import { useContext, useEffect, useState } from 'react';
 
 import styles from '../../../styles/ResultCircle.module.css';
 
-const ResultCircle = ({status}) => {
+const ResultCircle = ({day, status}) => {
     const [backgroundColor, setBackgroundColor] = useState('transparent');
-
+    
+    
     useEffect(() => {
         switch (status) {
             case 0:
@@ -22,8 +23,12 @@ const ResultCircle = ({status}) => {
         }
     },[status]);
 
+    
+
     return (
-        <div className={styles['result-circle']} style={{backgroundColor: backgroundColor}}></div>
+        <div className={styles['result-circle']} style={{backgroundColor: backgroundColor}}>
+            <div className={styles['rectangle']}  style={{backgroundColor: backgroundColor}}></div>
+        </div>
     );
 }
 

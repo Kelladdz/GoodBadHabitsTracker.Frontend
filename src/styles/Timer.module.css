@@ -219,7 +219,7 @@
     min-height: 5rem;
 }
 .secondary-label {
-    font-size: 1rem;
+    font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: -0.03rem;
     color: #1e1e1e;
@@ -228,5 +228,6 @@
 
 .check-icon {
     z-index: 100000;
+    transform-origin: 50% 50%;
     transform: rotate(90deg);
 }

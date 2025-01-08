@@ -45,6 +45,39 @@
     outline: none;
 }
 
+.group-section {
+    height: 29.5rem;
+    overflow-y: scroll;
+}
+
+.group-section::-webkit-scrollbar {
+    width: .5rem;
+}
+
+.group-section::-webkit-scrollbar-track {
+    background-image: #ececec;
+    width: .4rem;
+    border-radius: 50px;
+}
+
+.group-section::-webkit-scrollbar-thumb {
+    background-color: #1e1e1e;
+    border-radius: 30px;
+    width: .4rem;
+} 
+
+.label {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.05rem;
+    color: #1e1e1e;
+    text-transform: uppercase;
+    transform: translateY(-1px);
+    display: flex;
+    justify-content: center;
+}
+
 @media (max-width: 81.875rem) {
     .left-bar {
         min-height: 2.5rem;

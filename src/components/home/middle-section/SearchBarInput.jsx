@@ -21,7 +21,7 @@ const SearchBarInput = () => {
     const [divSprings, divApi] = useSpring(() => ({ width: '2rem' }));
 
     const show = () => {
-        divApi.start({ flexGrow: 'inherit', width: 'auto' });
+        divApi.start({ width: '15rem' });
         toggleSearchBar(true);
     }
 

@@ -2,11 +2,6 @@ import { useContext, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { getExternalTokens } from "../../store/slices/authSlice";
-import { jwtDecode } from "jwt-decode";
-import AuthContext from "../../context/auth";
-import axios from "axios";
-import { PATHS } from "../../constants/paths";
 import { useAuth } from "../../hooks/useAuth";
 
 const Auth0Callback = ({provider}) => {

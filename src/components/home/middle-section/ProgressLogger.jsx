@@ -33,9 +33,8 @@ const ProgressLogger = () => {
     const {activeHabit} = useContext(HabitsContext);
     const {toggleProgressLogger} = useContext(ProgressLoggerContext);
     const {hideContextMenu} = useContext(ContextMenuContext);
-    const {currentDateString} = useContext(CalendarContext)
     const [updateDayResult, {isLoading: isUpdateDayResultLoading}] = useUpdateDayResultMutation();
-
+    const currentDateString = useSelector(state => state.progressLoggingForm.date);
     const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
@@ -116,7 +115,7 @@ const ProgressLogger = () => {
             <form className={styles.form} onSubmit={handleSubmit}>
                 <div ref={statusDropdownRef} className={styles['input-box']}>
                     <span className={styles['box-label']}>{DAY_RESULT_PROPERTIES.status}</span>
-                    <ProgressLoggerDropdown label={DAY_RESULT_STATUSES[form.status]} onClick={toggleStatusDropdown} content={isStatusDropdownOpen && <StatusOptionsList ref={statusOptionsRef} onClose={() => setIsStatusDropdownOpen(false)}/>}/>
+                    <ProgressLoggerDropdown style={{width: '100%'}} label={DAY_RESULT_STATUSES[form.status]} onClick={toggleStatusDropdown} content={isStatusDropdownOpen && <StatusOptionsList ref={statusOptionsRef} onClose={() => setIsStatusDropdownOpen(false)}/>}/>
                 </div>
                 {activeHabit.habitType !== 2 && <div className={styles['input-box']}>
                     <span className={styles['box-label']}>{DAY_RESULT_PROPERTIES.progress}</span>

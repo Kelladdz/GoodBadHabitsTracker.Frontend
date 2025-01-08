@@ -2,7 +2,6 @@
 	margin-inline: 2rem;
 	display: flex;
 	justify-content: center;
-	overflow-x: scroll;
 }
 
 @media (max-width: 88rem) {

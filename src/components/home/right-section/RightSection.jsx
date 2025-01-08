@@ -5,20 +5,27 @@ import Chart from './Chart';
 
 import { HABIT_STATISTICS_PROPERTIES } from '../../../constants/habit-statistics-properties';
 import { CALENDAR_TYPES } from '../../../constants/calendar-types';
-
 import styles from '../../../styles/RightSection.module.css';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import HabitContext from '../../../context/habit';
 import { CHART_TYPES } from '../../../constants/chart-types';
 import ChartContext from '../../../context/chart';
+import { useFetchHabitQuery } from '../../../store';
 
 const RightSection = () => {
-    const {activeHabit,toggleHabit, activeDetails, toggleDetails} = useContext(HabitContext);
-    const {toggleChart} = useContext(ChartContext   );
+    const {activeHabit, toggleHabit, activeDetails, toggleDetails} = useContext(HabitContext);
+    const {toggleChart} = useContext(ChartContext);
+    const {data, error, isLoading} = useFetchHabitQuery(activeHabit.habit.id, {skip: !activeHabit})
 
     const handleChartTypeClick = (type) => {
         toggleChart(type);
     }
+
+    useEffect(() => {
+        if (data && !isLoading) {
+            console.log(data);
+        }
+    },[data, isLoading])
     return (
         <div className={`${styles['right-section']} ${!activeDetails ? styles.hide : ''}`}>
             <div className={styles['label-box']}>
@@ -30,27 +37,27 @@ const RightSection = () => {
                     <div className={styles['statistics-grid']}>
 
                         <div className={styles.cell}>
-                            <StatisticCell property={HABIT_STATISTICS_PROPERTIES.streak}/>
+                            <StatisticCell value={data && data.stats.streak} property={HABIT_STATISTICS_PROPERTIES.streak}/>
                         </div>
 
                         <div className={styles.cell}>
-                            <StatisticCell property={HABIT_STATISTICS_PROPERTIES.completed}/>
+                            <StatisticCell value={data && data.stats.completed} property={HABIT_STATISTICS_PROPERTIES.completed}/>
                         </div>
 
                         <div className={styles.cell}>
-                            <StatisticCell property={HABIT_STATISTICS_PROPERTIES.failed}/>
+                            <StatisticCell value={data && data.stats.failed} property={HABIT_STATISTICS_PROPERTIES.failed}/>
                         </div>
 
                         <div className={styles.cell}>
-                            <StatisticCell property={HABIT_STATISTICS_PROPERTIES.total}/>
+                            <StatisticCell value={data && data.stats.total} property={HABIT_STATISTICS_PROPERTIES.total}/>
                         </div>
 
                         <div className={styles.cell}>
-                            <StatisticCell property={HABIT_STATISTICS_PROPERTIES.skipped}/>
+                            <StatisticCell value={data && data.stats.skipped} property={HABIT_STATISTICS_PROPERTIES.skipped}/>
                         </div>
 
                     </div>
-                    <Calendar withoutArrows cellSize='2.5rem' headerPadding='0.5rem' type={CALENDAR_TYPES.main}/>
+                    <Calendar withoutArrows cellSize='3rem' headerPadding='0.5rem' type={CALENDAR_TYPES.main}/>
                 </div>
                 <div className={styles['r-side']}>
                     <Chart />

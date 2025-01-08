@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext, useRef } from 'react';
 
-import { useAddGroupMutation } from '../../../store';
+import { useAddGroupMutation,useFetchGroupsQuery } from '../../../store';
 
 import LeftBarContext from '../../../context/left-bar';
 
@@ -9,11 +9,14 @@ import { PLUS_SIGN_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
 import PlusSign from '../../../assets/svg/black-plus-sign.svg';
 
 import styles from '../../../styles/AddGroupInput.module.css';
+import { useSelector } from 'react-redux';
 
 const AddGroupInput = () => {
-    const {formMode, toggleFormMode, toggleActiveGroup} = useContext(LeftBarContext);
+    const accessToken = useSelector(state => state.auth.accessToken);
+    const {formMode, toggleFormMode, toggleActiveGroup, toggleOrder, order} = useContext(LeftBarContext);
 
     const [addGroup, {isLoading: addGroupLoading}] = useAddGroupMutation();
+    const {data, error, isLoading} = useFetchGroupsQuery(undefined, {skip: !accessToken}) || [];
 
     const [name, setName] = useState('');
 
@@ -35,9 +38,13 @@ const AddGroupInput = () => {
                 await addGroup(name).unwrap();
                 toggleFormMode(false);
                 toggleActiveGroup(name);
+                console.log(data);
+                toggleOrder(data.length + 1)
                 setName('');
             } catch (error) {
                 throw new Error(error);
+            } finally {
+                
             }
         }
     }
@@ -47,6 +54,12 @@ const AddGroupInput = () => {
             setName('');
         }
     }, [formMode])
+
+    useEffect(() => {
+        if (order) {
+            console.log('order: ', order)
+        }
+    }, [order]);
 
     useEffect(() => {
 		const handleKeyDown = event => {

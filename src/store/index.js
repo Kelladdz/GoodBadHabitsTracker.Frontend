@@ -11,6 +11,7 @@ import { initializeAuth } from "./actions/authActions"
 import { userReducer } from "./slices/userSlice"
 import { calendarReducer } from "./slices/calendarSlice"
 import { timerReducer } from "./slices/timerSlice"
+import { statisticsReducer } from "./slices/statisticsSlice"
 import { thunk } from "redux-thunk"
 
 const createAppStore = async () => {
@@ -26,7 +27,8 @@ const createAppStore = async () => {
                 user: userReducer,
                 register: registerReducer,
                 calendar: calendarReducer,
-                timer: timerReducer
+                timer: timerReducer,
+                statistics: statisticsReducer,
             },
             middleware: (getDefaultMiddleware) => { return getDefaultMiddleware({
                 serializableCheck: false
@@ -71,17 +73,18 @@ export {
     changeDate,
     resetProgressLoggingForm,
     fillProgressLoggingForm} from "./slices/progressLoggingFormSlice";
-export {changeFirstDayOfWeek, changeLanguage} from "./slices/settingsSlice";
+export {changeFirstDayOfWeek, changeLanguage, changeName} from "./slices/settingsSlice";
 export {setAccessToken, setRefreshToken, setUserData, loginSuccess, loginFail, signUpSuccess, signUpFail, sendResetPasswordLinkSuccess, sendResetPasswordLinkFailed, logout, setCredentials, login, getExternalTokens, refreshTokenSuccess, refreshTokenFail } from './slices/authSlice';
 export {getUser} from './slices/userSlice';
 export {changeUserName, toggleUserNameError, 
     changeEmail, toggleEmailError,
     changePassword, togglePasswordError,
     changeConfirmPassword, toggleConfirmPasswordError} from './slices/registerSlice';
-export {changeCurrentDate, previousMonth, nextMonth, setCalendarDays, changeFirstDayOfWeekToMonday, changeFirstDayOfWeekToSunday, setFirstDayOnCalendar} from "./slices/calendarSlice";   
+export {changeCurrentDate, previousMonth, nextMonth, setMonth, setCalendarDays, changeFirstDayOfWeekToMonday, changeFirstDayOfWeekToSunday, changeCurrentYear} from "./slices/calendarSlice";   
 export{changeTimerState, changeCountingDirection, toggleEndlessTimer, 
     changeDuration, durationIncrement, durationDecrement, timeCount,
     countingStartForGoodHabit, countingStartForLimitHabit, countingStartForEndlessTimer, reset} from './slices/timerSlice'
+export {setTotalResultsCount, setStreak, setCompletedResultsCount, setFailedResultsCount, setSkippedResultsCount, addResult, addCompletedResult, addFailedResult, addSkippedResult, addStreak} from './slices/statisticsSlice'
 export {
     useFetchHabitQuery, 
     useFetchHabitsQuery, 

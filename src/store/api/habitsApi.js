@@ -48,6 +48,7 @@ const habitsApi = createApi({
     endpoints: (builder) => {
         return {
         fetchHabit: builder.query({
+            providesTags: ['Habits'],
             query: (id) => {
                 return {
                     url: `/api/habits/${id}`,

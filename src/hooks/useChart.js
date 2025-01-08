@@ -1,16 +1,15 @@
 import { useContext, useEffect, useState } from "react";
-
+import { useFetchHabitQuery } from './../store'
 import HabitContext from "../context/habit";
 
 export function useChart() {
     const {activeHabit} = useContext(HabitContext);
-
-    const [dayResults, setDayResults] = useState();
+    const {data, error, isLoading} = useFetchHabitQuery(activeHabit.habit.id, {skip: !activeHabit})
 
     const getStreaks = (month) => {
-        if (activeHabit.habit) {
-            console.log(activeHabit.habit);
-            const currentMonthResults = activeHabit.habit.dayResults.filter(result => new Date(result.date).getMonth() === month).sort((a, b) => b.date.localeCompare(a.date));
+        if (data && data.habit) {
+            console.log(data.habit);
+            const currentMonthResults = data.habit.dayResults.filter(result => new Date(result.date).getMonth() === month).sort((a, b) => b.date.localeCompare(a.date));
             console.log(currentMonthResults);
             let streak = 0;
             let newStreak = 0;
@@ -31,23 +30,16 @@ export function useChart() {
     }
 
     const getCompletes = (month) => {
-        if (activeHabit.habit) {
-            return activeHabit.habit.dayResults.filter(result => new Date(result.date).getMonth() === month && result.status === 0).length;
+        if (data && data.habit) {
+            return data.habit.dayResults.filter(result => new Date(result.date).getMonth() === month && result.status === 0).length;
         }
     }
 
     const getFails = (month) => {
-        if (activeHabit.habit) {
-            return activeHabit.habit.dayResults.filter(result => new Date(result.date).getMonth() === month && result.status === 1).length;
+        if (data && data.habit) {
+            return data.habit.dayResults.filter(result => new Date(result.date).getMonth() === month && result.status === 1).length;
         }
     }
-
-    useEffect(() => {
-        if (activeHabit.habit) {
-            const results = activeHabit.habit.dayResults;
-            setDayResults(results);
-        }
-    }, [activeHabit]);
 
 
 

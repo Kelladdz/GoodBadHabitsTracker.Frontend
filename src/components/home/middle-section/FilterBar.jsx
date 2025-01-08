@@ -110,10 +110,10 @@ const FilterBar = () => {
             <div className={styles['r-side']}>
                 <SearchBarInput/>
                 <div ref={calendarDropdownRef} className={styles['dropdown-box']}>
-                    <FilterBarDropdown icon={FilterIcon} alt={FILTER_ICON_ALTERNATE_LABEL} label={currentDateString === todayString ? 'Today' : currentDateString} onClick={showCalendar} content={calendar}/>       
+                    <FilterBarDropdown icon={CalendarIcon} alt={FILTER_ICON_ALTERNATE_LABEL} label={currentDateString === todayString ? 'Today' : currentDateString} onClick={showCalendar} content={calendar}/>       
                 </div>
                 <div ref={sortMenuDropdownRef} className={styles['dropdown-box']}>
-                    <FilterBarDropdown icon={CalendarIcon} alt={CALENDAR_ICON_ALTERNATE_LABEL} label={FILTER_BAR_BUTTON_LABELS.sortBy} onClick={showSortMenu} content={sortMenu}/>
+                    <FilterBarDropdown icon={FilterIcon} alt={CALENDAR_ICON_ALTERNATE_LABEL} label={FILTER_BAR_BUTTON_LABELS.sortBy} onClick={showSortMenu} content={sortMenu}/>
                 </div>
                 <AddHabitDropdown/>
             </div> 

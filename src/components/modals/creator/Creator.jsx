@@ -35,7 +35,7 @@ const Creator = () => {
     const [isOpen, setIsOpen] = useState(true);
     const [groupOptions, setGroupOptions] = useState(["None"]);
     const selectedGroup = groupsData.find(group => group.group.id === form.groupId);
-
+    
     const formRef = useRef();
     const repeatRef = useRef();
     const calendarRef = useRef();
@@ -69,7 +69,7 @@ const Creator = () => {
         switch (property) {
             case HABIT_PROPERTIES.isTimeBased:
                 console.log('handle isTimeBased change... ', value);
-                const flag = value === HABITS_QUANTITY_UNITS[0] ? true : false;
+                const flag = value === 0 ? true : false;
                 dispatch(changeIsTimeBased(flag));
                 break;
             case HABIT_PROPERTIES.frequency:
@@ -147,7 +147,7 @@ const Creator = () => {
                     operations.push({op: "replace", path: "/isTimeBased", value: form.isTimeBased})
                 } 
                 if (activeHabit.habit.quantity !== form.quantity && form.quantity !== null){
-                    operations.push({op: "replace", path: "/quantity", value: form.quantity})
+                    operations.push({op: "replace", path: "/quantity", value: form.isTimeBased ? form.quantity * 60 : form.quality})
                 } 
                 if (activeHabit.habit.frequency !== form.frequency && form.frequency !== null){
                     operations.push({op: "replace", path: "/frequency", value: form.frequency})
@@ -261,9 +261,8 @@ const Creator = () => {
                         break;
                     default:
                         break;
-            dispatch(fillForm(activeHabit.habit));
         }
-        dispatch(fillForm(activeHabit.habit));
+        if (activeEditor) dispatch(fillForm(activeHabit.habit));
     },[activeCreator, activeEditor])
 
 

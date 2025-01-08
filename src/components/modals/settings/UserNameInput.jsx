@@ -5,31 +5,31 @@ import { EDIT_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
 import EditIcon from '../../../assets/svg/edit-icon.svg';
 
 import styles from '../../../styles/UserNameInput.module.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 const UserNameInput = () => {
-
+    const dispatch = useDispatch()
+    const userName = useSelector(state => state.settings.name);
     const [editMode, setEditMode] = useState(false);
-    const [userName, setUserName] = useState(useSelector(state => state.user.user.name));
-
+    const [nameInput, setNameInput] = useState(userName)
     const handleClick = () => {
         setEditMode(true);
     }
 
     const handleNameChange = (e) => {
         e.preventDefault();
-        setUserName(e.target.value);
+        setNameInput(e.target.value);
     }
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && userName.length >= 3 && userName.length <= 50) {
             console.log('Name changed to: ', userName);
-            setEditMode(false);
+            dispatch(changeName(nameInput));
         }
     }
     return (
         <div className={styles['user-name-input']}>
             {editMode ? 
-                <input minLength={3} maxLength={50} autoFocus type="text" placeholder='Your name...' className={styles.input} value={userName} onChange={handleNameChange} onKeyDown={handleKeyDown}/>
+                <input minLength={3} maxLength={50} autoFocus type="text" placeholder='Your name...' className={styles.input} value={nameInput} onChange={handleNameChange} onKeyDown={handleKeyDown}/>
                 :   
                 <>
                 {userName.length > 3 ? 

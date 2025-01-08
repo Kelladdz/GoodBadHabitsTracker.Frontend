@@ -10,7 +10,7 @@ import styles from '../../../styles/HabitList.module.css';
 
 const HabitList = ({habits}) => {
     const {activeGroup} = useContext(LeftBarContext);
-
+    
     const habitTransition = useTransition(habits, {
         from: {height: '0rem', opacity: 0},
         enter: {height: '4rem', opacity: 1},

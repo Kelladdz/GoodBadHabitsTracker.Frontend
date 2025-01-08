@@ -7,7 +7,7 @@ const timerSlice = createSlice({
         timerState: TIMER_STATES.init,
         countingDirection: COUNTING_DIRECTIONS.counterClockwise,
         endlessTimer: false,
-        duration: 300,
+        duration: 60,
         timeElapsed: 0,
 
     },
@@ -57,11 +57,11 @@ const timerSlice = createSlice({
             state.duration = null;
         },
         reset: (state) => {
+            state.timeElapsed = 0;
             state.timerState = TIMER_STATES.init;
             state.countingDirection = COUNTING_DIRECTIONS.counterClockwise;
             state.endlessTimer = false;
             state.duration = 300;
-            state.timeElapsed = 0;
         }
     }
 })

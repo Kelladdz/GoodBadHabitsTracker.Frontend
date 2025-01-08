@@ -36,12 +36,6 @@ const MiddleSection = () => {
         }
     }, [data])
 
-    useEffect(() => {
-        if(currentDate){
-            console.log('currentDate:', currentDate);
-        }
-    }, [currentDate]);
-
     if (data) {
         console.log(data)
         return (
@@ -55,9 +49,9 @@ const MiddleSection = () => {
                     </>}
                 {activeGroup.id && 
                     <>
-                        {goodHabits && goodHabits.length > 0 && <HabitsAccordion type={HABIT_TYPES.good} habits={goodHabits.filter(habit => habit.habit.groupId === activeGroup.id)}/>}
-                        {limitHabits && limitHabits.length > 0 && <HabitsAccordion type={HABIT_TYPES.limit} habits={limitHabits.filter(habit => habit.habit.groupId === activeGroup.id)}/>}
-                        {quitHabits && quitHabits.length > 0 && <HabitsAccordion type={HABIT_TYPES.quit} habits={quitHabits.filter(habit => habit.habit.groupId === activeGroup.id)}/>}    
+                        {goodHabits && goodHabits.length > 0 && goodHabits.some(habit => habit.habit.groupId === activeGroup.id) && <HabitsAccordion type={HABIT_TYPES.good} habits={goodHabits.filter(habit => habit.habit.groupId === activeGroup.id)}/>}
+                        {limitHabits && limitHabits.length > 0 && limitHabits.some(habit => habit.habit.groupId === activeGroup.id) && <HabitsAccordion type={HABIT_TYPES.limit} habits={limitHabits.filter(habit => habit.habit.groupId === activeGroup.id)}/>}
+                        {quitHabits && quitHabits.length > 0 && quitHabits.some(habit => habit.habit.groupId === activeGroup.id) && <HabitsAccordion type={HABIT_TYPES.quit} habits={quitHabits.filter(habit => habit.habit.groupId === activeGroup.id)}/>}
                     </>}
             </div>
         );

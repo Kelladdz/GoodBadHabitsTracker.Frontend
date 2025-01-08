@@ -19,6 +19,10 @@
     flex-direction: column;
 }
 
+.input-box:first-of-type > * {
+    width: 100%;
+}
+
 .box-label {
     text-transform: uppercase;
     font-size: 0.75rem;

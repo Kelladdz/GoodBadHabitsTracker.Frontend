@@ -54,7 +54,9 @@
     width: 100%;
     padding-top: 0;
     position: relative;
-    grid-template-columns: repeat(7, calc(100% / 7));
+    grid-template-columns: repeat(7, 2rem);
+    justify-items: center;
+    align-items: center;
     
 }
 
@@ -84,7 +86,7 @@
     border-radius: 50%;
     position: relative;
     z-index: 2;
-    padding: 0.25rem;
+    
 }
 
 .day-of-month-box {
@@ -106,13 +108,56 @@
     z-index: 1;
 }
 
+.animated-result {
+    position: absolute;
+}
+
+.circle {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    position:absolute;
+    z-index: 0;
+}
+
+.rectangle {
+    width: calc((100% / 7));
+    height: 2rem;
+    position: absolute;
+    z-index: 0;
+    transform: translateX(50%);
+    animation: wide 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.completed {
+    background-color: #53e05e;
+}
+
+.failed {
+    background-color: #cb5050;
+}
+
+.skipped {
+    background-color: #c7d544;
+}
+
+@keyframes wide {
+    0% {
+        width: 0rem
+    }
+    100% {
+        width: calc((100% / 7));
+    }
+}
+
 
 @media (max-width: 81.875rem) {
     .calendar {
         margin-inline: 1rem;
     }
-    
 }
+
+
 
 /*
 @media (max-width: 55rem) {

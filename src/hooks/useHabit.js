@@ -1,21 +1,19 @@
 import {useContext, useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
+import { useFetchHabitQuery } from '../store';
 
-import CalendarContext from '../context/calendar';
+import HabitContext from '../context/habit';
 
 import { DAY_RESULT_STATUSES } from '../constants/habits-properties';
-import { set } from 'lodash';
-import { useAddDayResultMutation } from '../store';
 
 export function useHabit(habit) {
     const currentDate = useSelector(state => state.calendar.currentDate);
     const currentDateString = currentDate.toISOString().substring(0, 10);
 
     const [backgroundColor, setBackgroundColor] = useState('transparent');
+    const [infoFontColor, setInfoFontColor] = useState('#828282')
     const [status, setStatus] = useState();
     const [breakDays, setBreakDays] = useState(0);
-
-    
 
     let today = new Date();
     today.setHours(0,0,0,0);
@@ -23,7 +21,6 @@ export function useHabit(habit) {
     today = today.toISOString().substring(0, 10);
 
     const getProgressToDisplay = () => {
-        console.log(habit.habit)
         if (habit.habit.dayResults.some(result => result.date === currentDateString)) {
             const currentDayResult = habit.habit.dayResults.find(result => result.date === currentDateString);
             if (habit.habit.isTimeBased) {
@@ -44,11 +41,13 @@ export function useHabit(habit) {
     }
 
     const getQuantityToDisplay = () => {
-        if (habit.habit.isTimeBased) {
-            return `${habit.habit.quantity / 60 > 9 ? '' : '0'}${habit.habit.quantity / 60}:00 minutes`;
-        } else {
-            return `${habit.habit.quantity} times`;
-        }
+
+            if (habit.habit.isTimeBased) {
+                return `${habit.habit.quantity / 60 > 9 ? '' : '0'}${habit.habit.quantity / 60}:00 minutes`;
+            } else {
+                return `${habit.habit.quantity} times`;
+            }
+        
     }
 
     const getBreakDays = () => {
@@ -76,7 +75,7 @@ export function useHabit(habit) {
     const quantityToDisplay = getQuantityToDisplay();
 
     useEffect(() => {
-        if (habit) {
+
             console.log(habit)
             if (habit.habit.dayResults.some(result => result.date === currentDateString && result.status === 0)) {
                 setStatus(DAY_RESULT_STATUSES[0]);
@@ -91,30 +90,43 @@ export function useHabit(habit) {
             getBreakDays();
 
             
-        }
+        
     }, [habit, currentDateString]);
 
     useEffect(() => {
         switch (status) {
             case DAY_RESULT_STATUSES[0]:
                 setBackgroundColor('#53e05e');
+                setInfoFontColor('#1e1e1e');
                 break;
             case DAY_RESULT_STATUSES[1]:
                 setBackgroundColor('#cb5050');
+                setInfoFontColor('#1e1e1e');
                 break;
             case DAY_RESULT_STATUSES[2]:
-                setBackgroundColor('#2f3400');
+                setBackgroundColor('#c7d544');
+                setInfoFontColor('#1e1e1e');
                 break;
             case DAY_RESULT_STATUSES[3]:
                 setBackgroundColor('#d9d9d9');
+                setInfoFontColor('#828282');
                 break;
             case DAY_RESULT_STATUSES[4]:
                 setBackgroundColor('transparent');
+                setInfoFontColor('#828282');
                 break;
             default:
                 break;
         }
     }, [status]);
 
-    return {backgroundColor, status, progressToDisplay, quantityToDisplay, breakDays};
+    useEffect(() => {
+        if (status !== DAY_RESULT_STATUSES[3]){
+            setInfoFontColor('#1e1e1e')
+        } else {
+            setInfoFontColor('#828282')
+        }
+    },[])
+    
+    return {backgroundColor, status, progressToDisplay, quantityToDisplay, breakDays, infoFontColor};
 }

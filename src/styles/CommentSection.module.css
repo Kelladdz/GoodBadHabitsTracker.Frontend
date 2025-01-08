@@ -11,6 +11,22 @@
     border-bottom: 1px solid #c2c2c2;
 }
 
+.list::-webkit-scrollbar {
+    width: .5rem;
+}
+
+.list::-webkit-scrollbar-track {
+    background-image: #ececec;
+    width: .4rem;
+    border-radius: 50px;
+}
+
+.list::-webkit-scrollbar-thumb {
+    background-color: #1e1e1e;
+    border-radius: 30px;
+    width: .4rem;
+} 
+
 .year-box {
     display: flex;
 	justify-content: center;

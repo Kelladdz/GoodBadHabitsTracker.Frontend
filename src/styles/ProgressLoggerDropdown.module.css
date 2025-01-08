@@ -12,10 +12,12 @@
     min-width: 6.5rem;
 }
 
+
+
 .dropdown-content {
+    width: 14rem;
     position: absolute;
     top: 2.25rem;
-    min-width: 100%;
     border-radius: 7px;
 }
 

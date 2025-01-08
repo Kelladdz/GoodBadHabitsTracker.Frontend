@@ -29,7 +29,7 @@
     background-color: transparent;
     overflow-y: hidden;
     z-index: 1000;
-    width: 15rem;
+    width: 14rem;
 }
 
 .header {
@@ -59,7 +59,7 @@
 .days-of-month {
     display: grid;
     width: 100%;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, calc(2rem - 0.5px)) !important;
     grid-template-rows: repeat(5, 1fr);
 }
 

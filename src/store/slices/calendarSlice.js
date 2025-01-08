@@ -19,7 +19,6 @@ const calendarSlice = createSlice({
         previousMonth: (state) => {
             if (state.currentMonth === 0) {
                 state.currentMonth = 11;
-                state.currentYear = state.currentYear - 1;
             } else {
                 state.currentMonth = state.currentMonth - 1;
             }
@@ -27,10 +26,12 @@ const calendarSlice = createSlice({
         nextMonth: (state) => {
             if (state.currentMonth === 11) {
                 state.currentMonth = 0;
-                state.currentYear = state.currentYear + 1;
             } else {
                 state.currentMonth = state.currentMonth + 1;
             }
+        },
+        setMonth: (state, action) => {
+            state.currentMonth = action.payload;
         },
         setCalendarDays: (state, action) => {
             state.calendarDays = action.payload;
@@ -57,10 +58,11 @@ const calendarSlice = createSlice({
                 state.currentDay = state.currentDay - 1;
             }
         },
-        setFirstDayOnCalendar: (state, action) => {
+        changeCurrentYear: (state, action) => {
+            state.currentYear = action.payload;
         }
     }
 })
 
-export const {changeCurrentDate, previousMonth, nextMonth, setCalendarDays, changeFirstDayOfWeekToMonday, changeFirstDayOfWeekToSunday, setFirstDayOnCalendar} = calendarSlice.actions;
+export const {changeCurrentDate, previousMonth, nextMonth, setMonth, setCalendarDays, changeFirstDayOfWeekToMonday, changeFirstDayOfWeekToSunday, changeCurrentYear} = calendarSlice.actions;
 export const calendarReducer = calendarSlice.reducer;

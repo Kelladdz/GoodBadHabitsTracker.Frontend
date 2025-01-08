@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { changeDate, changeStartDate, changeCurrentDate, previousMonth, nextMonth, setCalendarDays, changeFirstDayOfWeekToSunday, changeFirstDayOfWeekToMonday, setFirstDayOnCalendar } from '../store';
+import { changeDate, changeStartDate, changeCurrentDate, previousMonth, nextMonth, setCalendarDays, changeFirstDayOfWeekToSunday, changeFirstDayOfWeekToMonday, changeCurrentYear } from '../store';
 
 import { CALENDAR_TYPES } from '../constants/calendar-types';
 
@@ -22,7 +22,7 @@ export function useCalendar(type) {
 
     const today = new Date();
     today.setHours(1,0,0,0);
-    const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3);
     const numberOfLastDayOfCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     const numberOfLastDayOfPreviousMonth = new Date(currentYear, currentMonth, 0).getDate();
     const firstDayOfCurrentMonth = new Date(currentYear, currentMonth, 1).getDay();
@@ -32,14 +32,20 @@ export function useCalendar(type) {
     const firstDayOnCalendar = firstDayOfCurrentMonth === 0 
         ? new Date(currentYear, currentMonth, 1)
         : new Date(currentYear, currentMonth - 1, isSundayFirstDayOfWeek ? lastSundayOfPreviousMonth : lastSundayOfPreviousMonth + 1);
-    const numberOfAllDaysInCalendar = numberOfLastDayOfCurrentMonth + firstDayOfCurrentMonth;
+    const numberOfAllDaysInCalendar = numberOfLastDayOfCurrentMonth + (6 - new Date(currentYear, currentMonth + 1, 0).getDay()) + firstDayOfCurrentMonth;
     const calendarRows = numberOfAllDaysInCalendar > 35 ? 6 : 5;
 
     const handlePreviousMonthClick = () => {
-       dispatch(previousMonth());
+            if (currentMonth === 0){
+                dispatch(changeCurrentYear(currentYear - 1))
+            }
+           dispatch(previousMonth());
     }
 
     const handleNextMonthClick = () => {
+        if (currentMonth === 11){
+            dispatch(changeCurrentYear(currentYear + 1))
+        }
         dispatch(nextMonth());
     }
 
@@ -47,11 +53,11 @@ export function useCalendar(type) {
         if (type !== CALENDAR_TYPES.main) {
             const selectedDate = new Date(day);
             selectedDate.setHours(1,0,0,0);
-            if (selectedDate.getMonth() < currentMonth) {
-                dispatch(previousMonth());
-            } else if (selectedDate.getMonth() > currentMonth) {
-                dispatch(nextMonth());
-            } 
+            if (selectedDate.getMonth() > currentMonth || (selectedDate.getMonth() === 11 && currentMonth === 0)) {
+                handlePreviousMonthClick();
+            } else if (selectedDate.getMonth() < currentMonth || (selectedDate.getMonth() === 0 && currentMonth === 11)) {
+                handleNextMonthClick();
+            }
             switch (type) {
                 case CALENDAR_TYPES.form:
                     console.log(selectedDate)
@@ -89,7 +95,6 @@ export function useCalendar(type) {
         const firstDayOnCalendar = firstDayOfCurrentMonth === 0 
         ? new Date(currentYear, currentMonth, 2)
         : new Date(currentYear, currentMonth, isSundayFirstDayOfWeek ? lastSundayOfPreviousMonth : lastSundayOfPreviousMonth + 1);
-        dispatch(setFirstDayOnCalendar(firstDayOnCalendar));
     },[isSundayFirstDayOfWeek]);    
 
 
