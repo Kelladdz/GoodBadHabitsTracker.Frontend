@@ -73,7 +73,7 @@ export {
     changeDate,
     resetProgressLoggingForm,
     fillProgressLoggingForm} from "./slices/progressLoggingFormSlice";
-export {changeFirstDayOfWeek, changeLanguage, changeName} from "./slices/settingsSlice";
+export {changeFirstDayOfWeek, changeLanguage, changeUserNameIsSettings} from "./slices/settingsSlice";
 export {setAccessToken, setRefreshToken, setUserData, loginSuccess, loginFail, signUpSuccess, signUpFail, sendResetPasswordLinkSuccess, sendResetPasswordLinkFailed, logout, setCredentials, login, getExternalTokens, refreshTokenSuccess, refreshTokenFail } from './slices/authSlice';
 export {getUser} from './slices/userSlice';
 export {changeUserName, toggleUserNameError, 

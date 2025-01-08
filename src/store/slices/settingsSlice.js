@@ -10,7 +10,7 @@ const settingsSlice = createSlice({
         language: LANGUAGES.english,
     },
     reducers: {
-        changeName: (state, action) => {
+        changeUserNameIsSettings: (state, action) => {
             state.name = action.payload;
         },
         changeFirstDayOfWeek: (state, action) => {
@@ -22,5 +22,5 @@ const settingsSlice = createSlice({
     }
 })
 
-export const {changeFirstDayOfWeek, changeLanguage, changeName} = settingsSlice.actions;
+export const {changeFirstDayOfWeek, changeLanguage, changeUserNameIsSettings} = settingsSlice.actions;
 export const settingsReducer = settingsSlice.reducer;
