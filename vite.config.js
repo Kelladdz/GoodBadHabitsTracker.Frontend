@@ -4,7 +4,6 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import dns from 'dns';
 import dotenv from 'dotenv';
-import react from '@vitejs/plugin-react-swc'
 
 dotenv.config();
 
@@ -14,8 +13,8 @@ export default defineConfig({
 	server: {
 		port: 8080,
 		https: {
-			key: readFileSync(resolve('dev.pem')),
-			cert: readFileSync(resolve('cert.pem'))
+			key: readFileSync(resolve(process.env.VITE_DEV_PEM_LOCATION)),
+			cert: readFileSync(resolve(process.env.VITE_CERT_PEM_LOCATION))
 		},
 		cors: {
 			origin: process.env.VITE_LOCALHOST_URL,
@@ -23,6 +22,5 @@ export default defineConfig({
 		},
 	},
 	plugins: [mkcert()],
-
 
 });
