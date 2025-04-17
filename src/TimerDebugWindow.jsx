@@ -30,16 +30,14 @@ export const TimerDebugWindow = () => {
                     setTimeElapsed(prev => prev + 1)
                 }, 1000);
             }else if (timer.timerState === TIMER_STATES.stop || timer.timerState === TIMER_STATES.finish) {
-                clearInterval(countingInterval);
-            } else if (timer.timerState === TIMER_STATES.stop){
                 setTimeElapsed(0);
                 clearInterval(countingInterval);
-            }
             return () => {
                 clearInterval(countingInterval);
             } 
     
-        },[timer.timerState]);
+    }},[timer.timerState]);
+    
     return (
         <div className={styles['debug-window']}>
             <span>Timer State: {timer.timerState}</span>

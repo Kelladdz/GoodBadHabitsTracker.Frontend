@@ -11,13 +11,14 @@ import { DECREMENT_ICON_ALTERNATE_LABEL, INCREMENT_ICON_ALTERNATE_LABEL } from '
 import { CREATOR_TYPES } from '../../../constants/creator-types';
 
 import styles from '../../../styles/QuantityInput.module.css';
-import { set } from 'lodash';
 import HabitContext from '../../../context/habit';
+import { HABIT_TYPES } from '../../../constants/habits-properties';
 
 const QuantityInput = () => {
     const dispatch = useDispatch();
     const isTimeBased = useSelector(state => state.goodHabitCreator.isTimeBased);
     const quantity = useSelector(state => state.goodHabitCreator.quantity);
+    const habitType = useSelector(state => state.goodHabitCreator.habitType)
     
     const {activeCreator, activeEditor} = useContext(HabitCreatorContext);
     const {activeHabit} = useContext(HabitContext);
@@ -27,7 +28,9 @@ const QuantityInput = () => {
         if (activeEditor && isTimeBased) {
             return data.habit.quantity / 60;
         } else if (activeEditor && !isTimeBased) {
-            return quantity
+            return quantity;
+        } else if (habitType === HABIT_TYPES.quit) {
+            return null;
         } else return 1;
     }
     
@@ -73,6 +76,11 @@ const QuantityInput = () => {
     useEffect(() => {
         dispatch(changeQuantity(quantityToDisplay));
     }, [quantityToDisplay])
+    useEffect(() => {
+        if (habitType === HABIT_TYPES.quit) {
+            dispatch(changeQuantity(null))
+        }
+    },[habitType])
 
     return (
         <div ref={ref} className={styles['quantity-input']}>

@@ -1,4 +1,4 @@
-import { useState, useRef, useContext, useEffect, useMemo } from 'react';
+import { useState, useRef, useContext, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createPortal } from 'react-dom';
 import { useSpringRef, useSpring, animated, useTransition, useChain } from 'react-spring';
@@ -18,7 +18,7 @@ import CreatorRepeatDropdown from './CreatorRepeatDropdown';
 import CreatorCalendarDropdown from './CreatorCalendarDropdown';
 
 import { CREATOR_LABELS } from '../../../constants/creator-labels';
-import { HABIT_PROPERTIES, HABITS_FREQUENCIES, HABITS_QUANTITY_UNITS } from '../../../constants/habits-properties';
+import { HABIT_PROPERTIES, HABIT_TYPES, HABITS_FREQUENCIES, HABITS_QUANTITY_UNITS } from '../../../constants/habits-properties';
 import { CREATOR_TYPES } from '../../../constants/creator-types';
 
 import styles from '../../../styles/Creator.module.css';
@@ -69,6 +69,7 @@ const Creator = () => {
         switch (property) {
             case HABIT_PROPERTIES.isTimeBased:
                 console.log('handle isTimeBased change... ', value);
+                // eslint-disable-next-line no-case-declarations
                 const flag = value === 0 ? true : false;
                 dispatch(changeIsTimeBased(flag));
                 break;
@@ -87,6 +88,19 @@ const Creator = () => {
 
     const onCreatorTypeSelect = (creatorType) => {
         activeCreator ? toggleCreator(creatorType) : toggleEditor(creatorType);
+        switch (creatorType) {
+            case CREATOR_TYPES.goodHabit:
+                dispatch(changeHabitType(HABIT_TYPES.good))
+                break;
+            case CREATOR_TYPES.limitHabit:
+                dispatch(changeHabitType(HABIT_TYPES.limit))
+                break;
+            case CREATOR_TYPES.quitHabit:
+                dispatch(changeHabitType(HABIT_TYPES.quit))
+                break;
+            default:
+                break;
+        }
     }
 
     const handleSubmit = (e) => {

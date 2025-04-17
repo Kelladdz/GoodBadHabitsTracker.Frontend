@@ -3,8 +3,6 @@ import { useSpring, animated } from 'react-spring';
 
 import LeftBarContext from '../../../context/left-bar';
 
-import { useAuth } from '../../../hooks/useAuth';
-
 import LeftBarButton from './LeftBarButton';
 import GroupList from './GroupList';
 import AddGroupInput from './AddGroupInput';
@@ -13,7 +11,7 @@ import AllHabitsIcon from '../../../assets/svg/all-habits-icon.svg';
 import BadHabitsIcon from '../../../assets/svg/bad-habits-icon.svg';
 import LogoutIcon from '../../../assets/svg/logout-icon.svg';
 
-import { ALL_HABITS_ICON_ALTERNATE_LABEL, GOOD_HABITS_ICON_ALTERNATE_LABEL, BAD_HABITS_ICON_ALTERNATE_LABEL, LOGOUT_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
+import { ALL_HABITS_ICON_ALTERNATE_LABEL, GOOD_HABITS_ICON_ALTERNATE_LABEL, BAD_HABITS_ICON_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
 import { LEFT_BAR_BUTTON_LABELS } from '../../../constants/button-labels';
 import { CONTEXT_MENU_TYPES } from '../../../constants/context-menu-types';
 
