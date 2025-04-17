@@ -24,7 +24,6 @@ import { DAY_RESULT_STATUSES } from '../../../constants/habits-properties';
 import { MODAL_TYPES } from '../../../constants/modal-types';
 
 import styles from '../../../styles/Habit.module.css';
-import TimerContext from '../../../context/timer';
 
 const Habit = ({habit}) => {
     const {toggleContextMenu} = useContext(ContextMenuContext);

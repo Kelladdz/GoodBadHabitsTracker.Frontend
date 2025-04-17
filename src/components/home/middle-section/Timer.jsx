@@ -1,19 +1,13 @@
-import { useState, useContext, useEffect, useRef, useReducer } from 'react';
-import { createPortal } from 'react-dom';
+import { useState, useContext, useEffect} from 'react';
 import { useSpring, animated } from 'react-spring';
 
-import { changeTimerState, changeCountingDirection, toggleEndlessTimer, 
-    changeDuration, durationIncrement, durationDecrement, timeCount,
+import { changeTimerState, toggleEndlessTimer, 
+    changeDuration, durationIncrement, durationDecrement, 
     countingStartForGoodHabit, countingStartForLimitHabit, reset, useUpdateDayResultMutation } from '../../../store';
 
 import HabitContext from '../../../context/habit';
 import CalendarContext from '../../../context/calendar';
 import ModalContext from '../../../context/modals';
-
-import { CARET_ALTERNATE_LABEL } from '../../../constants/alternate-labels';
-
-import Caret from '../../../assets/svg/caret.svg';
-import SadIcon from '../../../assets/svg/sad-face-icon.svg'
 
 import styles from '../../../styles/Timer.module.css';
 
@@ -253,7 +247,6 @@ const Timer = React.forwardRef(({props, handleCancelButtonClick}, ref) => {
     },[timeElapsed])
 
     useEffect(() => {
-        console.log(timeElapsed + currentDayResult.progress >= activeHabit.habit.quantity )
         if (timerState === TIMER_STATES.finish) {
             logProgress()
         }

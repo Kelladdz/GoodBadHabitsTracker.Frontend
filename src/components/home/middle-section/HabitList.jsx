@@ -1,15 +1,8 @@
-import {useContext, useEffect} from "react";
 import { useTransition, animated } from "react-spring";
-
-import LeftBarContext from "../../../context/left-bar";
 import Habit from "./Habit";
-
-import { LEFT_BAR_BUTTON_LABELS } from "../../../constants/button-labels";
-
 import styles from '../../../styles/HabitList.module.css';
 
 const HabitList = ({habits}) => {
-    const {activeGroup} = useContext(LeftBarContext);
     
     const habitTransition = useTransition(habits, {
         from: {height: '0rem', opacity: 0},
@@ -17,14 +10,6 @@ const HabitList = ({habits}) => {
         leave: {height: '0rem', opacity: 0},
         config: {duration: 200}
     });
-
-    // useEffect(() => {
-    //     if (activeGroup === LEFT_BAR_BUTTON_LABELS.goodHabits && habits.length > 0 && habits[0].habitType !== 0
-    //         || activeGroup === LEFT_BAR_BUTTON_LABELS.badHabits && habits.length > 0 && habits[0].habitType === 0
-    //     ) {
-    //         close();
-    //     }
-    // },[activeGroup]);   
 
     return (
         <>

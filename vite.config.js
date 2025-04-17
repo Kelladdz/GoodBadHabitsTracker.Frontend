@@ -1,9 +1,10 @@
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig } from 'vite'
 import mkcert from 'vite-plugin-mkcert';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import dns from 'dns';
 import dotenv from 'dotenv';
+import process from 'process';
 
 dotenv.config();
 

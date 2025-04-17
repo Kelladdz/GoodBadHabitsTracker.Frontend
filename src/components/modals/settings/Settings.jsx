@@ -83,18 +83,6 @@ const Settings = () => {
                                                 </li>
                                             </SettingsDropdown>
                                         </SettingsSection>
-                                        {/* <SettingsSection
-                                        title='Language' 
-                                        text='Select your language'>
-                                            <SettingsDropdown label={settings.language}>
-                                                <li className={styles['dropdown-item']} onClick={() => handleLanguageChange(LANGUAGES.english)}>
-                                                    <span className={styles['dropdown-item-label']}>English</span>
-                                                </li>
-                                                <li className={styles['dropdown-item']} onClick={() => handleLanguageChange(LANGUAGES.polish)}>
-                                                    <span className={styles['dropdown-item-label']}>Polish</span>
-                                                </li>
-                                            </SettingsDropdown>
-                                        </SettingsSection> */}
                                     </div>
                                 </div>
                             </div>

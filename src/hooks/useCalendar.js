@@ -52,7 +52,7 @@ export function useCalendar(type) {
     const handleDayClick = (day) => {
         if (type !== CALENDAR_TYPES.main) {
             const selectedDate = new Date(day);
-            selectedDate.setHours(1,0,0,0);
+            selectedDate.setHours(25,0,0,0);
             if (selectedDate.getMonth() > currentMonth || (selectedDate.getMonth() === 11 && currentMonth === 0)) {
                 handlePreviousMonthClick();
             } else if (selectedDate.getMonth() < currentMonth || (selectedDate.getMonth() === 0 && currentMonth === 11)) {

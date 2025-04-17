@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React, { useEffect, useContext, useState, useRef } from 'react';
 import { useSpring, animated, useTransition } from 'react-spring';
 

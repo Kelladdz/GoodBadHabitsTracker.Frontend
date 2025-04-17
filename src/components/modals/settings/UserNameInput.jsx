@@ -6,6 +6,7 @@ import EditIcon from '../../../assets/svg/edit-icon.svg';
 
 import styles from '../../../styles/UserNameInput.module.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { changeUserNameIsSettings } from '../../../store';
 const UserNameInput = () => {
     const dispatch = useDispatch()
     const userName = useSelector(state => state.settings.name);
@@ -23,7 +24,7 @@ const UserNameInput = () => {
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && userName.length >= 3 && userName.length <= 50) {
             console.log('Name changed to: ', userName);
-            dispatch(changeName(nameInput));
+            dispatch(changeUserNameIsSettings(nameInput));
         }
     }
     return (
